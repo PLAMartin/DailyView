@@ -153,6 +153,9 @@ Take Medication
 
 ## Frontend
 
+- HTML
+- CSS
+- Javascript
 - Next.js
 - TypeScript
 - Tailwind CSS

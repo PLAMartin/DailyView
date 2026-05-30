@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily View</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000;
+}
+
+.viewer {
+  width: 1536px;
+  height: 1024px;
+  padding: 36px 70px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+.title {
+  text-align: center;
+  font-size: 70px;
+  line-height: 1;
+  font-weight: 900;
+  color: #08245f;
+  margin: 0 0 20px;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 1fr 330px 1fr;
+  align-items: center;
+}
+
+.day {
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+
+.date {
+  font-size: 38px;
+  font-weight: 900;
+  margin-top: 20px;
+}
+
+.time-block {
+  text-align: right;
+}
+
+.time {
+  font-size: 72px;
+  font-weight: 900;
+}
+
+.period {
+  font-size: 38px;
+  font-weight: 900;
+  margin-top: 16px;
+}
+
+.sun-icon {
+  width: 260px;
+  height: 170px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.sun {
+  width: 94px;
+  height: 94px;
+  background: #ff7900;
+  border-radius: 50%;
+  position: absolute;
+  left: 83px;
+  top: 38px;
+}
+
+.horizon {
+  position: absolute;
+  left: 34px;
+  top: 120px;
+  width: 192px;
+  height: 55px;
+  border-top: 16px solid #08245f;
+  border-radius: 50% 50% 0 0;
+}
+
+.ray {
+  position: absolute;
+  background: #ff7900;
+  width: 5px;
+  height: 34px;
+  border-radius: 3px;
+}
+
+.r1 { left: 128px; top: 0; }
+.r2 { left: 65px; top: 22px; transform: rotate(-42deg); }
+.r3 { right: 65px; top: 22px; transform: rotate(42deg); }
+.r4 { left: 45px; top: 82px; transform: rotate(90deg); }
+.r5 { right: 45px; top: 82px; transform: rotate(90deg); }
+
+.cloud {
+  position: absolute;
+  width: 58px;
+  height: 24px;
+  background: #93bce9;
+  border-radius: 18px 18px 6px 6px;
+  top: 80px;
+}
+
+.cloud:before {
+  content: "";
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  background: #93bce9;
+  border-radius: 50%;
+  left: 12px;
+  top: -18px;
+}
+
+.cloud.left { left: -10px; }
+.cloud.right { right: -10px; }
+
+.main {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 78px;
+  margin-top: 58px;
+}
+
+.today-title {
+  font-size: 36px;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+
+.event {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  align-items: center;
+  height: 150px;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.event:last-child {
+  border-bottom: none;
+}
+
+.circle {
+  width: 106px;
+  height: 106px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 54px;
+}
+
+.hair { background: #f1f1f1; color: #444; }
+.people { background: #eee9ff; color: #4521a8; }
+.home { background: #fff1cf; color: #dd9400; }
+
+.event-name {
+  font-size: 39px;
+  font-weight: 800;
+}
+
+.event-time {
+  font-size: 38px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.past {
+  color: #7b7b82;
+}
+
+.current {
+  color: #000;
+}
+
+.next-card {
+  background: #f1f5ff;
+  border-radius: 24px;
+  height: 542px;
+  padding: 42px 46px;
+  margin-top: 0;
+}
+
+.next-label {
+  color: #0b4df0;
+  font-size: 38px;
+  font-weight: 900;
+  margin-bottom: 34px;
+}
+
+.next-item {
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin-bottom: 36px;
+}
+
+.next-time {
+  color: #0b4df0;
+  font-size: 45px;
+  font-weight: 900;
+}
+</style>
+</head>
+
+<body>
+<main class="viewer">
+
+  <h1 class="title">Daily View</h1>
+
+  <section class="top">
+    <div>
+      <div class="day">TUESDAY</div>
+      <div class="date">25 APRIL 2024</div>
+    </div>
+
+    <div class="sun-icon">
+      <div class="ray r1"></div>
+      <div class="ray r2"></div>
+      <div class="ray r3"></div>
+      <div class="ray r4"></div>
+      <div class="ray r5"></div>
+      <div class="cloud left"></div>
+      <div class="cloud right"></div>
+      <div class="sun"></div>
+      <div class="horizon"></div>
+    </div>
+
+    <div class="time-block">
+      <div class="time">14:05</div>
+      <div class="period">AFTERNOON</div>
+    </div>
+  </section>
+
+  <section class="main">
+    <div>
+      <div class="today-title">TODAY</div>
+
+      <div class="event past">
+        <div class="circle hair">✂</div>
+        <div class="event-name">Hair appointment</div>
+        <div class="event-time">11:00</div>
+      </div>
+
+      <div class="event past">
+        <div class="circle people">👥</div>
+        <div class="event-name">Lunch with Sarah</div>
+        <div class="event-time">13:00</div>
+      </div>
+
+      <div class="event current">
+        <div class="circle home">⌂</div>
+        <div class="event-name">Carer visit</div>
+        <div class="event-time">16:00</div>
+      </div>
+    </div>
+
+    <aside class="next-card">
+      <div class="next-label">NEXT</div>
+      <div class="next-item">Carer visit</div>
+      <div class="next-time">at 16:00</div>
+    </aside>
+  </section>
+
+</main>
+</body>
+</html>

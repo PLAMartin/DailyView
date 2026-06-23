@@ -1,0 +1,20 @@
+<svg width="600" height="600" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_8_2)">
+<rect width="600" height="600" fill="white"/>
+<rect x="-36" y="91" width="660" height="660" fill="white"/>
+<rect x="112" y="300.76" width="11" height="69" rx="5.5" transform="rotate(-78 112 300.76)" fill="#FDA01F"/>
+<rect x="487.492" y="290" width="11" height="69" rx="5.5" transform="rotate(78 487.492 290)" fill="#FDA01F"/>
+<rect x="174" y="189.922" width="11" height="69" rx="5.5" transform="rotate(-39 174 189.922)" fill="#FDA01F"/>
+<rect x="422.423" y="183" width="11" height="69" rx="5.5" transform="rotate(39 422.423 183)" fill="#FDA01F"/>
+<circle cx="300" cy="337" r="84" fill="#FDA01F"/>
+<ellipse cx="299.5" cy="578.5" rx="299.5" ry="198.5" fill="#0A168F"/>
+<ellipse cx="299.5" cy="501.5" rx="263.5" ry="98.5" fill="white"/>
+<rect x="294" y="145" width="11" height="69" rx="5.5" fill="#FDA01F"/>
+<rect x="-96" y="460" width="791" height="317" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_8_2">
+<rect width="600" height="600" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,21 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_21_16)">
+<rect width="512" height="512" fill="white"/>
+<rect x="-12.061" y="27" width="537.376" height="537.376" fill="#D9D9D9"/>
+<rect x="-96.0264" y="27" width="692.711" height="692.711" fill="white"/>
+<rect x="59.3091" y="247.156" width="11.5452" height="72.4198" rx="5.5" transform="rotate(-78 59.3091 247.156)" fill="#FDA01F"/>
+<rect x="453.412" y="235.863" width="11.5452" height="72.4198" rx="5.5" transform="rotate(78 453.412 235.863)" fill="#FDA01F"/>
+<rect x="124.382" y="130.825" width="11.5452" height="72.4198" rx="5.5" transform="rotate(-39 124.382 130.825)" fill="#FDA01F"/>
+<rect x="385.117" y="123.56" width="11.5452" height="72.4198" rx="5.5" transform="rotate(39 385.117 123.56)" fill="#FDA01F"/>
+<circle cx="256.627" cy="285.192" r="88.1633" fill="#FDA01F"/>
+<ellipse cx="256.102" cy="538.662" rx="314.344" ry="208.338" fill="#0A168F"/>
+<ellipse cx="256.102" cy="457.846" rx="276.56" ry="103.382" fill="white"/>
+<rect x="250.33" y="83.6764" width="11.5452" height="72.4198" rx="5.5" fill="#FDA01F"/>
+<rect x="-159" y="414.289" width="830.204" height="332.711" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_21_16">
+<rect width="512" height="512" fill="white"/>
+</clipPath>
+</defs>
+</svg>

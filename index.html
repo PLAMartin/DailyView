@@ -11,9 +11,24 @@ gtag('js', new Date());
 gtag('config', 'G-VW1Q3CYX7Q');
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily View</title>
+<title>Daily View — A calm, clear daily display for older adults</title>
+<meta name="description" content="Give your loved one confidence about what happens next. A simple daily display showing the date, time, activities and reminders at a glance.">
+
+<!-- Favicons -->
+<link rel="icon" href="assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+<meta name="apple-mobile-web-app-title" content="Daily View">
+<meta name="application-name" content="Daily View">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- Favicons -->
 <link rel="icon" href="assets/favicons/favicon.ico" sizes="any">
@@ -27,332 +42,1345 @@ gtag('config', 'G-VW1Q3CYX7Q');
 <meta name="application-name" content="Daily View">
 
 <style>
-* {
-  box-sizing: border-box;
+/* ── Design tokens ── */
+:root {
+  --dv-navy:        #1a2b6d;
+  --dv-navy-dark:   #14226b;
+  --dv-accent:      #1a4fd6;
+  --dv-bg-soft:     #f8f9ff;
+  --dv-bg-cta:      #eef2ff;
+  --dv-border:      #c8d2ea;
+  --dv-border-card: #d4dcf0;
+  --dv-text-muted:  #6878a8;
+  --dv-text-mid:    #3d4e87;
+  --dv-divider:     #e8ecf4;
+  --dv-subtle:      #8896c4;
+  --dv-arrow:       #b8c4e0;
+  --dv-footer-rule: #e0e7f2;
 }
+
+/* ── Reset / Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
 
 body {
-  margin: 0;
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  color: var(--dv-navy);
   background: #fff;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #000;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
-.viewer {
-  width: 100%;
-  max-width: 1536px;
+img { display: block; max-width: 100%; }
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--dv-navy);
+}
+
+/* ── Screen-reader only ── */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Layout ── */
+.container {
+  max-width: 1160px;
   margin: 0 auto;
-  padding: clamp(20px, 3vw, 36px) clamp(20px, 5vw, 70px);
+  padding: 0 36px;
 }
 
-.title {
-  text-align: center;
-  font-size: clamp(2.5rem, 5vw, 4.4rem);
+section { padding: 80px 0; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-block;
+  background: var(--dv-navy);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn:hover, .btn:focus-visible { background: var(--dv-navy-dark); outline: none; }
+
+/* ── Email capture form ── */
+.email-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.email-form input[type="email"] {
+  flex: 1 1 220px;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 14px 18px;
+  border: 2px solid var(--dv-border);
+  border-radius: 8px;
+  color: var(--dv-navy);
+  background: #fff;
+  outline: none;
+}
+.email-form input[type="email"]::placeholder { color: var(--dv-subtle); }
+.email-form input[type="email"]:focus { border-color: var(--dv-navy); }
+
+.consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--dv-text-muted);
+  margin-top: 10px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.consent-label input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; accent-color: var(--dv-navy); }
+.consent-label a { color: var(--dv-navy); }
+.form-note {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+  margin-top: 10px;
+}
+
+/* ── Form success state ── */
+.form-success {
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: var(--dv-bg-cta);
+  border-radius: 10px;
+  color: var(--dv-navy);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* ── Demo play button (hero copy column) ── */
+.hero-play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 18px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dv-navy);
+  cursor: pointer;
+  text-decoration: none;
+}
+.hero-play-btn:hover { color: var(--dv-accent); }
+.hero-play-btn:focus-visible { outline: 2px solid var(--dv-navy); outline-offset: 3px; border-radius: 4px; }
+.hero-play-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--dv-navy);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.15s;
+}
+.hero-play-btn:hover .hero-play-icon {
+  background: var(--dv-accent);
+  transform: scale(1.06);
+}
+
+/* ── Device frame ── */
+.dv-device-frame {
+  background: #1d2545;
+  border-radius: 22px;
+  padding: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.dv-device-frame .dv-mockup {
+  border-radius: 13px;
+  box-shadow: none;
+}
+
+/* ── Video modal ── */
+/* ── Video dialog ── */
+dialog#video-dialog {
+  border: none;
+  background: transparent;
+  padding: 48px 20px 20px;
+  max-width: 860px;
+  width: 90vw;
+}
+dialog#video-dialog::backdrop {
+  background: rgba(10, 18, 60, 0.82);
+  backdrop-filter: blur(4px);
+}
+.video-modal-inner {
+  position: relative;
+}
+.video-modal-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
   line-height: 1;
-  font-weight: 900;
-  color: #08245f;
-  margin: 0 0 20px;
+  padding: 4px 8px;
+  opacity: 0.85;
+}
+.video-modal-close:hover { opacity: 1; }
+dialog#video-dialog video {
+  display: block;
+  max-width: 100%;
+  border-radius: 12px;
 }
 
-.top {
+/* ══════════════════════════════════════════ */
+/* DEVICE MOCKUP COMPONENT  (.dv-mockup)     */
+/* ══════════════════════════════════════════ */
+.dv-mockup {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(26, 43, 109, 0.18);
+  padding: 20px 20px 16px;
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  color: var(--dv-navy);
+  user-select: none;
+}
+
+.dvm-top {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 20px;
-}
-
-.day {
-  font-size: clamp(2rem, 4vw, 4.5rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-}
-
-.date {
-  font-size: clamp(1.2rem, 2.2vw, 2.4rem);
-  font-weight: 900;
-  margin-top: 10px;
-}
-
-.time-block {
-  text-align: right;
-}
-
-.time {
-  font-size: clamp(2rem, 4vw, 4.5rem);
-  font-weight: 900;
-}
-
-.period {
-  font-size: clamp(1.2rem, 2.2vw, 2.4rem);
-  font-weight: 900;
-  margin-top: 10px;
-}
-
-.sun-icon {
-  width: min(260px, 20vw);
-  aspect-ratio: 260 / 170;
-  position: relative;
-  margin: 0 auto;
-}
-
-.sun {
-  width: 36%;
-  height: 55%;
-  background: #ff7900;
-  border-radius: 50%;
-  position: absolute;
-  left: 32%;
-  top: 22%;
-}
-
-.horizon {
-  position: absolute;
-  left: 13%;
-  top: 70%;
-  width: 74%;
-  height: 30%;
-  border-top: 10px solid #08245f;
-  border-radius: 50% 50% 0 0;
-}
-
-.ray {
-  position: absolute;
-  background: #ff7900;
-  width: 2%;
-  height: 20%;
-  border-radius: 3px;
-}
-
-.r1 { left: 49%; top: 0; }
-.r2 { left: 25%; top: 13%; transform: rotate(-42deg); }
-.r3 { right: 25%; top: 13%; transform: rotate(42deg); }
-.r4 { left: 17%; top: 48%; transform: rotate(90deg); }
-.r5 { right: 17%; top: 48%; transform: rotate(90deg); }
-
-.cloud {
-  position: absolute;
-  width: 22%;
-  height: 14%;
-  background: #93bce9;
-  border-radius: 18px 18px 6px 6px;
-  top: 47%;
-}
-
-.cloud:before {
-  content: "";
-  position: absolute;
-  width: 60%;
-  height: 140%;
-  background: #93bce9;
-  border-radius: 50%;
-  left: 20%;
-  top: -70%;
-}
-
-.cloud.left { left: -4%; }
-.cloud.right { right: -4%; }
-
-.main {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: clamp(24px, 4vw, 78px);
-  margin-top: clamp(30px, 4vw, 58px);
-}
-
-.today-title {
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
-  font-weight: 900;
+  gap: 8px;
   margin-bottom: 14px;
 }
 
-.event {
+.dvm-day {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.dvm-date {
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 3px;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+}
+
+.dvm-time-block { text-align: right; }
+.dvm-time { font-size: 1rem; font-weight: 700; }
+.dvm-period {
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 3px;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+}
+
+/* Time-of-day icon (approved custom assets from /assets/icon/) */
+.dvm-tod-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+.dvm-tod-icon img {
+  height: 42px;
+  width: auto;
+  display: block;
+}
+
+/* Screen title row */
+.dvm-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--dv-navy);
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--dv-divider);
+}
+.dv-mockup--lg .dvm-title {
+  font-size: 0.95rem;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.dvm-divider { height: 1px; background: var(--dv-divider); margin: 0 0 10px; }
+
+.dvm-today-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: var(--dv-subtle);
+  margin-bottom: 8px;
+}
+
+.dvm-events { list-style: none; }
+.dvm-event {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 20px;
-  min-height: 110px;
-  border-bottom: 2px solid #e5e5e5;
-  padding: 10px 0;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--dv-bg-cta);
 }
+.dvm-event:last-child { border-bottom: none; }
+.dvm-event--past { opacity: 0.45; }
 
-.event:last-child {
-  border-bottom: none;
-}
-
-.circle {
-  width: clamp(60px, 7vw, 106px);
-  height: clamp(60px, 7vw, 106px);
+.dvm-event-icon {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
+  background: var(--dv-bg-cta);
   display: grid;
   place-items: center;
-  font-size: clamp(1.5rem, 3vw, 3.4rem);
+  flex-shrink: 0;
+  color: var(--dv-navy);
+}
+.dvm-event-icon svg { display: block; }
+.dvm-event-icon--medical { background: #fff0f0; }
+.dvm-event-icon--home    { background: #fffae6; }
+.dvm-event-icon--people  { background: var(--dv-bg-cta); }
+
+.dvm-event-name { font-size: 0.78rem; font-weight: 600; }
+.dvm-event-time { font-size: 0.72rem; font-weight: 600; color: var(--dv-subtle); }
+
+.dvm-next-card {
+  margin-top: 12px;
+  background: var(--dv-bg-cta);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+.dvm-next-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--dv-accent);
+  margin-bottom: 3px;
+}
+.dvm-next-item {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.dvm-next-time {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--dv-accent);
 }
 
-.hair {
-  background: #f1f1f1;
-  color: #444;
+/* ── Landscape mockup variant (secondary section) ── */
+.dv-mockup--landscape {
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas:
+    "title   title"
+    "left    today"
+    "left    events"
+    "left    next";
+  column-gap: 20px;
+  padding: 20px 24px 18px;
+}
+.dv-mockup--landscape .dvm-title {
+  grid-area: title;
+  font-size: 0.9rem;
+  text-align: left;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+.dv-mockup--landscape .dvm-top {
+  grid-area: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 0;
+  border-right: 1px solid var(--dv-divider);
+  padding-right: 20px;
+  text-align: center;
+}
+.dv-mockup--landscape .dvm-time-block { text-align: center; }
+.dv-mockup--landscape .dvm-day       { font-size: 1.1rem; }
+.dv-mockup--landscape .dvm-date      { font-size: 0.72rem; }
+.dv-mockup--landscape .dvm-time      { font-size: 1.1rem; }
+.dv-mockup--landscape .dvm-period    { font-size: 0.72rem; }
+.dv-mockup--landscape .dvm-tod-icon img { height: 52px; }
+.dv-mockup--landscape .dvm-divider   { display: none; }
+.dv-mockup--landscape .dvm-today-label { grid-area: today; font-size: 0.72rem; margin-bottom: 4px; }
+.dv-mockup--landscape .dvm-events    { grid-area: events; }
+.dv-mockup--landscape .dvm-event     { gap: 10px; padding: 7px 0; }
+.dv-mockup--landscape .dvm-event-icon { width: 30px; height: 30px; }
+.dv-mockup--landscape .dvm-event-name { font-size: 0.88rem; }
+.dv-mockup--landscape .dvm-event-time { font-size: 0.8rem; }
+.dv-mockup--landscape .dvm-next-card  { grid-area: next; margin-top: 10px; padding: 12px 16px; }
+.dv-mockup--landscape .dvm-next-label { font-size: 0.66rem; }
+.dv-mockup--landscape .dvm-next-item  { font-size: 1.05rem; }
+.dv-mockup--landscape .dvm-next-time  { font-size: 0.85rem; }
+
+/* ══════════════════════════════════════════ */
+/* 1. HEADER                                 */
+/* ══════════════════════════════════════════ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: #fff;
+  border-bottom: 1px solid var(--dv-divider);
+  padding: 14px 0;
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+}
+.site-logo img {
+  height: 50px;
+  width: auto;
 }
 
-.people {
-  background: #eee9ff;
-  color: #4521a8;
+/* ══════════════════════════════════════════ */
+/* 2. HERO                                   */
+/* ══════════════════════════════════════════ */
+.hero {
+  padding: 72px 0 0;
+  overflow: hidden;
 }
-
-.home {
-  background: #fff1cf;
-  color: #dd9400;
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
 }
+.hero-copy { padding-bottom: 80px; }
 
-.event-name {
-  font-size: clamp(1.2rem, 2.4vw, 2.4rem);
-  font-weight: 800;
-}
-
-.event-time {
-  font-size: clamp(1.2rem, 2.4vw, 2.4rem);
-  font-weight: 800;
-  text-align: right;
-}
-
-.past {
-  color: #7b7b82;
-}
-
-.current {
-  color: #000;
-}
-
-.next-card {
-  background: #f1f5ff;
-  border-radius: 24px;
-  padding: clamp(24px, 3vw, 42px);
-}
-
-.next-label {
-  color: #0b4df0;
-  font-size: clamp(1.4rem, 2.5vw, 2.4rem);
-  font-weight: 900;
+.hero-copy h1 {
+  font-size: clamp(1.9rem, 3.5vw, 2.85rem);
   margin-bottom: 20px;
+  max-width: 480px;
+}
+.hero-subhead {
+  font-size: 1.1rem;
+  color: var(--dv-text-mid);
+  margin-bottom: 36px;
+  max-width: 400px;
 }
 
-.next-item {
-  font-size: clamp(2rem, 4vw, 4.5rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
+.hero-visual {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.hero-photo {
+  position: relative;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  flex: 1;
+  min-height: 420px;
+}
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+.hero-mockup-wrap {
+  position: absolute;
+  top: 24px;
+  right: 0;
+  width: 54%;
+  z-index: 2;
+}
+
+/* ══════════════════════════════════════════ */
+/* 3. PAIN POINTS                            */
+/* ══════════════════════════════════════════ */
+.pain-points { background: var(--dv-bg-soft); }
+
+.pain-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+.pain-photo {
+  border-radius: 20px;
+  overflow: hidden;
+}
+.pain-photo img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  max-height: 500px;
+}
+
+.pain-copy h2 {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  margin-bottom: 32px;
+}
+.question-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.question-card {
+  background: #fff;
+  border: 1.5px solid var(--dv-border-card);
+  border-radius: 14px;
+  padding: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dv-navy);
+  line-height: 1.35;
+}
+.pain-tagline {
+  font-size: 1rem;
+  color: var(--dv-text-muted);
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════ */
+/* 4. SECONDARY MOCKUP + CHECKLIST           */
+/* ══════════════════════════════════════════ */
+.secondary-mockup-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+
+.checklist-section h2 {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  margin-bottom: 28px;
+}
+.checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+.checklist li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.check-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--dv-bg-cta);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--dv-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.checklist-tagline {
+  font-size: 1rem;
+  color: var(--dv-text-muted);
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════ */
+/* 5. HOW IT WORKS                           */
+/* ══════════════════════════════════════════ */
+.how-it-works { background: var(--dv-bg-soft); text-align: center; }
+
+.how-it-works h2 {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  margin-bottom: 60px;
+}
+.steps-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.step {
+  flex: 1;
+  max-width: 300px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.step-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--dv-navy);
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
   margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.step-icon {
+  margin-bottom: 14px;
+  color: var(--dv-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.step p {
+  font-size: 0.9rem;
+  color: var(--dv-text-muted);
+  line-height: 1.55;
+}
+.step-arrow {
+  padding-top: 26px;
+  color: var(--dv-arrow);
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
-.next-time {
-  color: #0b4df0;
-  font-size: clamp(1.5rem, 3vw, 2.8rem);
-  font-weight: 900;
+/* ══════════════════════════════════════════ */
+/* 6. WHO IT'S FOR                           */
+/* ══════════════════════════════════════════ */
+.who-its-for h2 {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  margin-bottom: 48px;
+  text-align: center;
+}
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.audience-card {
+  background: var(--dv-bg-soft);
+  border: 1.5px solid var(--dv-border-card);
+  border-radius: 18px;
+  padding: 32px 24px;
+  text-align: center;
+}
+.audience-card .card-icon {
+  margin-bottom: 16px;
+  color: var(--dv-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.audience-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.audience-card p {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+  line-height: 1.55;
 }
 
-/* Tablet */
+/* ══════════════════════════════════════════ */
+/* 7. FOOTER CTA BAND                        */
+/* ══════════════════════════════════════════ */
+.footer-cta {
+  background: var(--dv-bg-cta);
+  padding: 88px 0;
+  text-align: center;
+}
+.footer-cta h2 {
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  margin-bottom: 12px;
+}
+.footer-cta .cta-sub {
+  font-size: 1.1rem;
+  color: var(--dv-text-mid);
+  margin-bottom: 36px;
+}
+.footer-cta .email-form {
+  justify-content: center;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.footer-cta .form-success {
+  max-width: 520px;
+  margin: 16px auto 0;
+}
 
+/* ══════════════════════════════════════════ */
+/* 8. FOOTER                                 */
+/* ══════════════════════════════════════════ */
+.site-footer {
+  border-top: 1px solid var(--dv-footer-rule);
+  padding: 28px 0;
+}
+.site-footer .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+}
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+.footer-links a {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+  text-decoration: none;
+}
+.footer-links a:hover { text-decoration: underline; color: var(--dv-navy); }
+
+/* ══════════════════════════════════════════ */
+/* RESPONSIVE                                */
+/* ══════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .main {
+  section { padding: 64px 0; }
+  .container { padding: 0 28px; }
+
+  /* Hero */
+  .hero { overflow: visible; }
+  .hero-inner {
     grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .hero-copy {
+    padding-bottom: 0;
+    order: 1;
+  }
+  .hero-visual {
+    order: 2;
+    min-height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .hero-photo {
+    min-height: auto;
+    border-radius: 20px;
+    width: 100%;
+    flex: none;
+  }
+  .hero-photo img { height: 320px; }
+  .hero-mockup-wrap {
+    position: relative;
+    width: 72%;
+    margin: -60px auto 0;
+    z-index: 2;
   }
 
-  .next-card {
-    margin-top: 20px;
+  /* Pain points */
+  .pain-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
+  .pain-photo img { max-height: 340px; }
+
+  /* Secondary mockup */
+  .secondary-mockup-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  /* How it works */
+  .steps-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .step { max-width: 360px; padding: 0; }
+  .step-arrow { transform: rotate(90deg); padding-top: 0; }
+
+  /* Who it's for */
+  .audience-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-/* Mobile */
 
 @media (max-width: 640px) {
+  section { padding: 52px 0; }
+  .container { padding: 0 20px; }
 
-  .top {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
+  .hero-photo img { height: 240px; }
+  .hero-mockup-wrap { width: 90%; margin-top: -50px; }
 
-  .time-block {
-    text-align: center;
-  }
+  .question-grid { grid-template-columns: 1fr; }
+  .audience-grid { grid-template-columns: 1fr; }
 
-  .event {
-    grid-template-columns: 70px 1fr;
-  }
+  .email-form { flex-direction: column; }
+  .email-form input[type="email"] { flex: none; }
 
-  .event-time {
-    grid-column: 2;
-    text-align: left;
-  }
+  .footer-cta { padding: 60px 0; }
+  .site-footer .container { flex-direction: column; align-items: flex-start; }
 }
 </style>
 
 </head>
-
 <body>
 
-<main class="viewer">
+<!-- ══════════════════════════════════════ -->
+<!-- 1. HEADER                             -->
+<!-- ══════════════════════════════════════ -->
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="site-logo" aria-label="Daily View home">
+      <img src="assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="38">
+    </a>
+  </div>
+</header>
 
-  <h1 class="title">Daily View</h1>
 
-  <section class="top">
+<!-- ══════════════════════════════════════ -->
+<!-- 2. HERO                               -->
+<!-- ══════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
 
-    <div>
-      <div class="day">TUESDAY</div>
-      <div class="date">25 APRIL 2024</div>
-    </div>
+      <div class="hero-copy">
+        <h1>Give your loved one confidence about what happens next.</h1>
+        <p class="hero-subhead">A simple daily display showing the date, time, activities and reminders at a glance.</p>
 
-    <div class="sun-icon">
-      <div class="ray r1"></div>
-      <div class="ray r2"></div>
-      <div class="ray r3"></div>
-      <div class="ray r4"></div>
-      <div class="ray r5"></div>
-      <div class="cloud left"></div>
-      <div class="cloud right"></div>
-      <div class="sun"></div>
-      <div class="horizon"></div>
-    </div>
+        <form class="email-form" id="hero-form" novalidate>
+          <label for="hero-email" class="sr-only">Your email address</label>
+          <input
+            type="email"
+            id="hero-email"
+            name="email"
+            placeholder="Enter your email address"
+            autocomplete="email"
+            required
+          >
+          <button type="submit" class="btn">Register Interest</button>
+        </form>
+        <label class="consent-label">
+          <input type="checkbox" id="hero-consent" required>
+          I agree to the <a href="legal/terms-of-use.html">Terms of Use</a> and <a href="legal/privacy-policy.html">Privacy Policy</a>
+        </label>
+        <p class="form-note">No spam. Occasional updates only.</p>
+        <div class="form-success" id="hero-success" hidden>
+          <p>Thanks! We'll keep you posted.</p>
+        </div>
 
-    <div class="time-block">
-      <div class="time">14:05</div>
-      <div class="period">AFTERNOON</div>
-    </div>
-
-  </section>
-
-  <section class="main">
-
-    <div>
-
-      <div class="today-title">TODAY</div>
-
-      <div class="event past">
-        <div class="circle hair">✂</div>
-        <div class="event-name">Hair appointment</div>
-        <div class="event-time">11:00</div>
+        <button type="button" class="hero-play-btn" id="open-demo" onclick="document.getElementById('video-dialog').showModal();document.getElementById('demo-video').play().catch(function(){})" aria-label="Watch a 10-second Daily View demo">
+          <span class="hero-play-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <polygon points="6,4 21,12 6,20" fill="#ffffff"/>
+            </svg>
+          </span>
+          Watch a 10-second demo
+        </button>
       </div>
 
-      <div class="event past">
-        <div class="circle people">👥</div>
-        <div class="event-name">Lunch with Sarah</div>
-        <div class="event-time">13:00</div>
-      </div>
+      <div class="hero-visual">
+        <div class="hero-photo">
+          <img
+            src="assets/photo/hero-elderly-lady%20v2.webp"
+            srcset="
+              assets/photo/hero-elderly-lady-400%20v2.webp   400w,
+              assets/photo/hero-elderly-lady-800%20v2.webp   800w,
+              assets/photo/hero-elderly-lady-1200%20v2.webp 1200w,
+              assets/photo/hero-elderly-lady-1600%20v2.webp 1600w
+            "
+            sizes="(max-width: 900px) 100vw, 50vw"
+            alt="An older woman sitting comfortably at home, smiling and looking calm"
+            width="800"
+            height="600"
+            loading="eager"
+          >
+        </div>
 
-      <div class="event current">
-        <div class="circle home">⌂</div>
-        <div class="event-name">Carer visit</div>
-        <div class="event-time">16:00</div>
+        <!-- TODO: this mockup currently shows static sample data. Future: wire
+             this up to live date/time and real event data from Supabase. -->
+        <div class="hero-mockup-wrap">
+          <div class="dv-device-frame">
+          <article class="dv-mockup" id="dv-mockup-hero" aria-label="Daily View sample screen">
+            <div class="dvm-title">Daily View</div>
+            <div class="dvm-top">
+              <div>
+                <div class="dvm-day"></div>
+                <div class="dvm-date"></div>
+              </div>
+              <div class="dvm-tod-icon" aria-hidden="true"></div>
+              <div class="dvm-time-block">
+                <div class="dvm-time"></div>
+                <div class="dvm-period"></div>
+              </div>
+            </div>
+            <div class="dvm-divider"></div>
+            <div class="dvm-today-label">TODAY</div>
+            <ul class="dvm-events" aria-label="Today's events"></ul>
+            <aside class="dvm-next-card">
+              <div class="dvm-next-label">NEXT</div>
+              <div class="dvm-next-item"></div>
+              <div class="dvm-next-time"></div>
+            </aside>
+          </article>
+          </div>
+        </div>
       </div>
 
     </div>
+  </div>
+</section>
 
-    <aside class="next-card">
-      <div class="next-label">NEXT</div>
-      <div class="next-item">Carer visit</div>
-      <div class="next-time">at 16:00</div>
-    </aside>
 
-  </section>
+<!-- ══════════════════════════════════════ -->
+<!-- 3. PAIN POINTS                        -->
+<!-- ══════════════════════════════════════ -->
+<section class="pain-points">
+  <div class="container">
+    <div class="pain-inner">
 
-</main>
+      <div class="pain-photo">
+        <img
+          src="assets/photo/mother-daughter%20v2.webp"
+          srcset="
+            assets/photo/mother-daughter-400%20v2.webp   400w,
+            assets/photo/mother-daughter-800%20v2.webp   800w,
+            assets/photo/mother-daughter-1200%20v2.webp 1200w,
+            assets/photo/mother-daughter-1600%20v2.webp 1600w
+          "
+          sizes="(max-width: 900px) 100vw, 45vw"
+          alt="A daughter and her mother sitting together warmly"
+          width="600"
+          height="500"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="pain-copy">
+        <h2>Do you find yourself answering the same questions every day?</h2>
+        <div class="question-grid">
+          <div class="question-card">"What day is it?"</div>
+          <div class="question-card">"When is my appointment?"</div>
+          <div class="question-card">"Is anyone visiting today?"</div>
+          <div class="question-card">"What is she doing this afternoon?"</div>
+        </div>
+        <p class="pain-tagline">Daily View helps your loved one find the answer themselves.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- 4. SECONDARY MOCKUP + CHECKLIST       -->
+<!-- ══════════════════════════════════════ -->
+<section class="secondary-mockup">
+  <div class="container">
+    <div class="secondary-mockup-inner">
+
+      <div>
+        <!-- TODO: this mockup currently shows static sample data. Future: wire
+             this up to live date/time and real event data from Supabase. -->
+        <div class="dv-device-frame">
+        <article class="dv-mockup dv-mockup--landscape" id="dv-mockup-secondary" aria-label="Daily View sample screen">
+          <div class="dvm-title">Daily View</div>
+          <div class="dvm-top">
+            <div>
+              <div class="dvm-day"></div>
+              <div class="dvm-date"></div>
+            </div>
+            <div class="dvm-tod-icon" aria-hidden="true"></div>
+            <div class="dvm-time-block">
+              <div class="dvm-time"></div>
+              <div class="dvm-period"></div>
+            </div>
+          </div>
+          <div class="dvm-divider"></div>
+          <div class="dvm-today-label">TODAY</div>
+          <ul class="dvm-events" aria-label="Today's events"></ul>
+          <aside class="dvm-next-card">
+            <div class="dvm-next-label">NEXT</div>
+            <div class="dvm-next-item"></div>
+            <div class="dvm-next-time"></div>
+          </aside>
+        </article>
+        </div>
+      </div>
+
+      <div class="checklist-section">
+        <h2>A simple daily reference</h2>
+        <ul class="checklist">
+          <li>
+            <span class="check-icon" aria-hidden="true">✓</span>
+            Today's time and date
+          </li>
+          <li>
+            <span class="check-icon" aria-hidden="true">✓</span>
+            Time-of-day icon — morning, afternoon, or evening
+          </li>
+          <li>
+            <span class="check-icon" aria-hidden="true">✓</span>
+            Today's appointments and activities
+          </li>
+          <li>
+            <span class="check-icon" aria-hidden="true">✓</span>
+            What happens next, always clearly highlighted
+          </li>
+        </ul>
+        <p class="checklist-tagline">Large, clear information visible from across the room.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- 5. HOW IT WORKS                       -->
+<!-- ══════════════════════════════════════ -->
+<section class="how-it-works">
+  <div class="container">
+    <h2>How it works</h2>
+    <div class="steps-row" role="list">
+
+      <div class="step" role="listitem">
+        <div class="step-badge" aria-hidden="true">1</div>
+        <div class="step-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <h3>Family member updates the schedule</h3>
+        <p>Add appointments, visits, and daily activities in a few taps — no technical skill needed.</p>
+      </div>
+
+      <div class="step-arrow" aria-hidden="true">→</div>
+
+      <div class="step" role="listitem">
+        <div class="step-badge" aria-hidden="true">2</div>
+        <div class="step-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+        </div>
+        <h3>Daily View updates automatically</h3>
+        <p>The display refreshes on its own — no action required from your loved one.</p>
+      </div>
+
+      <div class="step-arrow" aria-hidden="true">→</div>
+
+      <div class="step" role="listitem">
+        <div class="step-badge" aria-hidden="true">3</div>
+        <div class="step-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <h3>Your loved one sees what's next</h3>
+        <p>A calm, clear screen shows today's plan and always highlights what's coming up.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- 6. WHO IT'S FOR                       -->
+<!-- ══════════════════════════════════════ -->
+<section class="who-its-for">
+  <div class="container">
+    <h2>Who it's for</h2>
+    <div class="audience-grid">
+
+      <div class="audience-card">
+        <div class="card-icon" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>Families</h3>
+        <p>Supporting an older parent or relative who benefits from gentle daily structure and reassurance.</p>
+      </div>
+
+      <div class="audience-card">
+        <div class="card-icon" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="7" r="4"/>
+            <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+          </svg>
+        </div>
+        <h3>Older adults</h3>
+        <p>Following a familiar daily routine, with clear reminders of what's happening and when.</p>
+      </div>
+
+      <div class="audience-card">
+        <div class="card-icon" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <h3>Retirement communities</h3>
+        <p>Displayed in common areas or individual rooms to keep residents oriented and at ease.</p>
+      </div>
+
+      <div class="audience-card">
+        <div class="card-icon" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <h3>Carers and support organisations</h3>
+        <p>Helping clients maintain independence and reducing the need for repeated reminders.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- 7. FOOTER CTA BAND                    -->
+<!-- ══════════════════════════════════════ -->
+<section class="footer-cta">
+  <div class="container">
+    <h2>Less confusion for them.<br>More peace of mind for you.</h2>
+    <p class="cta-sub">Join the Daily View waiting list.</p>
+    <form class="email-form" id="footer-form" novalidate>
+      <label for="footer-email" class="sr-only">Your email address</label>
+      <input
+        type="email"
+        id="footer-email"
+        name="email"
+        placeholder="Enter your email address"
+        autocomplete="email"
+        required
+      >
+      <button type="submit" class="btn">Register Interest</button>
+    </form>
+    <label class="consent-label">
+      <input type="checkbox" id="footer-consent" required>
+      I agree to the <a href="legal/terms-of-use.html">Terms of Use</a> and <a href="legal/privacy-policy.html">Privacy Policy</a>
+    </label>
+    <p class="form-note">No spam. Occasional updates only.</p>
+    <div class="form-success" id="footer-success" hidden>
+      <p>Thanks! We'll keep you posted.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- 8. FOOTER                             -->
+<!-- ══════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="legal/terms-of-use.html">Terms of Use</a>
+      <a href="legal/privacy-policy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- VIDEO MODAL                           -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="video-dialog" aria-label="Daily View demo video">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" id="close-demo" aria-label="Close video">✕</button>
+    <video
+      id="demo-video"
+      src="assets/video/Daily%20View%20Explainer%20(10s)%20v2.mp4"
+      controls
+      playsinline
+      preload="auto"
+      width="800"
+    ></video>
+  </div>
+</dialog>
+
+
+<script>
+// ── Mockup sample data ──────────────────────────────────────────────────────────
+// Edit only this object to update what the mockups display.
+// Future: replace with live system clock values and real event data from Supabase.
+var iconHome = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
+var iconPeople = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+
+// Approved custom time-of-day icons. Morning asset not yet in /assets/icon/ — ask before substituting.
+var periodIcons = {
+  'MORNING': 'assets/icon/logo_icon_v5.svg',
+  'AFTERNOON': 'assets/icon/afternoon%20icon%20v1.svg',
+  'EVENING':   'assets/icon/evening_icon_v2.svg',
+  'NIGHT':     'assets/icon/night_icon_v1.svg'
+};
+
+const mockupData = {
+  day: 'THURSDAY',
+  date: '11 JUNE 2026',
+  time: '16:50',
+  period: 'AFTERNOON',
+  events: [
+    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people', label: 'Hair styling',    time: '11:00', state: 'past'     },
+    { iconSvg: iconHome,   iconClass: 'dvm-event-icon--medical', label: 'Care visit',     time: '14:00', state: 'past'     },
+    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people',  label: 'Clare visiting', time: '17:00', state: 'upcoming' }
+  ],
+  next: { label: 'Clare visiting', time: '17:00' }
+};
+
+const mockupDataSecondary = {
+  day: 'TUESDAY',
+  date: '25 APRIL 2024',
+  time: '14:05',
+  period: 'AFTERNOON',
+  events: [
+    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people',  label: 'Hair appointment', time: '11:00', state: 'past'     },
+    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people',  label: 'Lunch with Sarah', time: '13:00', state: 'past'     },
+    { iconSvg: iconHome,   iconClass: 'dvm-event-icon--medical', label: 'Carer visit',      time: '16:00', state: 'upcoming' }
+  ],
+  next: { label: 'Carer visit', time: '16:00' }
+};
+
+function renderMockup(id, data) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var d = data || mockupData;
+
+  el.querySelector('.dvm-day').textContent    = d.day;
+  el.querySelector('.dvm-date').textContent   = d.date;
+  el.querySelector('.dvm-time').textContent   = d.time;
+  el.querySelector('.dvm-period').textContent = d.period;
+
+  var iconSrc = periodIcons[d.period];
+  var todEl = el.querySelector('.dvm-tod-icon');
+  if (todEl && iconSrc) {
+    todEl.innerHTML = '<img src="' + iconSrc + '" alt="">';
+  }
+
+  var list = el.querySelector('.dvm-events');
+  d.events.forEach(function(ev) {
+    var li = document.createElement('li');
+    li.className = 'dvm-event' + (ev.state === 'past' ? ' dvm-event--past' : '');
+    li.innerHTML =
+      '<span class="dvm-event-icon ' + ev.iconClass + '">' + ev.iconSvg + '</span>' +
+      '<span class="dvm-event-name">' + ev.label + '</span>' +
+      '<span class="dvm-event-time">' + ev.time  + '</span>';
+    list.appendChild(li);
+  });
+
+  el.querySelector('.dvm-next-item').textContent = d.next.label;
+  el.querySelector('.dvm-next-time').textContent = 'at ' + d.next.time;
+}
+
+try { renderMockup('dv-mockup-hero'); } catch(e) {}
+try { renderMockup('dv-mockup-secondary', mockupDataSecondary); } catch(e) {}
+
+// ── Supabase ─────────────────────────────────────────────────────────────────────
+var sb = supabase.createClient(
+  'https://sroptiolcjzhvbewbsho.supabase.co',
+  'sb_publishable_vB5lSSuS9tfuFXBCjkrSrg_ipCOgXRt'
+);
+
+// ── Form handlers ────────────────────────────────────────────────────────────────
+function handleFormSubmit(formId, consentId, successId) {
+  var form = document.getElementById(formId);
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = form.querySelector('input[type="email"]').value.trim();
+    var consent = document.getElementById(consentId).checked;
+    if (!email || !consent) return;
+
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    sb.from('interest_register').insert({
+      email: email,
+      product_name: 'Daily View',
+      source: 'landing_page',
+      consent_privacy_policy: true,
+      consent_terms: true,
+      consent_marketing: false,
+      consent_timestamp: new Date().toISOString(),
+      privacy_policy_url: window.location.origin + '/legal/privacy-policy.html',
+      terms_url: window.location.origin + '/legal/terms-of-use.html'
+    }).then(function(res) {
+      if (res.error) {
+        btn.disabled = false;
+        btn.textContent = 'Register Interest';
+        console.error(res.error);
+        return;
+      }
+      // Send confirmation email (fire and forget — don't block the success state)
+      sb.functions.invoke('send-confirmation', { body: { email: email } }).catch(function() {});
+      form.hidden = true;
+      var consentEl = document.getElementById(consentId);
+      if (consentEl) consentEl.closest('label').hidden = true;
+      var note = form.nextElementSibling;
+      while (note && !note.classList.contains('form-success')) note = note.nextElementSibling;
+      document.getElementById(successId).hidden = false;
+    });
+  });
+}
+handleFormSubmit('hero-form',   'hero-consent',   'hero-success');
+handleFormSubmit('footer-form', 'footer-consent', 'footer-success');
+
+// ── Copyright year ───────────────────────────────────────────────────────────────
+document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+// ── Video dialog ─────────────────────────────────────────────────────────────────
+var dlg   = document.getElementById('video-dialog');
+var video = document.getElementById('demo-video');
+
+document.getElementById('open-demo').addEventListener('click', function() {
+  dlg.showModal();
+});
+
+function closeDialog() {
+  dlg.close();
+  video.pause();
+  video.currentTime = 0;
+}
+
+document.getElementById('close-demo').addEventListener('click', closeDialog);
+
+dlg.addEventListener('click', function(e) {
+  if (e.target === dlg) closeDialog();
+});
+</script>
 
 </body>
 </html>

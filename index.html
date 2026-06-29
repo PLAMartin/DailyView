@@ -107,6 +107,9 @@ section { padding: 80px 0; }
 }
 .btn:hover, .btn:focus-visible { background: var(--dv-navy-dark); outline: none; }
 
+/* ── Honeypot (bot trap — visually hidden, not interactable) ── */
+.dv-pot { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+
 /* ── Email capture form ── */
 .email-form {
   display: flex;
@@ -943,6 +946,11 @@ dialog#video-dialog video {
             autocomplete="email"
             required
           >
+          <!-- Bot trap: real users never see or fill this -->
+          <span class="dv-pot" aria-hidden="true">
+            <label for="hero-website">Website</label>
+            <input type="text" id="hero-website" name="website" tabindex="-1" autocomplete="off">
+          </span>
           <button type="submit" class="btn">Join Waitlist</button>
         </form>
         <label class="consent-label">
@@ -1250,6 +1258,11 @@ dialog#video-dialog video {
         autocomplete="email"
         required
       >
+      <!-- Bot trap: real users never see or fill this -->
+      <span class="dv-pot" aria-hidden="true">
+        <label for="footer-website">Website</label>
+        <input type="text" id="footer-website" name="website" tabindex="-1" autocomplete="off">
+      </span>
       <button type="submit" class="btn">Join Waitlist</button>
     </form>
     <label class="consent-label">
@@ -1313,6 +1326,9 @@ dialog#video-dialog video {
 
 
 <script>
+// ── Bot-deterrence: record when the page finished loading ────────────────────────
+var _formLoadTime = Date.now();
+
 // ── Mockup sample data ──────────────────────────────────────────────────────────
 // Edit only this object to update what the mockups display.
 // Future: replace with live system clock values and real event data from Supabase.
@@ -1456,6 +1472,26 @@ function handleFormSubmit(formId, consentId, successId) {
     var email = form.querySelector('input[type="email"]').value.trim();
     var consent = document.getElementById(consentId).checked;
     if (!email || !consent) return;
+
+    // Honeypot: if the hidden website field was filled, silently fake success
+    var pot = form.querySelector('input[name="website"]');
+    if (pot && pot.value) {
+      form.hidden = true;
+      var consentEl = document.getElementById(consentId);
+      if (consentEl) consentEl.closest('label').hidden = true;
+      document.getElementById(successId).hidden = false;
+      return;
+    }
+
+    // Timing: reject submissions under 3 s (bot speed) with the same silent treatment
+    if (Date.now() - _formLoadTime < 3000) {
+      form.hidden = true;
+      var consentEl2 = document.getElementById(consentId);
+      if (consentEl2) consentEl2.closest('label').hidden = true;
+      document.getElementById(successId).hidden = false;
+      return;
+    }
+
     waitlistCtx = { email: email, formId: formId, consentId: consentId, successId: successId };
     dialogNameInput.value = '';
     nameDialog.showModal();

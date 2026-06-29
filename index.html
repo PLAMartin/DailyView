@@ -1231,7 +1231,7 @@ var iconPeople = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" st
 
 // Approved custom time-of-day icons. Morning asset not yet in /assets/icon/ — ask before substituting.
 var periodIcons = {
-  'MORNING': 'assets/icon/logo_icon_v5.svg',
+  'MORNING':   'assets/icon/logo_icon_v5.svg',
   'AFTERNOON': 'assets/icon/afternoon%20icon%20v1.svg',
   'EVENING':   'assets/icon/evening_icon_v2.svg',
   'NIGHT':     'assets/icon/night_icon_v1.svg'
@@ -1329,7 +1329,7 @@ function handleFormSubmit(formId, consentId, successId) {
     }).then(function(res) {
       if (res.error) {
         btn.disabled = false;
-        btn.textContent = 'Register Interest';
+        btn.textContent = 'Join the Waitlist';
         console.error(res.error);
         return;
       }

@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email } = await req.json();
+    const { email, name } = await req.json();
 
     if (!email) {
       return new Response(JSON.stringify({ error: 'email required' }), {
@@ -19,6 +19,8 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    const greeting = name ? `Hi ${name},` : 'Hi there,';
 
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -32,7 +34,8 @@ serve(async (req) => {
         subject: "You're on the Daily View waitlist",
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1a2b6d;">
-            <h1 style="font-size: 24px; margin-bottom: 8px;">Thanks for registering your interest</h1>
+            <p style="font-size: 16px; line-height: 1.6; color: #3d4e87; margin-bottom: 4px;">${greeting}</p>
+            <h1 style="font-size: 24px; margin-bottom: 8px; margin-top: 8px;">You're on the Daily View waitlist</h1>
             <p style="font-size: 16px; line-height: 1.6; color: #3d4e87;">
               We'll be in touch when Daily View is ready. We'll only contact you with
               occasional updates — no spam.

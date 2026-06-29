@@ -110,11 +110,11 @@ section { padding: 80px 0; }
 /* ── Email capture form ── */
 .email-form {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
 }
+.email-form input[type="text"],
 .email-form input[type="email"] {
-  flex: 1 1 220px;
   font-family: inherit;
   font-size: 1rem;
   padding: 14px 18px;
@@ -123,9 +123,22 @@ section { padding: 80px 0; }
   color: var(--dv-navy);
   background: #fff;
   outline: none;
+  width: 100%;
+  box-sizing: border-box;
 }
+.email-form input[type="text"]::placeholder,
 .email-form input[type="email"]::placeholder { color: var(--dv-subtle); }
+.email-form input[type="text"]:focus,
 .email-form input[type="email"]:focus { border-color: var(--dv-navy); }
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.form-row input[type="email"] {
+  flex: 1 1 200px;
+  width: auto;
+}
 
 .consent-label {
   display: flex;
@@ -825,8 +838,8 @@ dialog#video-dialog video {
   .question-grid { grid-template-columns: 1fr; }
   .audience-grid { grid-template-columns: 1fr; }
 
-  .email-form { flex-direction: column; }
-  .email-form input[type="email"] { flex: none; }
+  .form-row { flex-direction: column; }
+  .form-row input[type="email"] { flex: none; width: 100%; }
 
   .footer-cta { padding: 60px 0; }
   .site-footer .container { flex-direction: column; align-items: flex-start; }
@@ -860,16 +873,26 @@ dialog#video-dialog video {
         <p class="hero-subhead">A simple daily display showing the date, time, activities and reminders at a glance.</p>
 
         <form class="email-form" id="hero-form" novalidate>
-          <label for="hero-email" class="sr-only">Your email address</label>
+          <label for="hero-name" class="sr-only">Your first name</label>
           <input
-            type="email"
-            id="hero-email"
-            name="email"
-            placeholder="Enter your email address"
-            autocomplete="email"
-            required
+            type="text"
+            id="hero-name"
+            name="name"
+            placeholder="Your first name (optional)"
+            autocomplete="given-name"
           >
-          <button type="submit" class="btn">Join Waitlist</button>
+          <div class="form-row">
+            <label for="hero-email" class="sr-only">Your email address</label>
+            <input
+              type="email"
+              id="hero-email"
+              name="email"
+              placeholder="Enter your email address"
+              autocomplete="email"
+              required
+            >
+            <button type="submit" class="btn">Join Waitlist</button>
+          </div>
         </form>
         <label class="consent-label">
           <input type="checkbox" id="hero-consent" required>
@@ -1167,16 +1190,26 @@ dialog#video-dialog video {
     <h2>Less confusion for them.<br>More peace of mind for you.</h2>
     <p class="cta-sub">Join the Daily View waiting list.</p>
     <form class="email-form" id="footer-form" novalidate>
-      <label for="footer-email" class="sr-only">Your email address</label>
+      <label for="footer-name" class="sr-only">Your first name</label>
       <input
-        type="email"
-        id="footer-email"
-        name="email"
-        placeholder="Enter your email address"
-        autocomplete="email"
-        required
+        type="text"
+        id="footer-name"
+        name="name"
+        placeholder="Your first name (optional)"
+        autocomplete="given-name"
       >
-      <button type="submit" class="btn">Register Interest</button>
+      <div class="form-row">
+        <label for="footer-email" class="sr-only">Your email address</label>
+        <input
+          type="email"
+          id="footer-email"
+          name="email"
+          placeholder="Enter your email address"
+          autocomplete="email"
+          required
+        >
+        <button type="submit" class="btn">Join Waitlist</button>
+      </div>
     </form>
     <label class="consent-label">
       <input type="checkbox" id="footer-consent" required>
@@ -1308,6 +1341,8 @@ function handleFormSubmit(formId, consentId, successId) {
   var form = document.getElementById(formId);
   form.addEventListener('submit', function(e) {
     e.preventDefault();
+    var nameInput = form.querySelector('input[type="text"]');
+    var name = nameInput ? nameInput.value.trim() : '';
     var email = form.querySelector('input[type="email"]').value.trim();
     var consent = document.getElementById(consentId).checked;
     if (!email || !consent) return;
@@ -1317,6 +1352,7 @@ function handleFormSubmit(formId, consentId, successId) {
     btn.textContent = 'Sending…';
 
     sb.from('interest_register').insert({
+      name: name || null,
       email: email,
       product_name: 'Daily View',
       source: 'landing_page',
@@ -1329,18 +1365,20 @@ function handleFormSubmit(formId, consentId, successId) {
     }).then(function(res) {
       if (res.error) {
         btn.disabled = false;
-        btn.textContent = 'Join the Waitlist';
+        btn.textContent = 'Join Waitlist';
         console.error(res.error);
         return;
       }
       // Send confirmation email (fire and forget — don't block the success state)
-      sb.functions.invoke('send-confirmation', { body: { email: email } }).catch(function() {});
+      sb.functions.invoke('send-confirmation', { body: { email: email, name: name || null } }).catch(function() {});
       form.hidden = true;
       var consentEl = document.getElementById(consentId);
       if (consentEl) consentEl.closest('label').hidden = true;
-      var note = form.nextElementSibling;
-      while (note && !note.classList.contains('form-success')) note = note.nextElementSibling;
-      document.getElementById(successId).hidden = false;
+      var successEl = document.getElementById(successId);
+      successEl.querySelector("p").textContent = name
+        ? "Thanks, " + name + ". We'll keep you posted."
+        : "Thanks. We'll keep you posted.";
+      successEl.hidden = false;
     });
   });
 }

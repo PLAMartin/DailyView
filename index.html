@@ -216,6 +216,9 @@ dialog#name-dialog::backdrop {
 }
 .consent-label input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; accent-color: var(--dv-navy); }
 .consent-label a { color: var(--dv-navy); }
+.consent-label--error { color: #c0392b; }
+.consent-label--error input[type="checkbox"] { outline: 2px solid #c0392b; outline-offset: 2px; border-radius: 2px; }
+.consent-label--error a { color: #c0392b; }
 .form-note {
   font-size: 0.875rem;
   color: var(--dv-text-muted);
@@ -1470,7 +1473,17 @@ function handleFormSubmit(formId, consentId, successId) {
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     var email = form.querySelector('input[type="email"]').value.trim();
-    var consent = document.getElementById(consentId).checked;
+    var consentCheckbox = document.getElementById(consentId);
+    var consentLabel = consentCheckbox.closest('label');
+    var consent = consentCheckbox.checked;
+    if (!consent) {
+      consentLabel.classList.add('consent-label--error');
+      consentCheckbox.focus();
+      consentCheckbox.addEventListener('change', function clear() {
+        consentLabel.classList.remove('consent-label--error');
+        consentCheckbox.removeEventListener('change', clear);
+      });
+    }
     if (!email || !consent) return;
 
     // Honeypot: if the hidden website field was filled, silently fake success

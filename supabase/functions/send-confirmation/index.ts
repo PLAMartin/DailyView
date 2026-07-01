@@ -36,7 +36,7 @@ serve(async (req) => {
     });
 
     await client.send({
-      from: 'Daily View <dailyviewhq@gmail.com>',
+      from: 'Daily View <support@dailyview.org>',
       to: email,
       subject: "You're on the Daily View waitlist",
       html: `

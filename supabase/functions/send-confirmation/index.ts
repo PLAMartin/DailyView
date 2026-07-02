@@ -60,6 +60,30 @@ serve(async (req) => {
       });
     }
 
+    // Notify support of the new signup (fire-and-forget — don't fail the request if this errors)
+    fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Daily View <support@dailyview.org>',
+        to: 'support@dailyview.org',
+        subject: 'New waitlist signup',
+        html: `
+          <div style="font-family: Arial, sans-serif; color: #1a2b6d;">
+            <p>New waitlist signup:</p>
+            <ul>
+              <li>Name: ${name || '(not provided)'}</li>
+              <li>Email: ${email}</li>
+              <li>Time: ${new Date().toISOString()}</li>
+            </ul>
+          </div>
+        `,
+      }),
+    }).catch(() => {});
+
     return new Response(JSON.stringify({ ok: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

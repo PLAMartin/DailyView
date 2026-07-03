@@ -536,6 +536,55 @@ dialog#video-dialog video {
   height: 50px;
   width: auto;
 }
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-left: auto;
+}
+.site-nav a {
+  color: var(--dv-navy);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.site-nav a:hover,
+.site-nav a:focus-visible { text-decoration: underline; }
+.site-nav a.btn {
+  color: #fff;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+}
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.nav-toggle-bar,
+.nav-toggle-bar::before,
+.nav-toggle-bar::after {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--dv-navy);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.nav-toggle-bar { position: relative; }
+.nav-toggle-bar::before,
+.nav-toggle-bar::after { content: ""; position: absolute; left: 0; }
+.nav-toggle-bar::before { top: -7px; }
+.nav-toggle-bar::after { top: 7px; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar { background: transparent; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar::before { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar::after { transform: translateY(-7px) rotate(-45deg); }
 
 /* ══════════════════════════════════════════ */
 /* 2. HERO                                   */
@@ -848,6 +897,34 @@ dialog#video-dialog video {
   section { padding: 64px 0; }
   .container { padding: 0 28px; }
 
+  /* Header nav */
+  .nav-toggle { display: flex; }
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--dv-divider);
+    box-shadow: 0 12px 24px rgba(26, 43, 109, 0.08);
+    padding: 8px 28px 20px;
+  }
+  .site-nav.is-open { display: flex; }
+  .site-nav a {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--dv-divider);
+  }
+  .site-nav a:last-child { border-bottom: none; }
+  .site-nav .btn {
+    margin-top: 16px;
+    text-align: center;
+  }
+  .site-header .container { position: relative; }
+
   /* Hero */
   .hero { overflow: visible; }
   .hero-inner {
@@ -966,6 +1043,19 @@ dialog#video-dialog video {
     <a href="/" class="site-logo" aria-label="Daily View home">
       <img src="assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="38">
     </a>
+    <!-- TODO: placeholder navigation — links do not go anywhere yet. -->
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <a href="#">How it works</a>
+      <a href="#">Who is it for</a>
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">Help</a>
+      <a href="#">Login</a>
+      <a href="#" class="btn">Try demo</a>
+    </nav>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+      <span class="nav-toggle-bar"></span>
+    </button>
   </div>
 </header>
 
@@ -1549,6 +1639,32 @@ document.getElementById('close-demo').addEventListener('click', closeDialog);
 
 dlg.addEventListener('click', function(e) {
   if (e.target === dlg) closeDialog();
+});
+
+// ── Mobile nav toggle ────────────────────────────────────────────────────────────
+var navToggle = document.getElementById('nav-toggle');
+var siteNav   = document.getElementById('site-nav');
+
+function closeNav() {
+  siteNav.classList.remove('is-open');
+  navToggle.setAttribute('aria-expanded', 'false');
+  navToggle.setAttribute('aria-label', 'Open menu');
+}
+
+navToggle.addEventListener('click', function() {
+  var isOpen = siteNav.classList.toggle('is-open');
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+  navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+});
+
+document.addEventListener('click', function(e) {
+  if (!siteNav.classList.contains('is-open')) return;
+  if (siteNav.contains(e.target) || navToggle.contains(e.target)) return;
+  closeNav();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeNav();
 });
 </script>
 

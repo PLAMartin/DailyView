@@ -555,6 +555,18 @@ dialog#video-dialog video {
   padding: 10px 22px;
   font-size: 0.95rem;
 }
+.site-nav a.nav-login {
+  background: none;
+  color: var(--dv-navy);
+  padding: 8px 20px;
+  border: 1.5px solid var(--dv-navy);
+  border-radius: 8px;
+}
+.site-nav a.nav-login:hover,
+.site-nav a.nav-login:focus-visible {
+  background: var(--dv-bg-soft);
+  text-decoration: none;
+}
 .nav-toggle {
   display: none;
   align-items: center;
@@ -1045,13 +1057,13 @@ dialog#video-dialog video {
     </a>
     <!-- TODO: placeholder navigation — links do not go anywhere yet. -->
     <nav class="site-nav" id="site-nav" aria-label="Main">
-      <a href="#">How it works</a>
-      <a href="#">Who is it for</a>
+      <a href="#">How It Works</a>
+      <a href="#">Who It's For</a>
       <a href="#">Features</a>
       <a href="#">Pricing</a>
       <a href="#">Help</a>
-      <a href="#">Login</a>
-      <a href="#" class="btn">Try demo</a>
+      <a href="#" class="nav-login">Login</a>
+      <a href="#" class="btn">Try Demo</a>
     </nav>
     <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
       <span class="nav-toggle-bar"></span>

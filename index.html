@@ -107,6 +107,24 @@ section { padding: 80px 0; }
 }
 .btn:hover, .btn:focus-visible { background: var(--dv-navy-dark); outline: none; }
 
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  color: var(--dv-navy);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 12px 22px;
+  border: 1.5px solid var(--dv-navy);
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn-outline:hover, .btn-outline:focus-visible { background: var(--dv-bg-soft); outline: none; }
+
 /* ── Honeypot (bot trap — visually hidden, not interactable) ── */
 .dv-pot { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
 
@@ -254,6 +272,7 @@ dialog#name-dialog::backdrop {
 }
 .hero-play-btn:hover { color: var(--dv-accent); }
 .hero-play-btn:focus-visible { outline: 2px solid var(--dv-navy); outline-offset: 3px; border-radius: 4px; }
+.hero-try-demo-btn { margin-top: 20px; }
 .hero-play-icon {
   width: 40px;
   height: 40px;
@@ -555,18 +574,11 @@ dialog#video-dialog video {
   padding: 10px 22px;
   font-size: 0.95rem;
 }
-.site-nav a.nav-login {
-  background: none;
-  color: var(--dv-navy);
+.site-nav a.btn-outline {
   padding: 8px 20px;
-  border: 1.5px solid var(--dv-navy);
-  border-radius: 8px;
+  font-size: 0.95rem;
 }
-.site-nav a.nav-login:hover,
-.site-nav a.nav-login:focus-visible {
-  background: var(--dv-bg-soft);
-  text-decoration: none;
-}
+.nav-try-demo-mobile { display: none; }
 .nav-toggle {
   display: none;
   align-items: center;
@@ -931,9 +943,13 @@ dialog#video-dialog video {
     border-bottom: 1px solid var(--dv-divider);
   }
   .site-nav a:last-child { border-bottom: none; }
-  .site-nav .btn {
-    margin-top: 16px;
+  .site-nav a[href="#features"] { border-bottom: none; }
+  .nav-try-demo-desktop { display: none; }
+  .nav-try-demo-mobile {
+    display: block;
+    margin-bottom: 12px;
     text-align: center;
+    border-bottom: none;
   }
   .site-header .container { position: relative; }
 
@@ -1055,14 +1071,12 @@ dialog#video-dialog video {
     <a href="/" class="site-logo" aria-label="Daily View home">
       <img src="assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="38">
     </a>
-    <!-- TODO: placeholder navigation — links do not go anywhere yet. -->
     <nav class="site-nav" id="site-nav" aria-label="Main">
-      <a href="#">How It Works</a>
-      <a href="#">Who It's For</a>
-      <a href="#">Features</a>
-      <a href="#">Help</a>
-      <a href="#" class="nav-login">Login</a>
-      <a href="#" class="btn">Try Demo</a>
+      <a href="try-demo/" class="btn nav-try-demo-mobile">Try demo</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#who-its-for">Who it's for</a>
+      <a href="#features">Features</a>
+      <a href="try-demo/" class="btn-outline nav-try-demo-desktop">Try demo</a>
     </nav>
     <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
       <span class="nav-toggle-bar"></span>
@@ -1116,6 +1130,7 @@ dialog#video-dialog video {
           </span>
           Watch a 10-second demo
         </button>
+        <a href="try-demo/" class="btn-outline hero-try-demo-btn">Try the interactive demo</a>
       </div>
 
       <div class="hero-visual">
@@ -1186,7 +1201,7 @@ dialog#video-dialog video {
 <!-- ══════════════════════════════════════ -->
 <!-- 4. SECONDARY MOCKUP + CHECKLIST       -->
 <!-- ══════════════════════════════════════ -->
-<section class="secondary-mockup">
+<section class="secondary-mockup" id="features">
   <div class="container">
     <div class="secondary-mockup-inner">
 
@@ -1250,7 +1265,7 @@ dialog#video-dialog video {
 <!-- ══════════════════════════════════════ -->
 <!-- 5. HOW IT WORKS                       -->
 <!-- ══════════════════════════════════════ -->
-<section class="how-it-works">
+<section class="how-it-works" id="how-it-works">
   <div class="container">
     <h2>How it works</h2>
     <div class="steps-row" role="list">
@@ -1304,7 +1319,7 @@ dialog#video-dialog video {
 <!-- ══════════════════════════════════════ -->
 <!-- 6. WHO IT'S FOR                       -->
 <!-- ══════════════════════════════════════ -->
-<section class="who-its-for">
+<section class="who-its-for" id="who-its-for">
   <div class="container">
     <h2>Who it's for</h2>
     <div class="audience-grid">
@@ -1362,7 +1377,7 @@ dialog#video-dialog video {
 <!-- ══════════════════════════════════════ -->
 <!-- 7. FOOTER CTA BAND                    -->
 <!-- ══════════════════════════════════════ -->
-<section class="footer-cta">
+<section class="footer-cta" id="register-interest">
   <div class="container">
     <h2>Less confusion for them.<br>More peace of mind for you.</h2>
     <p class="cta-sub">Join the Daily View waiting list.</p>

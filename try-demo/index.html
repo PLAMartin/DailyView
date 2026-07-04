@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Try Daily View for yourself — Daily View</title>
+<meta name="description" content="Try the interactive Daily View demo. Make a change to a sample day and see it appear on the display instantly. No account needed.">
+
+<!-- Favicons -->
+<link rel="icon" href="../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+<meta name="apple-mobile-web-app-title" content="Daily View">
+<meta name="application-name" content="Daily View">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="try-demo.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ -->
+<!-- HEADER                                -->
+<!-- ══════════════════════════════════════ -->
+<header class="site-header">
+  <div class="container">
+    <a href="../" class="site-logo" aria-label="Daily View home">
+      <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="38">
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <a href="../#how-it-works">How it works</a>
+      <a href="../#who-its-for">Who it's for</a>
+      <a href="../#features">Features</a>
+    </nav>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+      <span class="nav-toggle-bar"></span>
+    </button>
+  </div>
+</header>
+
+
+<main>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- INTRO + RESET                         -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="demo-hero">
+    <div class="container demo-hero-row">
+      <div class="demo-hero-copy">
+        <h1 id="demo-title">Try Daily View for yourself</h1>
+        <p>Make a change to today's plan and see how it appears on the Daily View screen.</p>
+        <p class="reassurance">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          No account. No sign-up. Just explore.
+        </p>
+      </div>
+      <button type="button" class="btn-outline btn-reset" id="reset-demo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Reset scenario
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- DEMO WORKSPACE                        -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="demo-workspace" id="demo-workspace" aria-label="Interactive Daily View demonstration">
+    <div class="container">
+
+      <div class="demo-controls">
+        <div class="control-group" aria-labelledby="scenario-label">
+          <p id="scenario-label">Choose a scenario</p>
+          <div class="scenario-group" role="group" aria-label="Demo scenarios">
+            <button type="button" class="scenario-card" data-scenario="family" aria-pressed="true">
+              <span class="scenario-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </span>
+              <span class="scenario-text">
+                <span class="scenario-label">Family home</span>
+                <span class="scenario-sub">At home with family</span>
+              </span>
+            </button>
+            <button type="button" class="scenario-card" data-scenario="careHome" aria-pressed="false">
+              <span class="scenario-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/></svg>
+              </span>
+              <span class="scenario-text">
+                <span class="scenario-label">Care home resident</span>
+                <span class="scenario-sub">Living in a care home</span>
+              </span>
+            </button>
+            <button type="button" class="scenario-card" data-scenario="supportedLiving" aria-pressed="false">
+              <span class="scenario-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </span>
+              <span class="scenario-text">
+                <span class="scenario-label">Supported living</span>
+                <span class="scenario-sub">Living independently</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group" aria-labelledby="period-label">
+          <p id="period-label">View at</p>
+          <div class="period-group" role="group" aria-label="Time of day">
+            <button type="button" class="period-btn" data-period="MORNING" aria-pressed="false">Morning</button>
+            <button type="button" class="period-btn" data-period="AFTERNOON" aria-pressed="true">Afternoon</button>
+            <button type="button" class="period-btn" data-period="EVENING" aria-pressed="false">Evening</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="scenario-context" id="scenario-context"></p>
+
+      <div class="demo-panels">
+
+        <section class="viewer-panel" aria-labelledby="viewer-title">
+          <h2 id="viewer-title" class="panel-heading">
+            <svg class="panel-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Daily View display
+          </h2>
+          <p class="panel-subheading">This is the screen at home.</p>
+
+          <div class="dv-device-frame">
+            <article class="dv-mockup dv-mockup--landscape" id="dv-mockup-demo" aria-label="Daily View sample screen">
+              <div class="dvm-title">Daily View</div>
+              <div class="dvm-top">
+                <div>
+                  <div class="dvm-day"></div>
+                  <div class="dvm-date"></div>
+                </div>
+                <div class="dvm-tod-icon" aria-hidden="true"></div>
+                <div class="dvm-time-block">
+                  <div class="dvm-time"></div>
+                  <div class="dvm-period"></div>
+                </div>
+              </div>
+              <div class="dvm-divider"></div>
+              <div class="dvm-today-label">TODAY</div>
+              <ul class="dvm-events" aria-label="Today's events"></ul>
+              <aside class="dvm-next-card">
+                <div class="dvm-next-label">NEXT</div>
+                <div class="dvm-next-item"></div>
+                <div class="dvm-next-time"></div>
+              </aside>
+            </article>
+          </div>
+          <p class="viewer-caption">This is a simulation. Changes you make here are not saved.</p>
+        </section>
+
+        <section class="editor-panel" aria-labelledby="editor-title">
+          <h2 id="editor-title" class="panel-heading">
+            <svg class="panel-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            Update today
+          </h2>
+          <p class="panel-subheading">Make a change and click Update display.</p>
+
+          <form id="demo-event-form" novalidate>
+            <div class="field">
+              <label for="event-select">What would you like to update?</label>
+              <select id="event-select" name="event"></select>
+            </div>
+            <div class="field" id="event-time-field">
+              <label for="event-time">Change the time</label>
+              <input type="time" id="event-time" name="time" required>
+              <p class="field-error" id="event-time-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="event-title">Change the title <span class="field-optional">(optional)</span></label>
+              <input type="text" id="event-title" name="title" maxlength="40" autocomplete="off">
+            </div>
+            <button type="submit" class="btn" id="update-display-btn">Update display</button>
+            <p class="field-note">Changes appear on the display straight away.</p>
+          </form>
+        </section>
+
+      </div>
+
+      <p id="demo-status" class="sr-only" aria-live="polite" role="status"></p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- POST-UPDATE CTA                       -->
+  <!-- ══════════════════════════════════════ -->
+  <section id="demo-after-update" class="after-update" hidden aria-labelledby="after-update-title">
+    <div class="container after-update-inner">
+      <div class="after-update-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg>
+      </div>
+      <div class="after-update-copy">
+        <h2 id="after-update-title" tabindex="-1">That's the idea.</h2>
+        <p>A trusted family member or carer keeps the day up to date. The person at home has one clear, reassuring place to look.</p>
+      </div>
+      <div class="after-update-actions">
+        <a href="#demo-workspace" class="btn-outline" id="try-another-link">Try another example</a>
+        <a href="../#register-interest" class="btn">Apply for free trial</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- FOOTER                                -->
+<!-- ══════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="../legal/terms-of-use.html">Terms of Use</a>
+      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="try-demo.js" defer></script>
+</body>
+</html>

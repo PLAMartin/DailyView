@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reset your password — Daily View</title>
+<meta name="description" content="Request a secure link to reset your Daily View password.">
+<meta name="robots" content="noindex">
+
+<!-- Favicons -->
+<link rel="icon" href="../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+<meta name="apple-mobile-web-app-title" content="Daily View">
+<meta name="application-name" content="Daily View">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="forgot-password.css">
+</head>
+<body>
+
+<header class="auth-header">
+  <div class="container">
+    <a href="../" class="auth-logo" aria-label="Daily View home">
+      <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="32">
+    </a>
+    <a href="../" class="auth-back-home">Back to home</a>
+  </div>
+</header>
+
+<main class="auth-main">
+  <div class="auth-panel">
+    <h1>Reset your password</h1>
+    <p class="auth-sub">Enter the email address linked to your Daily View account and we will send you a secure reset link.</p>
+
+    <div class="auth-message" id="forgot-message" role="status" aria-live="polite"></div>
+
+    <form id="forgot-form" novalidate>
+      <div class="field" id="forgot-email-field">
+        <label for="forgot-email">Email address</label>
+        <input type="email" id="forgot-email" name="email" autocomplete="email" required>
+        <p class="field-error" id="forgot-email-error" hidden></p>
+      </div>
+
+      <button type="submit" class="btn btn-full" id="forgot-submit">Send reset link</button>
+    </form>
+
+    <p class="auth-footer-note">
+      <a href="../login/">Back to sign in</a>
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="../legal/terms-of-use.html">Terms of Use</a>
+      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+<script src="../assets/js/dv-auth-config.js"></script>
+<script src="../assets/js/dv-auth.js"></script>
+<script src="forgot-password.js" defer></script>
+</body>
+</html>

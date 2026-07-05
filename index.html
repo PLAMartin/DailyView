@@ -11,7 +11,7 @@ gtag('js', new Date());
 gtag('config', 'G-VW1Q3CYX7Q');
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daily View — A calm, clear daily display for older adults</title>
@@ -579,6 +579,7 @@ dialog#video-dialog video {
   font-size: 0.95rem;
 }
 .nav-try-demo-mobile { display: none; }
+.site-nav a[href="login/"] { order: 1; }
 .nav-toggle {
   display: none;
   align-items: center;
@@ -943,7 +944,7 @@ dialog#video-dialog video {
     border-bottom: 1px solid var(--dv-divider);
   }
   .site-nav a:last-child { border-bottom: none; }
-  .site-nav a[href="login/"] { border-bottom: none; }
+  .site-nav a[href="login/"] { border-bottom: none; order: -1; }
   .nav-try-demo-desktop { display: none; }
   .nav-try-demo-mobile {
     display: block;

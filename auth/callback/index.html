@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signing you in — Daily View</title>
+<meta name="robots" content="noindex">
+
+<!-- Favicons -->
+<link rel="icon" href="../../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root { --dv-navy: #1a2b6d; --dv-bg-soft: #f8f9ff; --dv-text-muted: #6878a8; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    background: var(--dv-bg-soft);
+    color: var(--dv-navy);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .callback-panel {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(26, 43, 109, 0.14);
+    padding: 40px 36px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+  }
+  h1 { font-size: 1.2rem; margin-bottom: 8px; }
+  p { color: var(--dv-text-muted); }
+  a { color: var(--dv-navy); font-weight: 600; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<div class="callback-panel">
+  <h1 class="sr-only">Signing you in</h1>
+  <p id="callback-status" role="status" aria-live="polite">Signing you in…</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+<script src="../../assets/js/dv-auth-config.js"></script>
+<script src="../../assets/js/dv-auth.js"></script>
+<script src="callback.js" defer></script>
+</body>
+</html>

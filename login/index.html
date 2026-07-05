@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in to Daily View — Daily View</title>
+<meta name="description" content="Sign in to manage today's plan for the person you support.">
+<meta name="robots" content="noindex">
+
+<!-- Favicons -->
+<link rel="icon" href="../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+<meta name="apple-mobile-web-app-title" content="Daily View">
+<meta name="application-name" content="Daily View">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ -->
+<!-- MINIMAL AUTH HEADER                   -->
+<!-- ══════════════════════════════════════ -->
+<header class="auth-header">
+  <div class="container">
+    <a href="../" class="auth-logo" aria-label="Daily View home">
+      <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="32">
+    </a>
+    <a href="../" class="auth-back-home">Back to home</a>
+  </div>
+</header>
+
+<main class="auth-main">
+  <div class="auth-panel">
+    <h1>Sign in to Daily View</h1>
+    <p class="auth-sub">Manage today's plan for the person you support.</p>
+    <p class="auth-hint">Use the email address linked to your Daily View account.</p>
+
+    <div class="auth-message" id="login-message" role="status" aria-live="polite"></div>
+
+    <form id="login-form" novalidate>
+      <div class="field" id="login-email-field">
+        <label for="login-email">Email address</label>
+        <input
+          type="email"
+          id="login-email"
+          name="email"
+          autocomplete="email"
+          required
+        >
+        <p class="field-error" id="login-email-error" hidden></p>
+      </div>
+
+      <div class="field field-with-toggle" id="login-password-field">
+        <label for="login-password">Password</label>
+        <div class="field-input-row">
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            autocomplete="current-password"
+            required
+          >
+          <button type="button" class="field-toggle-btn" id="login-password-toggle" aria-pressed="false">Show</button>
+        </div>
+        <p class="field-error" id="login-password-error" hidden></p>
+      </div>
+
+      <a href="../forgot-password/" class="auth-forgot-link">Forgot password?</a>
+
+      <button type="submit" class="btn btn-full" id="login-submit">Sign in</button>
+    </form>
+
+    <div class="auth-divider">or</div>
+
+    <button type="button" class="btn-outline btn-full" id="login-magic-link">Email me a secure sign-in link</button>
+
+    <p class="auth-footer-note">
+      New to Daily View?
+      <a href="../#register-interest">Apply for a free trial</a>
+    </p>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════ -->
+<!-- FOOTER                                -->
+<!-- ══════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="../legal/terms-of-use.html">Terms of Use</a>
+      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+<script src="../assets/js/dv-auth-config.js"></script>
+<script src="../assets/js/dv-auth.js"></script>
+<script src="login.js" defer></script>
+</body>
+</html>

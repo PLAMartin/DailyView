@@ -121,6 +121,7 @@ section { padding: 56px 0; }
 }
 .site-nav a:hover,
 .site-nav a:focus-visible { text-decoration: underline; }
+.nav-join-waitlist-mobile { display: none; }
 
 .nav-toggle {
   display: none;
@@ -578,6 +579,13 @@ section { padding: 56px 0; }
   .site-nav.is-open { display: flex; }
   .site-nav a { padding: 14px 0; border-bottom: 1px solid var(--dv-divider); }
   .site-nav a:last-child { border-bottom: none; }
+  .nav-join-waitlist-desktop { display: none; }
+  .nav-join-waitlist-mobile {
+    display: block;
+    margin-bottom: 12px;
+    text-align: center;
+    border-bottom: none;
+  }
   .site-header .container { position: relative; }
 
   .after-update-actions { margin-left: 0; width: 100%; }

@@ -32,13 +32,45 @@
   </div>
 </header>
 
-<main class="auth-main">
+<!-- ══════════════════════════════════════ -->
+<!-- LOADING / ACCOUNT CHOICE (pre-dashboard) -->
+<!-- ══════════════════════════════════════ -->
+<main class="auth-main" id="auth-main">
   <div class="auth-panel">
     <h1 class="sr-only">Your Daily View account</h1>
     <div class="auth-message" id="dashboard-message" role="status" aria-live="polite"></div>
-    <div id="dashboard-content"></div>
+    <div id="dashboard-account-choice"></div>
   </div>
 </main>
+
+<!-- ══════════════════════════════════════ -->
+<!-- DASHBOARD SHELL                        -->
+<!-- ══════════════════════════════════════ -->
+<div class="dash-shell" id="dash-shell" hidden>
+  <div class="dash-topbar">
+    <div class="dash-topbar-inner">
+      <span class="dash-account-name" id="dash-account-name"></span>
+      <div class="dash-topbar-actions">
+        <button type="button" class="btn-outline dash-topbar-btn" id="dash-switch-btn" hidden>Switch account</button>
+        <a href="#help" class="dash-help-link">Help</a>
+        <button type="button" class="btn-outline dash-topbar-btn" id="dash-signout-btn">Sign out</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-layout">
+    <nav class="dash-sidebar" aria-label="Dashboard sections">
+      <ul class="dash-nav-list" id="dash-nav-list"></ul>
+    </nav>
+
+    <div class="dash-content">
+      <p class="dash-section-status" id="dash-section-status" role="status" aria-live="polite"></p>
+      <div id="dashboard-content"></div>
+    </div>
+  </div>
+
+  <nav class="dash-bottom-nav" aria-label="Dashboard sections" id="dash-bottom-nav"></nav>
+</div>
 
 <footer class="site-footer">
   <div class="container">
@@ -49,6 +81,17 @@
     </nav>
   </div>
 </footer>
+
+<!-- ══════════════════════════════════════ -->
+<!-- MORE SHEET (mobile: Devices/People/Settings/Help) -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="more-sheet" aria-labelledby="more-sheet-title">
+  <div class="more-sheet-inner">
+    <button type="button" class="dialog-close" id="more-sheet-close" aria-label="Close">✕</button>
+    <h2 id="more-sheet-title">More</h2>
+    <ul class="more-sheet-list" id="more-sheet-list"></ul>
+  </div>
+</dialog>
 
 <!-- ══════════════════════════════════════ -->
 <!-- EVENT DIALOG (add / edit)             -->
@@ -123,6 +166,217 @@
 </dialog>
 
 <!-- ══════════════════════════════════════ -->
+<!-- MESSAGE DIALOG (add / edit)            -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="message-dialog" aria-labelledby="message-dialog-title">
+  <div class="event-dialog-inner">
+    <button type="button" class="dialog-close" id="message-dialog-close" aria-label="Close">✕</button>
+    <h2 id="message-dialog-title">Add message</h2>
+    <div class="auth-message" id="message-dialog-message" role="status" aria-live="polite"></div>
+
+    <form id="message-form" novalidate>
+      <div class="field" id="message-text-field">
+        <label for="message-text">Message</label>
+        <textarea id="message-text" name="message" maxlength="220" rows="3" required></textarea>
+        <p class="field-error" id="message-text-error" hidden></p>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="message-start-field">
+          <label for="message-start">Show from (optional)</label>
+          <input type="datetime-local" id="message-start" name="start_at">
+        </div>
+        <div class="field" id="message-end-field">
+          <label for="message-end">Show until (optional)</label>
+          <input type="datetime-local" id="message-end" name="end_at">
+          <p class="field-error" id="message-end-error" hidden></p>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="message-priority-field">
+          <label for="message-priority">Priority (1 = highest)</label>
+          <input type="number" id="message-priority" name="display_priority" min="1" max="9" value="1">
+          <p class="field-error" id="message-priority-error" hidden></p>
+        </div>
+        <div class="field field-checkbox">
+          <label><input type="checkbox" id="message-active" name="is_active" checked> Active</label>
+        </div>
+      </div>
+
+      <div class="event-dialog-actions">
+        <button type="button" class="btn-outline" id="message-cancel-btn">Cancel</button>
+        <button type="submit" class="btn" id="message-submit-btn">Save message</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ══════════════════════════════════════ -->
+<!-- ADD DEVICE DIALOG                      -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="add-device-dialog" aria-labelledby="add-device-dialog-title">
+  <div class="event-dialog-inner">
+    <button type="button" class="dialog-close" id="add-device-close" aria-label="Close">✕</button>
+    <h2 id="add-device-dialog-title">Add device</h2>
+    <div class="auth-message" id="add-device-message" role="status" aria-live="polite"></div>
+
+    <form id="add-device-form" novalidate>
+      <div class="field" id="add-device-name-field">
+        <label for="add-device-name">Device name (optional)</label>
+        <input type="text" id="add-device-name" name="device_name" maxlength="60" placeholder="e.g. Kitchen screen">
+      </div>
+
+      <div class="field" id="add-device-type-field">
+        <label for="add-device-type">Device type</label>
+        <select id="add-device-type" name="device_type_id"></select>
+      </div>
+
+      <div class="event-dialog-actions">
+        <button type="button" class="btn-outline" id="add-device-cancel-btn">Cancel</button>
+        <button type="submit" class="btn" id="add-device-submit-btn">Add device</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ══════════════════════════════════════ -->
+<!-- EDIT DEVICE DIALOG                     -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="edit-device-dialog" aria-labelledby="edit-device-dialog-title">
+  <div class="event-dialog-inner">
+    <button type="button" class="dialog-close" id="edit-device-close" aria-label="Close">✕</button>
+    <h2 id="edit-device-dialog-title">Edit device</h2>
+    <div class="auth-message" id="edit-device-message" role="status" aria-live="polite"></div>
+
+    <form id="edit-device-form" novalidate>
+      <div class="field" id="edit-device-name-field">
+        <label for="edit-device-name">Device name</label>
+        <input type="text" id="edit-device-name" name="device_name" maxlength="60">
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="edit-device-type-field">
+          <label for="edit-device-type">Device type</label>
+          <select id="edit-device-type" name="device_type_id"></select>
+        </div>
+        <div class="field" id="edit-device-mode-field">
+          <label for="edit-device-mode">Display mode</label>
+          <select id="edit-device-mode" name="display_mode_id"></select>
+        </div>
+      </div>
+
+      <div class="event-dialog-actions">
+        <button type="button" class="btn-outline" id="edit-device-cancel-btn">Cancel</button>
+        <button type="submit" class="btn" id="edit-device-submit-btn">Save changes</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ══════════════════════════════════════ -->
+<!-- PAIR DEVICE DIALOG                     -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="pair-device-dialog" aria-labelledby="pair-device-dialog-title">
+  <div class="event-dialog-inner">
+    <button type="button" class="dialog-close" id="pair-device-close" aria-label="Close">✕</button>
+    <h2 id="pair-device-dialog-title">Pair this device</h2>
+    <p class="pair-device-instructions">Enter this code on the Daily View screen, or scan the QR code with it.</p>
+    <div class="pair-device-code" id="pair-device-code"></div>
+    <p class="pair-device-expiry" id="pair-device-expiry" role="status" aria-live="polite"></p>
+    <div class="pair-device-qr" id="pair-device-qr"></div>
+    <div class="event-dialog-actions">
+      <button type="button" class="btn-outline" id="pair-device-regenerate-btn">Generate new code</button>
+      <button type="button" class="btn" id="pair-device-done-btn">Done</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ══════════════════════════════════════ -->
+<!-- INVITE PERSON DIALOG                   -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="invite-dialog" aria-labelledby="invite-dialog-title">
+  <div class="event-dialog-inner">
+    <button type="button" class="dialog-close" id="invite-dialog-close" aria-label="Close">✕</button>
+    <h2 id="invite-dialog-title">Invite person</h2>
+    <div class="auth-message" id="invite-dialog-message" role="status" aria-live="polite"></div>
+
+    <div id="invite-form-view">
+      <form id="invite-form" novalidate>
+        <div class="field" id="invite-email-field">
+          <label for="invite-email">Email</label>
+          <input type="email" id="invite-email" name="email" required>
+        </div>
+
+        <div class="field" id="invite-relationship-field">
+          <label for="invite-relationship">Relationship to viewer (optional)</label>
+          <input type="text" id="invite-relationship" name="relationship_to_viewer" maxlength="60" placeholder="e.g. Daughter">
+        </div>
+
+        <div class="field" id="invite-role-field">
+          <label for="invite-role">Role</label>
+          <select id="invite-role" name="role"></select>
+          <p class="role-summary" id="invite-role-summary"></p>
+        </div>
+
+        <div class="event-dialog-actions">
+          <button type="button" class="btn-outline" id="invite-cancel-btn">Cancel</button>
+          <button type="submit" class="btn" id="invite-submit-btn">Send invite</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="invite-result-view" hidden>
+      <p>Copy this link and share it with them however you'd like — email, text or in person.</p>
+      <div class="field">
+        <label for="invite-link-input">Invite link</label>
+        <div class="invite-link-row">
+          <input type="text" id="invite-link-input" readonly>
+          <button type="button" class="btn-outline" id="invite-copy-btn">Copy link</button>
+        </div>
+      </div>
+      <div class="event-dialog-actions">
+        <button type="button" class="btn" id="invite-done-btn">Done</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- ══════════════════════════════════════ -->
+<!-- EDIT MEMBER DIALOG                     -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="edit-member-dialog" aria-labelledby="edit-member-dialog-title">
+  <div class="event-dialog-inner">
+    <button type="button" class="dialog-close" id="edit-member-close" aria-label="Close">✕</button>
+    <h2 id="edit-member-dialog-title">Edit person</h2>
+    <p class="edit-member-name" id="edit-member-name"></p>
+    <div class="auth-message" id="edit-member-message" role="status" aria-live="polite"></div>
+
+    <form id="edit-member-form" novalidate>
+      <div class="field" id="edit-member-relationship-field">
+        <label for="edit-member-relationship">Relationship to viewer</label>
+        <input type="text" id="edit-member-relationship" name="relationship_to_viewer" maxlength="60">
+      </div>
+
+      <div class="field" id="edit-member-role-field">
+        <label for="edit-member-role">Role</label>
+        <select id="edit-member-role" name="role"></select>
+        <p class="role-summary" id="edit-member-role-summary"></p>
+      </div>
+
+      <div class="field field-checkbox">
+        <label><input type="checkbox" id="edit-member-primary" name="is_primary_contact"> Primary contact</label>
+      </div>
+
+      <div class="event-dialog-actions">
+        <button type="button" class="btn-outline" id="edit-member-cancel-btn">Cancel</button>
+        <button type="submit" class="btn" id="edit-member-submit-btn">Save changes</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ══════════════════════════════════════ -->
 <!-- CONFIRM DIALOG (cancel / delete event) -->
 <!-- ══════════════════════════════════════ -->
 <dialog id="confirm-dialog" aria-labelledby="confirm-dialog-title">
@@ -138,10 +392,17 @@
 </dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script src="../assets/js/dv-auth-config.js"></script>
 <script src="../assets/js/dv-auth.js"></script>
 <script src="../assets/js/dv-dashboard-data.js"></script>
+<script src="event-dialog.js" defer></script>
 <script src="today.js" defer></script>
+<script src="calendar.js" defer></script>
+<script src="messages.js" defer></script>
+<script src="devices.js" defer></script>
+<script src="people.js" defer></script>
+<script src="settings.js" defer></script>
 <script src="dashboard.js" defer></script>
 </body>
 </html>

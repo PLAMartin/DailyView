@@ -5,6 +5,8 @@
   var messageEl = document.getElementById('dashboard-message');
   var contentEl = document.getElementById('dashboard-content');
 
+  var LAST_ACCOUNT_KEY = 'dv_last_account_id';
+
   var NETWORK_FAILURE =
     'We could not reach Daily View just now. Please check your connection and try again.';
 
@@ -28,34 +30,40 @@
   function makeSignOutButton() {
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'btn dashboard-signout';
+    btn.className = 'btn-outline dashboard-signout';
     btn.textContent = 'Sign out';
     btn.addEventListener('click', handleSignOut);
     return btn;
   }
 
-  function displayNameFor(account) {
-    if (account.preferred_name) return account.preferred_name;
-    if (account.full_name) return account.full_name.split(' ')[0];
-    return 'there';
+  function rememberAccount(accountId) {
+    try {
+      window.localStorage.setItem(LAST_ACCOUNT_KEY, String(accountId));
+    } catch (e) {
+      // localStorage unavailable (private browsing etc.) — not required to function.
+    }
   }
 
-  function renderWelcome(account) {
+  // Only ever used as a pre-select hint, never trusted: activateAccount()
+  // is always called with an account object that already came back from
+  // dvAuth.getMyAccountAccess() for the signed-in user.
+  function getRememberedAccountId() {
+    try {
+      return window.localStorage.getItem(LAST_ACCOUNT_KEY);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function activateAccount(account, allAccounts) {
+    rememberAccount(account.account_id);
     contentEl.textContent = '';
-
-    var h2 = document.createElement('h2');
-    h2.textContent = 'Welcome, ' + displayNameFor(account) + '.';
-
-    var p1 = document.createElement('p');
-    p1.textContent = 'You are signed in to ' + account.account_name + '.';
-
-    var p2 = document.createElement('p');
-    p2.textContent = 'Your Daily View account area is being prepared.';
-
-    contentEl.appendChild(h2);
-    contentEl.appendChild(p1);
-    contentEl.appendChild(p2);
-    contentEl.appendChild(makeSignOutButton());
+    window.dvToday.render(contentEl, account, allAccounts, {
+      signOutButton: makeSignOutButton,
+      switchAccount: function () {
+        renderAccountChoice(allAccounts);
+      }
+    });
   }
 
   function renderAccountChoice(accounts) {
@@ -65,11 +73,6 @@
     h2.textContent = 'Choose the Daily View account you want to open';
     contentEl.appendChild(h2);
 
-    var status = document.createElement('p');
-    status.setAttribute('role', 'status');
-    status.setAttribute('aria-live', 'polite');
-    contentEl.appendChild(status);
-
     var list = document.createElement('ul');
     list.className = 'account-list';
 
@@ -78,7 +81,6 @@
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'account-choice-btn';
-      btn.setAttribute('aria-pressed', 'false');
 
       var nameSpan = document.createElement('span');
       nameSpan.className = 'account-choice-name';
@@ -90,14 +92,8 @@
 
       btn.appendChild(nameSpan);
       btn.appendChild(roleSpan);
-
       btn.addEventListener('click', function () {
-        var buttons = list.querySelectorAll('.account-choice-btn');
-        for (var i = 0; i < buttons.length; i++) {
-          buttons[i].setAttribute('aria-pressed', 'false');
-        }
-        btn.setAttribute('aria-pressed', 'true');
-        status.textContent = 'Selected: ' + acc.account_name + '.';
+        activateAccount(acc, accounts);
       });
 
       li.appendChild(btn);
@@ -126,10 +122,22 @@
     }
 
     setMessage('', null);
-    if (access.accounts.length === 1) {
-      renderWelcome(access.accounts[0]);
+    var accounts = access.accounts;
+
+    if (accounts.length === 1) {
+      activateAccount(accounts[0], accounts);
+      return;
+    }
+
+    var rememberedId = getRememberedAccountId();
+    var remembered = rememberedId && accounts.filter(function (acc) {
+      return String(acc.account_id) === rememberedId;
+    })[0];
+
+    if (remembered) {
+      activateAccount(remembered, accounts);
     } else {
-      renderAccountChoice(access.accounts);
+      renderAccountChoice(accounts);
     }
   }, function () {
     setMessage(NETWORK_FAILURE, 'error');

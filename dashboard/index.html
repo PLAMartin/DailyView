@@ -50,9 +50,98 @@
   </div>
 </footer>
 
+<!-- ══════════════════════════════════════ -->
+<!-- EVENT DIALOG (add / edit)             -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="event-dialog" aria-labelledby="event-dialog-title">
+  <div class="event-dialog-inner">
+    <button type="button" class="dialog-close" id="event-dialog-close" aria-label="Close">✕</button>
+    <h2 id="event-dialog-title">Add event</h2>
+    <div class="auth-message" id="event-dialog-message" role="status" aria-live="polite"></div>
+
+    <form id="event-form" novalidate>
+      <div class="field" id="event-title-field">
+        <label for="event-title">Title</label>
+        <input type="text" id="event-title" name="title" maxlength="100" required>
+        <p class="field-error" id="event-title-error" hidden></p>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="event-date-field">
+          <label for="event-date">Date</label>
+          <input type="date" id="event-date" name="event_date" required>
+          <p class="field-error" id="event-date-error" hidden></p>
+        </div>
+        <div class="field" id="event-start-time-field">
+          <label for="event-start-time">Start time</label>
+          <input type="time" id="event-start-time" name="start_time">
+        </div>
+        <div class="field" id="event-end-time-field">
+          <label for="event-end-time">End time</label>
+          <input type="time" id="event-end-time" name="end_time">
+          <p class="field-error" id="event-end-time-error" hidden></p>
+        </div>
+      </div>
+
+      <div class="field" id="event-description-field">
+        <label for="event-description">Description (optional)</label>
+        <textarea id="event-description" name="description" maxlength="1000" rows="3"></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="event-type-field">
+          <label for="event-type">Event type</label>
+          <select id="event-type" name="event_type_id"></select>
+        </div>
+        <div class="field" id="event-visibility-field">
+          <label for="event-visibility">Visibility</label>
+          <select id="event-visibility" name="event_visibility_id"></select>
+        </div>
+        <div class="field" id="event-accuracy-field">
+          <label for="event-accuracy">Accuracy</label>
+          <select id="event-accuracy" name="event_accuracy_id"></select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="event-priority-field">
+          <label for="event-priority">Priority (1 = highest)</label>
+          <input type="number" id="event-priority" name="display_priority" min="1" max="9" value="5">
+          <p class="field-error" id="event-priority-error" hidden></p>
+        </div>
+        <div class="field field-checkbox">
+          <label><input type="checkbox" id="event-show-on-display" name="show_on_display" checked> Show on Daily View</label>
+        </div>
+      </div>
+
+      <div class="event-dialog-actions">
+        <button type="button" class="btn-outline" id="event-cancel-btn">Cancel</button>
+        <button type="submit" class="btn" id="event-submit-btn">Save event</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ══════════════════════════════════════ -->
+<!-- CONFIRM DIALOG (cancel / delete event) -->
+<!-- ══════════════════════════════════════ -->
+<dialog id="confirm-dialog" aria-labelledby="confirm-dialog-title">
+  <div class="confirm-dialog-inner">
+    <h2 id="confirm-dialog-title">Are you sure?</h2>
+    <p id="confirm-dialog-message-text"></p>
+    <div class="auth-message" id="confirm-dialog-message" role="status" aria-live="polite"></div>
+    <div class="confirm-dialog-actions">
+      <button type="button" class="btn-outline" id="confirm-dialog-cancel">Cancel</button>
+      <button type="button" class="btn" id="confirm-dialog-confirm">Confirm</button>
+    </div>
+  </div>
+</dialog>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
 <script src="../assets/js/dv-auth-config.js"></script>
 <script src="../assets/js/dv-auth.js"></script>
+<script src="../assets/js/dv-dashboard-data.js"></script>
+<script src="today.js" defer></script>
 <script src="dashboard.js" defer></script>
 </body>
 </html>

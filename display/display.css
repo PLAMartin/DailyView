@@ -195,6 +195,11 @@ button, input { font-family: inherit; }
   display: grid; place-items: center; color: var(--dv-navy);
 }
 .dvm-event-icon svg { width: 55%; height: 55%; display: block; }
+.dvm-event-icon--medical { background: #fff0f0; }
+.dvm-event-icon--hair    { background: #f3e8ff; }
+.dvm-event-icon--meal    { background: #fff4e0; }
+.dvm-event-icon--home    { background: #fffae6; }
+.dvm-event-icon--people  { background: var(--dv-bg-cta); }
 .dv-mockup--landscape .dvm-event-name {
   font-size: 1.7rem;
   font-weight: 600;

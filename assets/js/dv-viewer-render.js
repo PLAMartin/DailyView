@@ -17,12 +17,64 @@
     night:     '../assets/icon/night_icon_v1.svg'
   };
 
-  // Generic event marker — real events carry no category (medical/home/
-  // social/etc.), only title, time and past/upcoming state, so every event
-  // gets the same calendar glyph rather than a per-category icon.
-  var EVENT_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-    'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-    '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>';
+  function svg(inner) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+  }
+
+  // Fallback event marker, used when no keyword below matches the title.
+  var EVENT_ICON_SVG = svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>');
+
+  // Real events carry no category field (medical/home/social/etc.), only a
+  // free-text title — so the icon is picked by matching keywords in the
+  // title rather than a stored type. First matching category wins; order
+  // matters (e.g. "hair" is checked before "home" so "hairdresser" doesn't
+  // fall through to a house icon via some other word).
+  var EVENT_CATEGORIES = [
+    {
+      className: 'dvm-event-icon--medical',
+      keywords: ['doctor', 'dentist', 'appointment', 'clinic', 'hospital', 'nurse',
+        'medicine', 'medication', 'pills', 'checkup', 'check-up', 'physio', 'therapy',
+        'vaccine', 'blood test', 'surgery', 'gp'],
+      svg: svg('<path d="M12 5v14M5 12h14"/>')
+    },
+    {
+      className: 'dvm-event-icon--hair',
+      keywords: ['hair', 'haircut', 'hairdresser', 'salon', 'barber'],
+      svg: svg('<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>' +
+        '<line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/>' +
+        '<line x1="8.12" y1="8.12" x2="12" y2="12"/>')
+    },
+    {
+      className: 'dvm-event-icon--meal',
+      keywords: ['breakfast', 'lunch', 'dinner', 'meal', 'coffee', 'tea', 'snack'],
+      svg: svg('<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>' +
+        '<line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>')
+    },
+    {
+      className: 'dvm-event-icon--home',
+      keywords: ['clean', 'cleaning', 'laundry', 'shopping', 'groceries', 'grocery',
+        'bins', 'garden', 'housework'],
+      svg: svg('<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>')
+    },
+    {
+      className: 'dvm-event-icon--people',
+      keywords: ['visit', 'visiting', 'family', 'friend', 'call', 'chat'],
+      svg: svg('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>' +
+        '<path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>')
+    }
+  ];
+
+  function pickEventIcon(title) {
+    var t = (title || '').toLowerCase();
+    for (var i = 0; i < EVENT_CATEGORIES.length; i++) {
+      var cat = EVENT_CATEGORIES[i];
+      for (var j = 0; j < cat.keywords.length; j++) {
+        if (t.indexOf(cat.keywords[j]) !== -1) return cat;
+      }
+    }
+    return null;
+  }
 
   function el(tag, className, text) {
     var e = document.createElement(tag);
@@ -97,8 +149,9 @@
     } else {
       viewModel.events.forEach(function (ev) {
         var li = el('li', 'dvm-event' + (ev.isPast ? ' dvm-event--past' : ''));
-        var icon = el('span', 'dvm-event-icon');
-        icon.innerHTML = EVENT_ICON_SVG;
+        var cat = pickEventIcon(ev.title);
+        var icon = el('span', 'dvm-event-icon' + (cat ? ' ' + cat.className : ''));
+        icon.innerHTML = cat ? cat.svg : EVENT_ICON_SVG;
         li.appendChild(icon);
         li.appendChild(el('span', 'dvm-event-name', ev.title));
         li.appendChild(el('span', 'dvm-event-time', ev.timeLabel || ''));

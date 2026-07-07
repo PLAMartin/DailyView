@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily View</title>
+<meta name="description" content="Daily View — today's plan, shown simply.">
+<meta name="robots" content="noindex">
+
+<!-- Favicons -->
+<link rel="icon" href="../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+<meta name="apple-mobile-web-app-title" content="Daily View">
+<meta name="application-name" content="Daily View">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="display.css">
+</head>
+<body>
+
+<!-- TODO: this is the real, live viewer screen — unlike index.html's and
+     dashboard/today.js's mockups, it renders dv_get_viewer_snapshot() data
+     through the shared dv-viewer-render.js component, not sample data. -->
+
+<!-- ══════════════════════════════════════ -->
+<!-- LOADING / RECONNECTING                 -->
+<!-- ══════════════════════════════════════ -->
+<div id="loading-view" class="pairing-shell" hidden>
+  <div class="pairing-card">
+    <p id="loading-message" role="status" aria-live="polite">Daily View is getting ready…</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- PAIRING                                -->
+<!-- ══════════════════════════════════════ -->
+<div id="pairing-view" class="pairing-shell" hidden>
+  <div class="pairing-card">
+    <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" class="pairing-logo">
+    <h1>Connect this screen</h1>
+    <p class="pairing-instructions">
+      Ask your family member for the code shown in their Daily View dashboard,
+      under Devices, then enter it below.
+    </p>
+
+    <div class="auth-message" id="pairing-message" role="status" aria-live="polite"></div>
+
+    <form id="pairing-form" novalidate>
+      <label for="pairing-code-input" class="sr-only">Pairing code</label>
+      <input
+        type="text"
+        id="pairing-code-input"
+        class="pairing-code-input"
+        maxlength="7"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        placeholder="ABC-123"
+        required
+      >
+      <button type="submit" class="pairing-submit-btn" id="pairing-submit-btn">Connect</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- VIEWER                                 -->
+<!-- ══════════════════════════════════════ -->
+<div id="viewer-view" hidden>
+  <div id="viewer-mount"></div>
+  <div class="viewer-offline-pill" id="viewer-offline-pill" role="status" aria-live="polite" hidden>
+    Offline — showing the last update
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+<script src="../assets/js/dv-auth-config.js"></script>
+<script src="../assets/js/dv-viewer-data.js"></script>
+<script src="../assets/js/dv-viewer-render.js"></script>
+<script src="display.js" defer></script>
+</body>
+</html>

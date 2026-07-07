@@ -246,9 +246,20 @@
   function handleRegenerateCode() {
     pairRegenerateBtn.disabled = true;
     pairRegenerateBtn.textContent = 'Generating…';
+    // Clearing auth_user_id/paired_at here is this design's revoke-and-
+    // reinvite for this device slot: dv_redeem_device_pairing_code() only
+    // claims a row whose auth_user_id is null, and dv_get_today_view_model's
+    // device branch / dv_touch_device_heartbeat both require the caller's
+    // auth_user_id to still match the row — so the instant a fresh code is
+    // generated, the old physical device's next poll/heartbeat gets 42501
+    // and it's shown the "no longer connected" state, not stale data. This
+    // is intentional, not a bug: it's what makes "Generate new code" also
+    // work as a revoke, without a separate dedicated button.
     dvData.updateDevice(pairingDeviceId, {
       pairing_code: generatePairingCode(),
-      pairing_code_expires_at: pairingCodeExpiresAtIso()
+      pairing_code_expires_at: pairingCodeExpiresAtIso(),
+      auth_user_id: null,
+      paired_at: null
     }).then(function (device) {
       pairRegenerateBtn.disabled = false;
       pairRegenerateBtn.textContent = 'Generate new code';

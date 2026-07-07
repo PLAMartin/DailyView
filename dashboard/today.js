@@ -3,24 +3,10 @@
 
   var dvData = window.dvDashboardData;
   var dvEventDialog = window.dvEventDialog;
+  var dvViewerRender = window.dvViewerRender;
 
   var NETWORK_FAILURE =
     'We could not reach Daily View just now. Please check your connection and try again.';
-
-  // Time-of-day icon assets — same files used by the marketing page's mockup
-  // (index.html's periodIcons object). Kept as a small local copy since this
-  // page is a separate script with no shared stylesheet/data module for it.
-  // Note: index.html's own periodIcons object points its MORNING entry at
-  // assets/icon/logo_icon_v5.svg, which does not exist (only assets/icon/
-  // logo_icon_v5.png does) — a pre-existing broken path on the marketing
-  // page, left as-is there since it's out of scope here. This copy points at
-  // assets/logo/logo_icon_v5.svg, which is the real file with that name.
-  var PERIOD_ICONS = {
-    morning:   '../assets/logo/logo_icon_v5.svg',
-    afternoon: '../assets/icon/afternoon%20icon%20v1.svg',
-    evening:   '../assets/icon/evening_icon_v2.svg',
-    night:     '../assets/icon/night_icon_v1.svg'
-  };
 
   var currentAccount = null;
   var currentLookups = null;
@@ -31,15 +17,6 @@
     return new Intl.DateTimeFormat('en-CA', {
       timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit'
     }).format(new Date());
-  }
-
-  function dayDateLabels(timezone) {
-    var now = new Date();
-    var day = new Intl.DateTimeFormat('en-GB', { timeZone: timezone, weekday: 'long' }).format(now);
-    var date = new Intl.DateTimeFormat('en-GB', {
-      timeZone: timezone, day: 'numeric', month: 'long', year: 'numeric'
-    }).format(now);
-    return { day: day.toUpperCase(), date: date.toUpperCase() };
   }
 
   function timeLabel(t) {
@@ -100,68 +77,9 @@
 
   function buildPreview(viewModel) {
     var wrap = el('div', 'dv-device-frame');
-    var article = el('article', 'dv-mockup dv-mockup--landscape');
-    article.setAttribute('aria-label', 'Live Daily View preview');
-
-    article.appendChild(el('div', 'dvm-title', 'Daily View'));
-
-    if (viewModel.message) {
-      article.appendChild(el('div', 'dvm-message-banner', viewModel.message));
-    }
-
-    var labels = dayDateLabels(currentAccount.timezone);
-    var top = el('div', 'dvm-top');
-    var dayDateWrap = el('div');
-    dayDateWrap.appendChild(el('div', 'dvm-day', labels.day));
-    dayDateWrap.appendChild(el('div', 'dvm-date', labels.date));
-    var todIcon = el('div', 'dvm-tod-icon');
-    todIcon.setAttribute('aria-hidden', 'true');
-    var iconSrc = PERIOD_ICONS[viewModel.dayPeriod];
-    if (iconSrc) {
-      var img = document.createElement('img');
-      img.src = iconSrc;
-      img.alt = '';
-      todIcon.appendChild(img);
-    }
-    var timeBlock = el('div', 'dvm-time-block');
-    timeBlock.appendChild(el('div', 'dvm-time', viewModel.timeLabel));
-    timeBlock.appendChild(el('div', 'dvm-period', viewModel.showDayPeriod ? viewModel.dayPeriod.toUpperCase() : ''));
-    top.appendChild(dayDateWrap);
-    top.appendChild(todIcon);
-    top.appendChild(timeBlock);
-    article.appendChild(top);
-
-    article.appendChild(el('div', 'dvm-divider'));
-    article.appendChild(el('div', 'dvm-today-label', 'TODAY'));
-
-    var list = el('ul', 'dvm-events');
-    list.setAttribute('aria-label', "Today's events");
-    if (viewModel.events.length === 0) {
-      var emptyLi = el('li', 'dvm-event-empty', 'Nothing has been added for today yet.');
-      list.appendChild(emptyLi);
-    } else {
-      viewModel.events.forEach(function (ev) {
-        var li = el('li', 'dvm-event' + (ev.isPast ? ' dvm-event--past' : ''));
-        li.appendChild(el('span', 'dvm-event-icon'));
-        li.appendChild(el('span', 'dvm-event-name', ev.title));
-        li.appendChild(el('span', 'dvm-event-time', ev.timeLabel || ''));
-        list.appendChild(li);
-      });
-    }
-    article.appendChild(list);
-
-    if (viewModel.showNextReminder) {
-      var next = el('aside', 'dvm-next-card');
-      next.appendChild(el('div', 'dvm-next-label', 'NEXT'));
-      if (viewModel.nextEvent) {
-        next.appendChild(el('div', 'dvm-next-item', viewModel.nextEvent.title));
-        next.appendChild(el('div', 'dvm-next-time', 'at ' + viewModel.nextEvent.timeLabel));
-      } else {
-        next.appendChild(el('div', 'dvm-next-item', 'Nothing else planned today.'));
-      }
-      article.appendChild(next);
-    }
-
+    var article = dvViewerRender.buildMockup(viewModel, currentAccount.timezone, {
+      ariaLabel: 'Live Daily View preview'
+    });
     wrap.appendChild(article);
     return wrap;
   }

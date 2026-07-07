@@ -331,7 +331,8 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dvm-event { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--dv-bg-cta); }
 .dvm-event:last-child { border-bottom: none; }
 .dvm-event--past { opacity: 0.45; }
-.dvm-event-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--dv-bg-cta); flex-shrink: 0; }
+.dvm-event-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--dv-bg-cta); flex-shrink: 0; display: grid; place-items: center; color: var(--dv-navy); }
+.dvm-event-icon svg { width: 55%; height: 55%; display: block; }
 .dvm-event-name { font-size: 0.78rem; font-weight: 600; }
 .dvm-event-time { font-size: 0.72rem; font-weight: 600; color: var(--dv-subtle); }
 .dvm-next-card { margin-top: 12px; background: var(--dv-bg-cta); border-radius: 12px; padding: 10px 14px; }

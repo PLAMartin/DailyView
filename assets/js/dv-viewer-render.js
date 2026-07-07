@@ -17,6 +17,13 @@
     night:     '../assets/icon/night_icon_v1.svg'
   };
 
+  // Generic event marker — real events carry no category (medical/home/
+  // social/etc.), only title, time and past/upcoming state, so every event
+  // gets the same calendar glyph rather than a per-category icon.
+  var EVENT_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>';
+
   function el(tag, className, text) {
     var e = document.createElement(tag);
     if (className) e.className = className;
@@ -90,7 +97,9 @@
     } else {
       viewModel.events.forEach(function (ev) {
         var li = el('li', 'dvm-event' + (ev.isPast ? ' dvm-event--past' : ''));
-        li.appendChild(el('span', 'dvm-event-icon'));
+        var icon = el('span', 'dvm-event-icon');
+        icon.innerHTML = EVENT_ICON_SVG;
+        li.appendChild(icon);
         li.appendChild(el('span', 'dvm-event-name', ev.title));
         li.appendChild(el('span', 'dvm-event-time', ev.timeLabel || ''));
         list.appendChild(li);

@@ -192,7 +192,9 @@ button, input { font-family: inherit; }
 .dv-mockup--landscape .dvm-event--past { opacity: 0.45; }
 .dv-mockup--landscape .dvm-event-icon {
   width: 48px; height: 48px; border-radius: 50%; background: var(--dv-bg-cta); flex-shrink: 0;
+  display: grid; place-items: center; color: var(--dv-navy);
 }
+.dvm-event-icon svg { width: 55%; height: 55%; display: block; }
 .dv-mockup--landscape .dvm-event-name {
   font-size: 1.7rem;
   font-weight: 600;

@@ -355,7 +355,6 @@ section { padding: 56px 0; }
   text-align: center;
   padding-bottom: 12px;
   margin-bottom: 12px;
-  border-bottom: 1px solid var(--dv-divider);
 }
 
 .dvm-divider { height: 1px; background: var(--dv-divider); margin: 0 0 10px; }

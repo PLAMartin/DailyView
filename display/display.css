@@ -132,7 +132,6 @@ button, input { font-family: inherit; }
   text-align: center;
   margin: 0;
   padding-bottom: 20px;
-  border-bottom: 2px solid var(--dv-divider);
 }
 
 .dv-mockup--landscape .dvm-message-banner {

@@ -418,7 +418,7 @@ section { padding: 56px 0; }
   column-gap: 24px;
   padding: 22px 26px 20px;
 }
-.dv-mockup--landscape .dvm-title { grid-area: title; font-size: 1rem; text-align: center; padding-bottom: 16px; margin-bottom: 16px; }
+.dv-mockup--landscape .dvm-title { grid-area: title; font-size: 1.4rem; text-align: center; padding-bottom: 16px; margin-bottom: 16px; }
 .dv-mockup--landscape .dvm-top {
   grid-area: top;
   display: grid;
@@ -603,7 +603,7 @@ section { padding: 56px 0; }
     column-gap: 14px;
     padding: 16px 16px 14px;
   }
-  .dv-mockup--landscape .dvm-title { font-size: 0.78rem; padding-bottom: 10px; margin-bottom: 10px; }
+  .dv-mockup--landscape .dvm-title { font-size: 1.1rem; padding-bottom: 10px; margin-bottom: 10px; }
   .dv-mockup--landscape .dvm-top { gap: 6px; margin-bottom: 10px; }
   .dv-mockup--landscape .dvm-day   { font-size: 0.85rem; }
   .dv-mockup--landscape .dvm-date  { font-size: 0.55rem; }

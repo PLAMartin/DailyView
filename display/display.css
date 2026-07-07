@@ -107,22 +107,31 @@ button, input { font-family: inherit; }
 .dv-mockup--landscape {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto auto auto 1fr;
   grid-template-areas:
     "title      title"
     "message    message"
     "top        top"
+    "todaylabel next"
     "events     next";
   column-gap: 56px;
   row-gap: 24px;
 }
 
-/* The small-scale dashboard preview (dashboard.css) still shows these; at
-   full screen the "TODAY" label and small-card divider are redundant with
-   the layout itself. Hidden via CSS only — the DOM from dv-viewer-render.js
-   stays identical between the dashboard preview and this real viewer. */
-.dv-mockup--landscape .dvm-today-label,
+/* The small-scale dashboard preview (dashboard.css) still shows this; at
+   full screen the small-card divider is redundant with the layout itself.
+   Hidden via CSS only — the DOM from dv-viewer-render.js stays identical
+   between the dashboard preview and this real viewer. */
 .dv-mockup--landscape .dvm-divider { display: none; }
+
+.dv-mockup--landscape .dvm-today-label {
+  grid-area: todaylabel;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--dv-subtle);
+  margin: 0;
+}
 
 .dv-mockup--landscape .dvm-title {
   grid-area: title;
@@ -240,11 +249,12 @@ button, input { font-family: inherit; }
 @media (orientation: portrait) {
   .dv-mockup--landscape {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-rows: auto auto auto auto auto 1fr;
     grid-template-areas:
       "title"
       "message"
       "top"
+      "todaylabel"
       "next"
       "events";
   }

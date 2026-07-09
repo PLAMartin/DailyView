@@ -116,6 +116,11 @@ body {
 .site-footer .container {
   max-width: 1160px;
   display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.footer-row {
+  display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -125,21 +130,27 @@ body {
   font-size: 0.875rem;
   color: var(--dv-text-muted);
 }
-.footer-links {
+.footer-links,
+.social-links {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 10px 24px;
 }
-.footer-links a {
+.footer-links a,
+.social-links a {
   font-size: 0.875rem;
   color: var(--dv-text-muted);
   text-decoration: none;
 }
-.footer-links a:hover { text-decoration: underline; color: var(--dv-navy); }
+.footer-links a:hover,
+.footer-links a:focus-visible,
+.social-links a:hover,
+.social-links a:focus-visible { text-decoration: underline; color: var(--dv-navy); }
 
 @media (max-width: 640px) {
   .container { padding: 0 20px; }
   .legal-content { padding: 44px 0 60px; }
-  .site-footer .container { flex-direction: column; align-items: flex-start; }
+  .footer-row { flex-direction: column; align-items: flex-start; }
 }
 </style>
 </head>
@@ -207,12 +218,25 @@ body {
 
 <footer class="site-footer">
   <div class="container">
-    <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
-    <nav class="footer-links" aria-label="Site">
-      <a href="../about/">About</a>
-      <a href="../press/">Press</a>
-      <a href="../legal/terms-of-use.html">Terms of Use</a>
-      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+    <div class="footer-row">
+      <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="../about/">About</a>
+        <a href="../press/">Press</a>
+        <a href="../legal/terms-of-use.html">Terms of Use</a>
+        <a href="../legal/privacy-policy.html">Privacy Policy</a>
+      </nav>
+    </div>
+    <nav class="social-links" aria-label="Daily View social media links">
+      <a href="mailto:phil@dailyview.org" aria-label="Email Daily View">Email</a>
+      <a href="https://www.facebook.com/dailyviewhq" target="_blank" rel="me noopener noreferrer">Facebook</a>
+      <a href="https://www.youtube.com/@DailyViewHQ" target="_blank" rel="me noopener noreferrer">YouTube</a>
+      <a href="https://www.linkedin.com/company/dailyviewhq" target="_blank" rel="me noopener noreferrer">LinkedIn</a>
+      <a href="https://www.instagram.com/dailyviewhq" target="_blank" rel="me noopener noreferrer">Instagram</a>
+      <a href="https://dailyviewhq.bsky.social" target="_blank" rel="me noopener noreferrer">Bluesky</a>
+      <a href="https://x.com/dailyviewhq" target="_blank" rel="me noopener noreferrer">X</a>
+      <a href="https://www.threads.com/@dailyviewhq" target="_blank" rel="me noopener noreferrer">Threads</a>
+      <a href="https://www.reddit.com/r/dailyviewhq/" target="_blank" rel="me noopener noreferrer">Reddit</a>
     </nav>
   </div>
 </footer>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Press — Daily View</title>
+<meta name="description" content="Press information about Daily View — a simple daily reference screen to help older people stay oriented at home. Key facts, founder bio and media contact.">
+
+<!-- Favicons -->
+<link rel="icon" href="../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --dv-navy:       #1a2b6d;
+  --dv-navy-dark:  #14226b;
+  --dv-text-muted: #6878a8;
+  --dv-divider:    #e8ecf4;
+  --dv-footer-rule:#e0e7f2;
+  --dv-panel:      #f4f7fc;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  color: var(--dv-navy);
+  background: #fff;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 36px;
+}
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: #fff;
+  border-bottom: 1px solid var(--dv-divider);
+  padding: 14px 0;
+}
+.site-header .container {
+  max-width: 1160px;
+  display: flex;
+  align-items: center;
+}
+.site-logo img { height: 38px; width: auto; display: block; }
+
+/* Legal-style content (reused for Press) */
+.legal-content {
+  padding: 64px 0 80px;
+}
+.legal-content h1 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--dv-navy);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.legal-content .intro {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--dv-navy);
+  margin-bottom: 32px;
+}
+.legal-content h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--dv-navy);
+  margin-top: 40px;
+  margin-bottom: 12px;
+}
+.legal-content h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dv-navy);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+.legal-content p {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  color: var(--dv-navy);
+}
+.legal-content ul {
+  margin: 0 0 16px 20px;
+}
+.legal-content ul li {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+.legal-content a {
+  color: var(--dv-navy);
+  text-underline-offset: 3px;
+}
+.legal-content a:hover { color: var(--dv-navy-dark); }
+
+.legal-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+}
+.legal-content table th,
+.legal-content table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--dv-divider);
+}
+.legal-content table th {
+  color: var(--dv-text-muted);
+  font-weight: 700;
+  width: 34%;
+}
+
+blockquote {
+  background: var(--dv-panel);
+  border-left: 4px solid var(--dv-navy);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 0 0 24px;
+  font-size: 1.05rem;
+  font-style: italic;
+}
+blockquote p { margin-bottom: 8px; }
+blockquote cite {
+  display: block;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: var(--dv-text-muted);
+}
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid var(--dv-footer-rule);
+  padding: 28px 0;
+}
+.site-footer .container {
+  max-width: 1160px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+}
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+.footer-links a {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+  text-decoration: none;
+}
+.footer-links a:hover { text-decoration: underline; color: var(--dv-navy); }
+
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .legal-content { padding: 44px 0 60px; }
+  .site-footer .container { flex-direction: column; align-items: flex-start; }
+  .legal-content table, .legal-content thead, .legal-content tbody, .legal-content th, .legal-content td, .legal-content tr { display: block; }
+  .legal-content table th { width: auto; border-bottom: none; padding-bottom: 2px; }
+  .legal-content table td { padding-top: 2px; margin-bottom: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="site-logo" aria-label="Daily View home">
+      <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="38">
+    </a>
+  </div>
+</header>
+
+<main class="legal-content">
+  <div class="container">
+
+    <h1>Press</h1>
+    <p class="intro">Daily View: a simple screen to help older people stay oriented at home.</p>
+
+    <p>Daily View is a Bath-based prototype designed to help older people with memory issues stay more confident and independent at home.</p>
+    <p>It provides a calm, always-visible screen showing the day, date, time, upcoming events, visits, reminders and important messages.</p>
+    <p>The aim is to give the person a reliable daily reference point while helping reduce repeated reassurance questions for family members and carers.</p>
+
+    <h2>Short description</h2>
+    <p>Daily View is a simple daily reference screen for older people with memory difficulties. It shows what is happening today in a clear, calm way so the person can stay more oriented at home.</p>
+
+    <h2>Longer description</h2>
+    <p>Daily View is a prototype service created to support older people who want to continue living independently at home but may experience memory issues or confusion about the day.</p>
+    <p>The screen displays essential daily information such as the day, date, time, upcoming appointments, visits, reminders and important messages. It is designed to be easy to read, reassuring and always available.</p>
+    <p>Daily View is intended to support both the person using it and the family members or carers who may otherwise answer repeated questions throughout the day, such as &ldquo;What day is it?&rdquo;, &ldquo;What&rsquo;s happening today?&rdquo; or &ldquo;When are you visiting?&rdquo;</p>
+    <p>The project is currently seeking early testers in and around Bath.</p>
+
+    <h2>Key facts</h2>
+    <table>
+      <tbody>
+        <tr><th scope="row">Product name</th><td>Daily View</td></tr>
+        <tr><th scope="row">Website</th><td><a href="https://www.dailyview.org">https://www.dailyview.org</a></td></tr>
+        <tr><th scope="row">Interactive demo</th><td><a href="https://www.dailyview.org/try-demo">https://www.dailyview.org/try-demo</a></td></tr>
+        <tr><th scope="row">Founder</th><td>Phil Martin</td></tr>
+        <tr><th scope="row">Location</th><td>Bath, UK</td></tr>
+        <tr><th scope="row">Status</th><td>Prototype / early testing</td></tr>
+        <tr><th scope="row">Contact</th><td><a href="mailto:phil@dailyview.org">phil@dailyview.org</a></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Who it is for</h2>
+    <p>Daily View may be useful for:</p>
+    <ul>
+      <li>Older people living independently at home</li>
+      <li>People with memory difficulties who need reassurance about the day</li>
+      <li>Families supporting an older relative</li>
+      <li>Carers and care organisations</li>
+      <li>Local groups supporting older people or people affected by dementia</li>
+    </ul>
+    <p>Daily View is not a medical device and does not replace professional care. It is a practical daily aid intended to make everyday orientation easier.</p>
+
+    <h2>Founder bio</h2>
+    <p>Phil Martin is a Bath-based software founder who studied Maths and Computing at the University of Bath in the 1980s.</p>
+    <p>After more than 40 years working in large organisations, including in telecoms and Vodafone, Phil recently left corporate work to focus on developing his own products.</p>
+    <p>His current project, Daily View, is a simple daily reference screen designed to help older people with memory issues stay oriented at home and reduce repeated reassurance questions for families and carers.</p>
+
+    <h2>Founder quote</h2>
+    <blockquote>
+      <p>&ldquo;I&rsquo;m building Daily View because many families quietly deal with the same repeated questions every day: What day is it? What&rsquo;s happening today? When are you visiting? My aim is to create a calm, simple reference point that helps older people feel more secure at home and gives families a little more peace of mind.&rdquo;</p>
+      <cite>— Phil Martin, founder of Daily View</cite>
+    </blockquote>
+
+    <h2>Press enquiries</h2>
+    <p>For press, media, partnership or local pilot enquiries, please contact <a href="mailto:phil@dailyview.org">phil@dailyview.org</a>.</p>
+
+    <h2>Images and assets</h2>
+    <p>Press images, screenshots, logos and further background information will be made available soon.</p>
+    <p>For specific requests, please contact <a href="mailto:phil@dailyview.org">phil@dailyview.org</a>.</p>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+    <nav class="footer-links" aria-label="Site">
+      <a href="../about/">About</a>
+      <a href="../press/">Press</a>
+      <a href="../legal/terms-of-use.html">Terms of Use</a>
+      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+document.getElementById('copyright-year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

@@ -161,10 +161,10 @@ button, input { font-family: inherit; }
   align-items: center;
   gap: 24px;
 }
-.dvm-day { font-size: 4.2rem; font-weight: 700; letter-spacing: 0.02em; margin: 0; }
+.dvm-day { font-size: 3.2rem; font-weight: 700; letter-spacing: 0.02em; margin: 0; }
 .dvm-date { font-size: 1.5rem; font-weight: 600; margin-top: 6px; opacity: 0.8; }
 .dvm-time-block { text-align: right; }
-.dvm-time { font-size: 4.2rem; font-weight: 700; line-height: 1; }
+.dvm-time { font-size: 3.2rem; font-weight: 700; line-height: 1; }
 .dvm-period { font-size: 1.4rem; font-weight: 600; margin-top: 8px; letter-spacing: 0.05em; opacity: 0.8; }
 .dvm-tod-icon { display: flex; align-items: center; justify-content: center; }
 .dvm-tod-icon img { height: 96px; width: auto; display: block; }
@@ -245,8 +245,8 @@ button, input { font-family: inherit; }
 /* Usable down to 1024×600 (spec §6.2) */
 @media (max-width: 1100px), (max-height: 650px) {
   .dv-mockup { padding: 32px 36px; }
-  .dvm-time { font-size: 3.2rem; }
-  .dvm-day { font-size: 3.2rem; }
+  .dvm-time { font-size: 2.4rem; }
+  .dvm-day { font-size: 2.4rem; }
   .dvm-tod-icon img { height: 64px; }
   .dv-mockup--landscape .dvm-event-name,
   .dvm-next-item { font-size: 1.3rem; }

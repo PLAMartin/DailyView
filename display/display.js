@@ -102,7 +102,12 @@
   function tickClock() {
     if (!state.snapshot) return;
     var timeEl = viewerMount.querySelector('.dvm-time');
-    if (timeEl) timeEl.textContent = dvViewerRender.currentTimeLabel(state.snapshot.timezone);
+    if (timeEl) {
+      timeEl.textContent = dvViewerRender.currentTimeLabel(
+        state.snapshot.timezone,
+        state.snapshot.preferences && state.snapshot.preferences.timeFormat
+      );
+    }
   }
 
   function startClock() {

@@ -92,9 +92,10 @@
     return { day: day.toUpperCase(), date: date.toUpperCase() };
   }
 
-  function currentTimeLabel(timezone) {
+  function currentTimeLabel(timezone, timeFormat) {
+    var is24Hour = timeFormat === '24_hour';
     return new Intl.DateTimeFormat('en-GB', {
-      timeZone: timezone, hour: '2-digit', minute: '2-digit', hour12: false
+      timeZone: timezone, hour: is24Hour ? '2-digit' : 'numeric', minute: '2-digit', hour12: !is24Hour
     }).format(new Date());
   }
 

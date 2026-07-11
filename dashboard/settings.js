@@ -9,6 +9,7 @@
   var FONT_SIZES = ['standard', 'large', 'extra_large'];
   var CONTRASTS = ['standard', 'high'];
   var LAYOUTS = ['standard', 'simplified'];
+  var TIME_FORMATS = ['12_hour', '24_hour'];
 
   var currentAccount = null;
   var currentPref = null;
@@ -215,6 +216,10 @@
     var layoutField = selectField('Layout', LAYOUTS, pref.layout || 'standard');
     layoutField._select.disabled = !canEditDisplay;
     row.appendChild(layoutField);
+
+    var timeFormatField = selectField('Time format', TIME_FORMATS, pref.time_format || '12_hour');
+    timeFormatField._select.disabled = !canEditDisplay;
+    row.appendChild(timeFormatField);
     form.appendChild(row);
 
     var showPast = checkboxField('Show past events on the display', pref.show_past_events !== false);
@@ -245,6 +250,7 @@
           font_size: fontSizeField._select.value,
           contrast: contrastField._select.value,
           layout: layoutField._select.value,
+          time_format: timeFormatField._select.value,
           show_past_events: showPast._input.checked,
           grey_out_past_events: greyOut._input.checked
         };

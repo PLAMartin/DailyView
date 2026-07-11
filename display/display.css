@@ -171,7 +171,7 @@ button, input { font-family: inherit; }
   grid-area: top;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  align-items: stretch;
   gap: 24px;
 }
 .dvm-day { font-size: 3.2rem; font-weight: 700; letter-spacing: 0.02em; margin: 0; }
@@ -179,8 +179,11 @@ button, input { font-family: inherit; }
 .dvm-time-block { text-align: right; }
 .dvm-time { font-size: 3.2rem; font-weight: 700; line-height: 1; }
 .dvm-period { font-size: 1.4rem; font-weight: 600; margin-top: 8px; letter-spacing: 0.05em; opacity: 0.8; }
-.dvm-tod-icon { display: flex; align-items: center; justify-content: center; }
-.dvm-tod-icon img { height: 96px; width: auto; display: block; }
+/* Stretched to the row's full height (driven by the day+date column, the
+   taller of the two side stacks) so the icon's top lines up with the top of
+   the day/time text and its bottom lines up with the bottom of the date. */
+.dvm-tod-icon { display: flex; align-items: stretch; justify-content: center; }
+.dvm-tod-icon img { height: 100%; width: auto; display: block; }
 
 .dv-mockup--landscape .dvm-events {
   grid-area: events;
@@ -260,7 +263,6 @@ button, input { font-family: inherit; }
   .dv-mockup { padding: 32px 36px; }
   .dvm-time { font-size: 2.4rem; }
   .dvm-day { font-size: 2.4rem; }
-  .dvm-tod-icon img { height: 64px; }
   .dv-mockup--landscape .dvm-event-name,
   .dvm-next-item { font-size: 1.3rem; }
 }

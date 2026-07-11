@@ -148,7 +148,7 @@ button, input { font-family: inherit; }
 
 .dv-mockup--landscape .dvm-title {
   grid-area: title;
-  font-size: 2rem;
+  font-size: 2.6rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-align: center;

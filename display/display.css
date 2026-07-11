@@ -118,6 +118,19 @@ button, input { font-family: inherit; }
   row-gap: 24px;
 }
 
+/* No dvm-message-banner is rendered on most days (spec: only shown while a
+   display message is active) — without this, the empty "message" grid row
+   still eats two 24px row-gaps around it, doubling the visual gap between
+   the title and the top row (day/time-of-day icon/time) below. */
+.dv-mockup--landscape:not(:has(.dvm-message-banner)) {
+  grid-template-rows: auto auto auto 1fr;
+  grid-template-areas:
+    "title      title"
+    "top        top"
+    "todaylabel next"
+    "events     next";
+}
+
 /* The small-scale dashboard preview (dashboard.css) still shows this; at
    full screen the small-card divider is redundant with the layout itself.
    Hidden via CSS only — the DOM from dv-viewer-render.js stays identical
@@ -140,7 +153,7 @@ button, input { font-family: inherit; }
   letter-spacing: 0.08em;
   text-align: center;
   margin: 0;
-  padding-bottom: 20px;
+  padding-bottom: 4px;
 }
 
 .dv-mockup--landscape .dvm-message-banner {

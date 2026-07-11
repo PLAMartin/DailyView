@@ -200,9 +200,11 @@ button, input { font-family: inherit; }
   border-bottom: 1px solid var(--dv-bg-cta);
 }
 .dv-mockup--landscape .dvm-event:last-child { border-bottom: none; }
-/* Colour is never the only signal an event has passed — the icon and text
-   both mute together, so this still reads correctly without colour vision. */
-.dv-mockup--landscape .dvm-event--past { opacity: 0.45; }
+/* Colour is never the only signal an event has passed — the icon fades too,
+   so this still reads correctly without colour vision. */
+.dv-mockup--landscape .dvm-event--past .dvm-event-icon { opacity: 0.45; }
+.dv-mockup--landscape .dvm-event--past .dvm-event-name,
+.dv-mockup--landscape .dvm-event--past .dvm-event-time { color: var(--dv-text-muted); }
 .dv-mockup--landscape .dvm-event-icon {
   width: 48px; height: 48px; border-radius: 50%; background: var(--dv-bg-cta); flex-shrink: 0;
   display: grid; place-items: center; color: var(--dv-navy);
@@ -221,7 +223,7 @@ button, input { font-family: inherit; }
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.dv-mockup--landscape .dvm-event-time { font-size: 1.5rem; font-weight: 600; color: var(--dv-subtle); }
+.dv-mockup--landscape .dvm-event-time { font-size: 1.5rem; font-weight: 600; }
 
 .dv-mockup--landscape .dvm-next-card {
   grid-area: next;

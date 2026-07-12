@@ -357,13 +357,13 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dv-mockup--landscape {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: auto auto auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr auto;
   grid-template-areas:
     "title      title"
-    "message    message"
     "top        top"
     "todaylabel next"
-    "events     next";
+    "events     next"
+    "message    message";
   column-gap: 24px;
   padding: 22px 26px 20px;
 }

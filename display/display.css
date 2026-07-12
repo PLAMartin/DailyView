@@ -107,21 +107,21 @@ button, input { font-family: inherit; }
 .dv-mockup--landscape {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: auto auto auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr auto;
   grid-template-areas:
     "title      title"
-    "message    message"
     "top        top"
     "todaylabel next"
-    "events     next";
+    "events     next"
+    "message    message";
   column-gap: 56px;
   row-gap: 24px;
 }
 
 /* No dvm-message-banner is rendered on most days (spec: only shown while a
    display message is active) — without this, the empty "message" grid row
-   still eats two 24px row-gaps around it, doubling the visual gap between
-   the title and the top row (day/time-of-day icon/time) below. */
+   still eats a 24px row-gap above it, leaving unwanted space beneath the
+   events/next row at the bottom of the screen. */
 .dv-mockup--landscape:not(:has(.dvm-message-banner)) {
   grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
@@ -271,14 +271,14 @@ button, input { font-family: inherit; }
 @media (orientation: portrait) {
   .dv-mockup--landscape {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto 1fr;
+    grid-template-rows: auto auto auto auto 1fr auto;
     grid-template-areas:
       "title"
-      "message"
       "top"
       "todaylabel"
       "next"
-      "events";
+      "events"
+      "message";
   }
   .dv-mockup--landscape .dvm-top { grid-template-columns: 1fr auto; }
   .dv-mockup--landscape .dvm-time-block { text-align: left; }

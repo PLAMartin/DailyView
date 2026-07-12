@@ -6,7 +6,7 @@
 
   var DEVICE_ID_KEY = 'dv_display_device_id';
   var CACHE_KEY = 'dv_display_snapshot_cache';
-  var POLL_INTERVAL_MS = 5 * 60 * 1000;
+  var POLL_INTERVAL_MS = 60 * 1000;
   var OFFLINE_INDICATOR_DELAY_MS = 5 * 60 * 1000;
 
   var loadingView = document.getElementById('loading-view');

@@ -229,7 +229,7 @@ button, input { font-family: inherit; }
   grid-area: next;
   background: var(--dv-bg-cta);
   border-radius: 24px;
-  padding: 32px;
+  padding: 0px 32px 32px;
   align-self: start;
 }
 .dvm-next-label { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; color: var(--dv-accent); margin: 0 0 10px; }

@@ -234,13 +234,13 @@ button, input { font-family: inherit; }
   flex: 3 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .dv-mockup--landscape .dvm-side-col .dvm-message-banner {
   flex: 2 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .dvm-next-item {
   font-size: 2.2rem;

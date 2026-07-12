@@ -113,7 +113,7 @@ button, input { font-family: inherit; }
     "top        top"
     "todaylabel next"
     "events     next"
-    "message    message";
+    "events     message";
   column-gap: 56px;
   row-gap: 24px;
 }
@@ -121,7 +121,7 @@ button, input { font-family: inherit; }
 /* No dvm-message-banner is rendered on most days (spec: only shown while a
    display message is active) — without this, the empty "message" grid row
    still eats a 24px row-gap above it, leaving unwanted space beneath the
-   events/next row at the bottom of the screen. */
+   NEXT card. */
 .dv-mockup--landscape:not(:has(.dvm-message-banner)) {
   grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
@@ -271,14 +271,14 @@ button, input { font-family: inherit; }
 @media (orientation: portrait) {
   .dv-mockup--landscape {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto 1fr auto;
+    grid-template-rows: auto auto auto auto auto 1fr;
     grid-template-areas:
       "title"
       "top"
       "todaylabel"
       "next"
-      "events"
-      "message";
+      "message"
+      "events";
   }
   .dv-mockup--landscape .dvm-top { grid-template-columns: 1fr auto; }
   .dv-mockup--landscape .dvm-time-block { text-align: left; }

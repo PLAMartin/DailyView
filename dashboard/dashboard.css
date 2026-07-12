@@ -363,11 +363,11 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
     "top        top"
     "todaylabel next"
     "events     next"
-    "message    message";
+    "events     message";
   column-gap: 24px;
   padding: 22px 26px 20px;
 }
-.dv-mockup--landscape .dvm-message-banner { grid-area: message; margin: 0 0 14px; font-size: 0.88rem; }
+.dv-mockup--landscape .dvm-message-banner { grid-area: message; margin: 14px 0 0; font-size: 0.88rem; }
 .dv-mockup--landscape .dvm-title { grid-area: title; font-size: 1rem; text-align: center; padding-bottom: 16px; margin-bottom: 16px; }
 .dv-mockup--landscape .dvm-top { grid-area: top; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; margin-bottom: 18px; text-align: left; }
 .dv-mockup--landscape .dvm-time-block { text-align: right; }

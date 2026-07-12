@@ -113,8 +113,11 @@
 
     article.appendChild(el('div', 'dvm-title', 'Daily View'));
 
+    var messageBanner = null;
     if (viewModel.message) {
-      article.appendChild(el('div', 'dvm-message-banner', viewModel.message));
+      messageBanner = el('div', 'dvm-message-banner');
+      messageBanner.appendChild(el('div', 'dvm-message-label', 'MESSAGE'));
+      messageBanner.appendChild(el('div', 'dvm-message-text', viewModel.message));
     }
 
     var labels = dayDateLabels(timezone);
@@ -161,8 +164,9 @@
     }
     article.appendChild(list);
 
+    var next = null;
     if (viewModel.showNextReminder) {
-      var next = el('aside', 'dvm-next-card');
+      next = el('aside', 'dvm-next-card');
       next.appendChild(el('div', 'dvm-next-label', 'NEXT'));
       if (viewModel.nextEvent) {
         next.appendChild(el('div', 'dvm-next-item', viewModel.nextEvent.title));
@@ -170,6 +174,19 @@
       } else {
         next.appendChild(el('div', 'dvm-next-item', 'Nothing else planned today.'));
       }
+    }
+
+    // When a message is present, NEXT and the message pane share the same
+    // grid slot via a flex column so the message pane's height is set in
+    // proportion to the NEXT card's rather than sizing to its own text
+    // alone. Without a message, NEXT is placed directly so its established
+    // top-aligned, content-sized behaviour is unchanged.
+    if (messageBanner) {
+      var sideCol = el('div', 'dvm-side-col');
+      if (next) sideCol.appendChild(next);
+      sideCol.appendChild(messageBanner);
+      article.appendChild(sideCol);
+    } else if (next) {
       article.appendChild(next);
     }
 

@@ -107,28 +107,14 @@ button, input { font-family: inherit; }
 .dv-mockup--landscape {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: auto auto auto 1fr auto;
-  grid-template-areas:
-    "title      title"
-    "top        top"
-    "todaylabel next"
-    "events     next"
-    "events     message";
-  column-gap: 56px;
-  row-gap: 24px;
-}
-
-/* No dvm-message-banner is rendered on most days (spec: only shown while a
-   display message is active) — without this, the empty "message" grid row
-   still eats a 24px row-gap above it, leaving unwanted space beneath the
-   NEXT card. */
-.dv-mockup--landscape:not(:has(.dvm-message-banner)) {
   grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
     "title      title"
     "top        top"
     "todaylabel next"
     "events     next";
+  column-gap: 56px;
+  row-gap: 24px;
 }
 
 /* The small-scale dashboard preview (dashboard.css) still shows this; at
@@ -157,15 +143,14 @@ button, input { font-family: inherit; }
 }
 
 .dv-mockup--landscape .dvm-message-banner {
-  grid-area: message;
   background: #fff8e6;
   color: #8a6100;
-  font-size: 1.4rem;
-  font-weight: 700;
   padding: 18px 24px;
   border-radius: 14px;
   margin: 0;
 }
+.dvm-message-label { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.08em; color: #8a6100; margin: 0 0 10px; }
+.dvm-message-text { font-size: 1.4rem; font-weight: 700; }
 
 .dv-mockup--landscape .dvm-top {
   grid-area: top;
@@ -232,7 +217,31 @@ button, input { font-family: inherit; }
   padding: 32px;
   align-self: start;
 }
-.dvm-next-label { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; color: var(--dv-accent); margin: 0 0 10px; }
+.dvm-next-label { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.08em; color: var(--dv-accent); margin: 0 0 10px; }
+
+/* Present only when a message is active (see dv-viewer-render.js) — NEXT and
+   the message pane share this flex column so the message pane's height is
+   set in proportion to the NEXT card's (3:2) instead of just hugging its
+   own text. */
+.dv-mockup--landscape .dvm-side-col {
+  grid-area: next;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.dv-mockup--landscape .dvm-side-col .dvm-next-card {
+  align-self: stretch;
+  flex: 3 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.dv-mockup--landscape .dvm-side-col .dvm-message-banner {
+  flex: 2 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .dvm-next-item {
   font-size: 2.2rem;
   font-weight: 700;
@@ -271,13 +280,12 @@ button, input { font-family: inherit; }
 @media (orientation: portrait) {
   .dv-mockup--landscape {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto 1fr;
+    grid-template-rows: auto auto auto auto 1fr;
     grid-template-areas:
       "title"
       "top"
       "todaylabel"
       "next"
-      "message"
       "events";
   }
   .dv-mockup--landscape .dvm-top { grid-template-columns: 1fr auto; }

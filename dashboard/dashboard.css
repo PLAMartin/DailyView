@@ -326,6 +326,8 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 }
 .dvm-divider { height: 1px; background: var(--dv-divider); margin: 0 0 10px; }
 .dvm-today-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em; color: var(--dv-subtle); margin-bottom: 8px; }
+.dvm-message-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em; color: #8a6100; margin-bottom: 4px; }
+.dvm-message-text { font-size: 0.82rem; font-weight: 700; }
 .dvm-events { list-style: none; }
 .dvm-event-empty { font-size: 0.85rem; color: var(--dv-text-muted); padding: 8px 0; }
 .dvm-event { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--dv-bg-cta); }
@@ -341,14 +343,12 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dvm-event-name { font-size: 0.78rem; font-weight: 600; }
 .dvm-event-time { font-size: 0.72rem; font-weight: 600; color: var(--dv-subtle); }
 .dvm-next-card { margin-top: 12px; background: var(--dv-bg-cta); border-radius: 12px; padding: 10px 14px; }
-.dvm-next-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; color: var(--dv-accent); margin-bottom: 3px; }
+.dvm-next-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em; color: var(--dv-accent); margin-bottom: 3px; }
 .dvm-next-item { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
 .dvm-next-time { font-size: 0.75rem; font-weight: 600; color: var(--dv-accent); }
 .dvm-message-banner {
   background: #fff8e6;
   color: #8a6100;
-  font-size: 0.82rem;
-  font-weight: 700;
   padding: 8px 12px;
   border-radius: 8px;
   margin-bottom: 12px;
@@ -357,17 +357,15 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dv-mockup--landscape {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: auto auto auto 1fr auto;
+  grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
     "title      title"
     "top        top"
     "todaylabel next"
-    "events     next"
-    "events     message";
+    "events     next";
   column-gap: 24px;
   padding: 22px 26px 20px;
 }
-.dv-mockup--landscape .dvm-message-banner { grid-area: message; margin: 14px 0 0; font-size: 0.88rem; }
 .dv-mockup--landscape .dvm-title { grid-area: title; font-size: 1rem; text-align: center; padding-bottom: 16px; margin-bottom: 16px; }
 .dv-mockup--landscape .dvm-top { grid-area: top; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; margin-bottom: 18px; text-align: left; }
 .dv-mockup--landscape .dvm-time-block { text-align: right; }
@@ -384,9 +382,35 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dv-mockup--landscape .dvm-event-name { font-size: 0.95rem; }
 .dv-mockup--landscape .dvm-event-time { font-size: 0.88rem; }
 .dv-mockup--landscape .dvm-next-card { grid-area: next; margin-top: 0; padding: 14px 18px; }
-.dv-mockup--landscape .dvm-next-label { font-size: 0.7rem; }
+.dv-mockup--landscape .dvm-next-label { font-size: 0.75rem; }
 .dv-mockup--landscape .dvm-next-item { font-size: 1.15rem; }
 .dv-mockup--landscape .dvm-next-time { font-size: 0.92rem; }
+.dv-mockup--landscape .dvm-message-label { font-size: 0.75rem; }
+.dv-mockup--landscape .dvm-message-text { font-size: 0.88rem; }
+
+/* Present only when a message is active (see dv-viewer-render.js) — NEXT and
+   the message pane share this flex column so the message pane's height is
+   set in proportion to the NEXT card's (3:2) instead of just hugging its
+   own text. */
+.dv-mockup--landscape .dvm-side-col {
+  grid-area: next;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dv-mockup--landscape .dvm-side-col .dvm-next-card {
+  flex: 3 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.dv-mockup--landscape .dvm-side-col .dvm-message-banner {
+  flex: 2 1 auto;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 /* ── Device status ── */
 .device-section h3 { font-size: 1.05rem; margin-bottom: 10px; }

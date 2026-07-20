@@ -280,7 +280,7 @@ button, input { font-family: inherit; }
 @media (orientation: portrait) {
   .dv-mockup--landscape {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto 1fr auto auto;
+    grid-template-rows: auto auto auto auto auto auto;
     grid-template-areas:
       "title"
       "top"
@@ -288,6 +288,12 @@ button, input { font-family: inherit; }
       "events"
       "next"
       "message";
+    /* Grid's default align-content:normal resolves to stretch, which
+       distributes any leftover vertical space across every auto row
+       (widening the gap between the event list and NEXT). Pin rows to
+       their natural size and let any leftover space fall below the
+       message pane instead. */
+    align-content: start;
   }
   .dv-mockup--landscape .dvm-top { grid-template-columns: 1fr auto; }
   .dv-mockup--landscape .dvm-time-block { text-align: left; }

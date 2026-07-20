@@ -300,6 +300,12 @@ button, input { font-family: inherit; }
      day-period label on the right of the icon, rather than wrapping to a
      second row. */
 
+  /* Portrait viewports are typically narrow enough to also match the
+     compact-screen query above (max-width: 1100px), which shrinks this
+     icon to 64px. Restore the full landscape size here so it's the same
+     regardless of orientation. */
+  .dvm-tod-icon img { height: 96px; }
+
   /* In landscape, NEXT and the message pane share .dvm-side-col as a flex
      column so the message inherits its height from NEXT (see
      dv-viewer-render.js). In portrait, events sit between todaylabel and

@@ -280,14 +280,26 @@ button, input { font-family: inherit; }
 @media (orientation: portrait) {
   .dv-mockup--landscape {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr auto auto;
     grid-template-areas:
       "title"
       "top"
       "todaylabel"
+      "events"
       "next"
-      "events";
+      "message";
   }
   .dv-mockup--landscape .dvm-top { grid-template-columns: 1fr auto; }
   .dv-mockup--landscape .dvm-time-block { text-align: left; }
+
+  /* In landscape, NEXT and the message pane share .dvm-side-col as a flex
+     column so the message inherits its height from NEXT (see
+     dv-viewer-render.js). In portrait, events sit between todaylabel and
+     NEXT, and the message drops to the very bottom of the screen — so the
+     two need independent grid placement. display: contents unwraps the
+     flex column and lets its children sit directly in the mockup's own
+     grid, positioned via the areas above (.dvm-next-card already carries
+     grid-area: next from the base landscape rule above). */
+  .dv-mockup--landscape .dvm-side-col { display: contents; }
+  .dv-mockup--landscape .dvm-message-banner { grid-area: message; }
 }

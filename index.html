@@ -443,9 +443,12 @@ dialog#video-dialog video {
   color: var(--dv-navy);
 }
 .dvm-event-icon svg { display: block; }
-.dvm-event-icon--medical { background: #fff0f0; }
-.dvm-event-icon--home    { background: #fffae6; }
-.dvm-event-icon--people  { background: var(--dv-bg-cta); }
+.dvm-event-icon--medical    { background: #fff0f0; }
+.dvm-event-icon--medication { background: #ffedd9; }
+.dvm-event-icon--meal       { background: #f0f9e8; }
+.dvm-event-icon--personal   { background: #e6f7f2; }
+.dvm-event-icon--home       { background: #fffae6; }
+.dvm-event-icon--people     { background: var(--dv-bg-cta); }
 
 .dvm-event-name { font-size: 0.78rem; font-weight: 600; }
 .dvm-event-time { font-size: 0.72rem; font-weight: 600; color: var(--dv-subtle); }
@@ -1512,8 +1515,13 @@ var _formLoadTime = Date.now();
 // ── Mockup sample data ──────────────────────────────────────────────────────────
 // Edit only this object to update what the mockups display.
 // Future: replace with live system clock values and real event data from Supabase.
-var iconHome = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
-var iconPeople = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+// Event-category icons (MUI Material Icons, Outlined variant, mui.com/material-ui/material-icons/)
+var iconHome     = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 5.69 5 4.5V18h-2v-6H9v6H7v-7.81zM12 3 2 12h3v8h6v-6h2v6h6v-8h3z"/></svg>';
+var iconPeople   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 13.75c-2.34 0-7 1.17-7 3.5V19h14v-1.75c0-2.33-4.66-3.5-7-3.5M4.34 17c.84-.58 2.87-1.25 4.66-1.25s3.82.67 4.66 1.25zM9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12m0-5c.83 0 1.5.67 1.5 1.5S9.83 10 9 10s-1.5-.67-1.5-1.5S8.17 7 9 7m7.04 6.81c1.16.84 1.96 1.96 1.96 3.44V19h4v-1.75c0-2.02-3.5-3.17-5.96-3.44M15 12c1.93 0 3.5-1.57 3.5-3.5S16.93 5 15 5c-.54 0-1.04.13-1.5.35.63.89 1 1.98 1 3.15s-.37 2.26-1 3.15c.46.22.96.35 1.5.35"/></svg>';
+var iconMedical  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2M10 4h4v2h-4zm10 16H4V8h16z"/><path d="M13 10h-2v3H8v2h3v3h2v-3h3v-2h-3z"/></svg>';
+var iconMedication = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.5 15H8v-3h2.5V9.5h3V12H16v3h-2.5v2.5h-3zM19 8v11c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2m-2 0H7v11h10zm1-5H6v2h12z"/></svg>';
+var iconMeal     = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 6v8h3v8h2V2c-2.76 0-5 2.24-5 4m-5 3H9V2H7v7H5V2H3v7c0 2.21 1.79 4 4 4v9h2v-9c2.21 0 4-1.79 4-4V2h-2z"/></svg>';
+var iconPersonal = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.64 7.64c.23-.5.36-1.05.36-1.64 0-2.21-1.79-4-4-4S2 3.79 2 6s1.79 4 4 4c.59 0 1.14-.13 1.64-.36L10 12l-2.36 2.36C7.14 14.13 6.59 14 6 14c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4c0-.59-.13-1.14-.36-1.64L12 14l7 7h3v-1zM6 8c-1.1 0-2-.89-2-2s.9-2 2-2 2 .89 2 2-.9 2-2 2m0 12c-1.1 0-2-.89-2-2s.9-2 2-2 2 .89 2 2-.9 2-2 2m6-7.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5M19 3l-6 6 2 2 7-7V3z"/></svg>';
 
 // Approved custom time-of-day icons. Morning asset not yet in /assets/icon/ — ask before substituting.
 var periodIcons = {
@@ -1529,9 +1537,9 @@ const mockupData = {
   time: '16:50',
   period: 'AFTERNOON',
   events: [
-    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people', label: 'Hair styling',    time: '11:00', state: 'past'     },
-    { iconSvg: iconHome,   iconClass: 'dvm-event-icon--medical', label: 'Care visit',     time: '14:00', state: 'past'     },
-    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people',  label: 'Clare visiting', time: '17:00', state: 'upcoming' }
+    { iconSvg: iconPersonal, iconClass: 'dvm-event-icon--personal', label: 'Hair styling',   time: '11:00', state: 'past'     },
+    { iconSvg: iconMedical,  iconClass: 'dvm-event-icon--medical',  label: 'Care visit',     time: '14:00', state: 'past'     },
+    { iconSvg: iconPeople,   iconClass: 'dvm-event-icon--people',   label: 'Clare visiting', time: '17:00', state: 'upcoming' }
   ],
   next: { label: 'Clare visiting', time: '17:00' }
 };
@@ -1542,9 +1550,9 @@ const mockupDataSecondary = {
   time: '16:50',
   period: 'AFTERNOON',
   events: [
-    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people', label: 'Hair styling',   time: '11:00', state: 'past' },
-    { iconSvg: iconHome,   iconClass: 'dvm-event-icon--home',   label: 'Care visit',     time: '16:00', state: 'past' },
-    { iconSvg: iconPeople, iconClass: 'dvm-event-icon--people', label: 'Clare visiting', time: '17:00', state: 'upcoming' }
+    { iconSvg: iconPersonal, iconClass: 'dvm-event-icon--personal', label: 'Hair styling',   time: '11:00', state: 'past' },
+    { iconSvg: iconMedical,  iconClass: 'dvm-event-icon--medical',  label: 'Care visit',     time: '16:00', state: 'past' },
+    { iconSvg: iconPeople,   iconClass: 'dvm-event-icon--people',   label: 'Clare visiting', time: '17:00', state: 'upcoming' }
   ],
   next: { label: 'Clare visiting', time: '17:00' }
 };

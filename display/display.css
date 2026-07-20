@@ -295,8 +295,10 @@ button, input { font-family: inherit; }
        message pane instead. */
     align-content: start;
   }
-  .dv-mockup--landscape .dvm-top { grid-template-columns: 1fr auto; }
-  .dv-mockup--landscape .dvm-time-block { text-align: left; }
+  /* .dvm-top keeps the base landscape column layout (day/date | icon |
+     time, time right-aligned) — day/date on the left, time and the
+     day-period label on the right of the icon, rather than wrapping to a
+     second row. */
 
   /* In landscape, NEXT and the message pane share .dvm-side-col as a flex
      column so the message inherits its height from NEXT (see

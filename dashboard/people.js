@@ -228,6 +228,10 @@
     var roleString = document.getElementById('invite-role').value;
     var token = generateInviteToken();
 
+    // A single .catch() at the end (rather than the previous two-arg
+    // .then(ok, fail) on just the first step) so a createInvite failure —
+    // RLS rejection, network blip — can't fall through as an unhandled
+    // rejection that leaves the button stuck on "Sending…" with no message.
     sha256Hex(token).then(function (tokenHash) {
       var payload = Object.assign({
         account_id: currentAccount.account_id,
@@ -238,13 +242,13 @@
         created_by_user_id: currentAccount.user_id
       }, rolePayloadFields(roleString));
 
-      return dvData.createInvite(payload).then(function (invite) {
-        inviteSubmitBtn.disabled = false;
-        inviteSubmitBtn.textContent = 'Send invite';
-        if (onPeopleChanged) onPeopleChanged();
-        return sendInviteEmailAndShowResult(invite, token);
-      });
-    }, function () {
+      return dvData.createInvite(payload);
+    }).then(function (invite) {
+      inviteSubmitBtn.disabled = false;
+      inviteSubmitBtn.textContent = 'Send invite';
+      if (onPeopleChanged) onPeopleChanged();
+      return sendInviteEmailAndShowResult(invite, token);
+    }).catch(function () {
       inviteSubmitBtn.disabled = false;
       inviteSubmitBtn.textContent = 'Send invite';
       setMessage(inviteMessageEl, NETWORK_FAILURE, 'error');
@@ -417,7 +421,14 @@
           inviteDialog.showModal();
           onPeopleChanged = onChanged;
           return sendInviteEmailAndShowResult(updated, token);
-        }, function () { resendBtn.disabled = false; });
+        }, function () {
+          resendBtn.disabled = false;
+          ensureDialogs();
+          setMessage(inviteMessageEl, NETWORK_FAILURE, 'error');
+          inviteFormView.hidden = true;
+          inviteResultView.hidden = true;
+          inviteDialog.showModal();
+        });
       });
       actions.appendChild(resendBtn);
 

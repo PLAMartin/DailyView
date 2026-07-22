@@ -184,8 +184,30 @@
 
   // ---- pairing ----
 
+  // Codes are always XXX-XXX (see PAIRING_CODE_CHARS in dashboard/devices.js).
+  // Centralizing the dash placement here means the user never has to type
+  // the "-" themselves: handlePairingCodeInput inserts it live, and
+  // normalizeCode re-derives it as a backstop for paste/autofill.
+  function formatPairingCode(alnum) {
+    alnum = alnum.slice(0, 6);
+    return alnum.length > 3 ? alnum.slice(0, 3) + '-' + alnum.slice(3) : alnum;
+  }
+
   function normalizeCode(raw) {
-    return (raw || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').trim();
+    var alnum = (raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return formatPairingCode(alnum);
+  }
+
+  function handlePairingCodeInput() {
+    var raw = pairingCodeInput.value;
+    var caret = pairingCodeInput.selectionStart;
+    var alnumBeforeCaret = raw.slice(0, caret).replace(/[^A-Za-z0-9]/g, '').length;
+    var alnum = raw.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+    var formatted = formatPairingCode(alnum);
+
+    pairingCodeInput.value = formatted;
+    var newCaret = Math.min(alnumBeforeCaret + (alnumBeforeCaret > 3 ? 1 : 0), formatted.length);
+    pairingCodeInput.setSelectionRange(newCaret, newCaret);
   }
 
   var pairingSubmitLocked = false;
@@ -244,6 +266,7 @@
     }
 
     pairingForm.addEventListener('submit', handlePairingSubmit);
+    pairingCodeInput.addEventListener('input', handlePairingCodeInput);
 
     dvViewerData.ensureDeviceSession().then(function () {
       if (storedId) {

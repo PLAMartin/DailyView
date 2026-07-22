@@ -15,19 +15,27 @@
   // separate role/permission/four-checkbox controls — simpler to reason
   // about, and matches the "readable summary of permissions" requirement
   // (section 16.2) better than raw checkboxes would.
+  //
+  // The `permission` strings below must match public.dv_account_user_permission
+  // rows exactly, or permissionIdFor() silently returns null and the insert
+  // fails NOT NULL on dv_account_invite.permission_id — confirmed live: the
+  // seeded permissions are read_only / suggest_updates / create_update_delete
+  // / admin, not the full_access / schedule_editor / device_admin names the
+  // spec assumed. Only 'viewer' happened to match by coincidence, so every
+  // other role silently failed to be invited until this was fixed.
   var ROLE_PRESETS = {
     owner: {
-      permission: 'full_access', can_manage_events: true, can_manage_users: true,
+      permission: 'admin', can_manage_events: true, can_manage_users: true,
       can_manage_devices: true, can_send_prompts: true,
       summary: 'Full control: events, messages, devices, people and settings.'
     },
     editor: {
-      permission: 'schedule_editor', can_manage_events: true, can_manage_users: false,
+      permission: 'create_update_delete', can_manage_events: true, can_manage_users: false,
       can_manage_devices: false, can_send_prompts: true,
       summary: 'Can manage events, messages and prompts. Cannot manage people, devices or settings.'
     },
     carer: {
-      permission: 'schedule_editor', can_manage_events: true, can_manage_users: false,
+      permission: 'create_update_delete', can_manage_events: true, can_manage_users: false,
       can_manage_devices: false, can_send_prompts: true,
       summary: 'Can manage events, messages and prompts. Cannot manage people, devices or settings.'
     },
@@ -37,7 +45,7 @@
       summary: 'Read-only access to the schedule. Cannot make changes.'
     },
     device_manager: {
-      permission: 'device_admin', can_manage_events: false, can_manage_users: false,
+      permission: 'suggest_updates', can_manage_events: false, can_manage_users: false,
       can_manage_devices: true, can_send_prompts: false,
       summary: 'Can pair, refresh and manage devices and display settings only.'
     }
@@ -205,7 +213,13 @@
     inviteForm.reset();
     document.getElementById('invite-email').value = '';
     document.getElementById('invite-relationship').value = '';
-    populateRoleSelect(document.getElementById('invite-role'), 'editor');
+    // 'editor' isn't a seeded dv_account_user_role value (only owner/viewer/
+    // carer, of the roles this dashboard exposes, actually exist live — see
+    // ROLE_PRESETS above), so it never matched and the <select> silently
+    // fell back to whichever option render first: 'owner' — defaulting a new
+    // invite to full account control. 'carer' is a real role and a sane
+    // lower-privilege default for an invite dialog.
+    populateRoleSelect(document.getElementById('invite-role'), 'carer');
     updateRoleSummary(document.getElementById('invite-role'), document.getElementById('invite-role-summary'));
     inviteSubmitBtn.disabled = false;
     inviteSubmitBtn.textContent = 'Send invite';

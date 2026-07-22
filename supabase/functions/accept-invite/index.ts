@@ -1,5 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.0';
+import { admin, checkInvite, corsHeaders, jsonResponse, InviteRow } from '../_shared/invite.ts';
 
 // Redeems a dv_account_invite row (created by the dashboard's "Invite
 // person" flow — see dashboard/people.js) into a real dv_user +
@@ -11,87 +11,6 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.0';
 // function runs with the service-role key instead, and independently
 // re-derives every fact it trusts (invite validity, token match, caller
 // identity for the existing-user path) rather than accepting client claims.
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
-const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const admin = createClient(supabaseUrl, serviceRoleKey, {
-  auth: { autoRefreshToken: false, persistSession: false },
-});
-
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  });
-}
-
-async function sha256Hex(text: string): Promise<string> {
-  const data = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-interface InviteRow {
-  invite_id: string;
-  account_id: number;
-  email: string;
-  role_id: number;
-  permission_id: number;
-  relationship_to_viewer: string | null;
-  can_manage_events: boolean;
-  can_manage_users: boolean;
-  can_manage_devices: boolean;
-  can_send_prompts: boolean;
-  is_primary_contact: boolean;
-  token_hash: string;
-  expires_at: string;
-  accepted_at: string | null;
-  revoked_at: string | null;
-  dv_account: { account_name: string } | null;
-  dv_account_user_role: { role: string } | null;
-}
-
-async function loadInvite(inviteId: string): Promise<InviteRow | null> {
-  const { data, error } = await admin
-    .from('dv_account_invite')
-    .select(
-      'invite_id, account_id, email, role_id, permission_id, relationship_to_viewer, ' +
-        'can_manage_events, can_manage_users, can_manage_devices, can_send_prompts, is_primary_contact, ' +
-        'token_hash, expires_at, accepted_at, revoked_at, ' +
-        'dv_account(account_name), dv_account_user_role(role)'
-    )
-    .eq('invite_id', inviteId)
-    .maybeSingle();
-  if (error) throw error;
-  return data as InviteRow | null;
-}
-
-// invite_id + token together prove knowledge of the one-time secret; a
-// mismatch on either is reported identically as 'invalid' so a guessed
-// invite_id can't be used to fish for whether an invite exists.
-async function checkInvite(inviteId: string | undefined, token: string | undefined) {
-  if (!inviteId || !token) return { ok: false as const, reason: 'invalid' as const };
-
-  const invite = await loadInvite(inviteId);
-  if (!invite) return { ok: false as const, reason: 'invalid' as const };
-
-  const tokenHash = await sha256Hex(token);
-  if (tokenHash !== invite.token_hash) return { ok: false as const, reason: 'invalid' as const };
-  if (invite.revoked_at) return { ok: false as const, reason: 'revoked' as const };
-  if (invite.accepted_at) return { ok: false as const, reason: 'accepted' as const };
-  if (new Date(invite.expires_at).getTime() < Date.now()) {
-    return { ok: false as const, reason: 'expired' as const };
-  }
-
-  return { ok: true as const, invite };
-}
 
 // dv_user.email is not guaranteed unique (see login spec §4.1 — the
 // authoritative identity is auth_user_id, not email), so this fetches all

@@ -241,8 +241,8 @@
       return dvData.createInvite(payload).then(function (invite) {
         inviteSubmitBtn.disabled = false;
         inviteSubmitBtn.textContent = 'Send invite';
-        showInviteResult(invite, token);
         if (onPeopleChanged) onPeopleChanged();
+        return sendInviteEmailAndShowResult(invite, token);
       });
     }, function () {
       inviteSubmitBtn.disabled = false;
@@ -255,10 +255,37 @@
     return window.location.origin + '/accept-invite/?invite=' + invite.invite_id + '.' + token;
   }
 
-  function showInviteResult(invite, token) {
+  function setInviteEmailStatus(state, email) {
+    var statusEl = document.getElementById('invite-result-status');
+    if (state === 'sending') {
+      statusEl.textContent = 'Sending an invite email to ' + email + '…';
+      statusEl.removeAttribute('data-tone');
+    } else if (state === 'sent') {
+      statusEl.textContent = 'An invite email has been sent to ' + email + '.';
+      statusEl.removeAttribute('data-tone');
+    } else {
+      statusEl.textContent = 'We could not send the invite email to ' + email + ' just now.';
+      statusEl.setAttribute('data-tone', 'error');
+    }
+  }
+
+  // Shows the link immediately (it's already valid — no need to wait on the
+  // network) and updates the status line once send-invite-email resolves.
+  // send-invite-email re-verifies the invite itself rather than trusting
+  // anything from this client. Either way the copy-link fallback stays
+  // available, so a bounced or blocked email never strands the invite.
+  function sendInviteEmailAndShowResult(invite, token) {
     inviteFormView.hidden = true;
     inviteResultView.hidden = false;
     inviteLinkInput.value = inviteLinkFor(invite, token);
+    setInviteEmailStatus('sending', invite.email);
+
+    return dvAuth.invokeFunction('send-invite-email', { invite_id: invite.invite_id, token: token })
+      .then(function (result) {
+        setInviteEmailStatus(result.error ? 'failed' : 'sent', invite.email);
+      }, function () {
+        setInviteEmailStatus('failed', invite.email);
+      });
   }
 
   function openEditDialog(member, onChanged) {
@@ -386,12 +413,10 @@
         }).then(function (updated) {
           resendBtn.disabled = false;
           ensureDialogs();
-          inviteFormView.hidden = true;
-          inviteResultView.hidden = false;
-          inviteLinkInput.value = inviteLinkFor(updated, token);
           setMessage(inviteMessageEl, '', null);
           inviteDialog.showModal();
           onPeopleChanged = onChanged;
+          return sendInviteEmailAndShowResult(updated, token);
         }, function () { resendBtn.disabled = false; });
       });
       actions.appendChild(resendBtn);

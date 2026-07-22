@@ -252,7 +252,7 @@
   }
 
   function inviteLinkFor(invite, token) {
-    return window.location.origin + '/login/?invite=' + invite.invite_id + '.' + token;
+    return window.location.origin + '/accept-invite/?invite=' + invite.invite_id + '.' + token;
   }
 
   function showInviteResult(invite, token) {

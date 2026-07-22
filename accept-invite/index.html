@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accept your invite — Daily View</title>
+<meta name="description" content="Accept an invitation to help manage a Daily View account.">
+<meta name="robots" content="noindex">
+
+<!-- Favicons -->
+<link rel="icon" href="../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+<meta name="apple-mobile-web-app-title" content="Daily View">
+<meta name="application-name" content="Daily View">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="accept-invite.css">
+</head>
+<body>
+
+<header class="auth-header">
+  <div class="container">
+    <a href="../" class="auth-logo" aria-label="Daily View home">
+      <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="32">
+    </a>
+    <a href="../" class="auth-back-home">Back to home</a>
+  </div>
+</header>
+
+<main class="auth-main">
+  <div class="auth-panel">
+    <h1 id="accept-heading">Accept your invite</h1>
+    <p class="auth-sub" id="accept-sub">Checking your invite…</p>
+
+    <div class="auth-message" id="accept-message" role="status" aria-live="polite"></div>
+
+    <!-- TODO: this page currently redeems dv_account_invite rows created by
+         the dashboard People page. Nothing else in this file is sample data. -->
+
+    <div id="accept-invalid-view" hidden>
+      <p class="auth-footer-note">
+        Already have a Daily View account? <a href="../login/">Sign in</a>.
+      </p>
+    </div>
+
+    <form id="accept-existing-form" novalidate hidden>
+      <div class="field" id="accept-existing-email-field">
+        <label for="accept-existing-email">Email address</label>
+        <input type="email" id="accept-existing-email" name="email" readonly autocomplete="username">
+      </div>
+
+      <div class="field field-with-toggle" id="accept-existing-password-field">
+        <label for="accept-existing-password">Password</label>
+        <div class="field-input-row">
+          <input type="password" id="accept-existing-password" name="password" autocomplete="current-password" required>
+          <button type="button" class="field-toggle-btn" id="accept-existing-toggle" aria-pressed="false">Show</button>
+        </div>
+        <p class="field-error" id="accept-existing-password-error" hidden></p>
+      </div>
+
+      <button type="submit" class="btn btn-full" id="accept-existing-submit">Sign in and accept invite</button>
+    </form>
+
+    <form id="accept-new-form" novalidate hidden>
+      <div class="field" id="accept-new-email-field">
+        <label for="accept-new-email">Email address</label>
+        <input type="email" id="accept-new-email" name="email" readonly autocomplete="username">
+      </div>
+
+      <div class="field" id="accept-new-name-field">
+        <label for="accept-new-name">Your name</label>
+        <input type="text" id="accept-new-name" name="name" autocomplete="name" required>
+        <p class="field-error" id="accept-new-name-error" hidden></p>
+      </div>
+
+      <div class="field field-with-toggle" id="accept-new-password-field">
+        <label for="accept-new-password">Choose a password</label>
+        <div class="field-input-row">
+          <input type="password" id="accept-new-password" name="password" autocomplete="new-password" required>
+          <button type="button" class="field-toggle-btn" id="accept-new-toggle" aria-pressed="false">Show</button>
+        </div>
+        <p class="field-error" id="accept-new-password-error" hidden></p>
+      </div>
+
+      <div class="field" id="accept-new-confirm-field">
+        <label for="accept-new-confirm">Confirm password</label>
+        <div class="field-input-row">
+          <input type="password" id="accept-new-confirm" name="confirm" autocomplete="new-password" required>
+        </div>
+        <p class="field-error" id="accept-new-confirm-error" hidden></p>
+      </div>
+
+      <button type="submit" class="btn btn-full" id="accept-new-submit">Create account and join</button>
+    </form>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="../legal/terms-of-use.html">Terms of Use</a>
+      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+<script src="../assets/js/dv-auth-config.js"></script>
+<script src="../assets/js/dv-auth.js"></script>
+<script src="accept-invite.js" defer></script>
+</body>
+</html>

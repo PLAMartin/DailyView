@@ -83,6 +83,14 @@
     return sb.rpc('dv_get_my_account_access');
   }
 
+  // Invokes a Supabase Edge Function on the same client used for sign-in, so
+  // a session established via signInWithPassword() is automatically attached
+  // to the call (supabase-js sends the session's access token instead of the
+  // anon/publishable key once one exists).
+  function invokeFunction(name, body) {
+    return sb.functions.invoke(name, { body: body });
+  }
+
   // Answers "does this signed-in visitor have a usable Daily View account?"
   // Never trusts membership data from anywhere but this RPC call.
   function requireDailyViewAccess() {
@@ -150,6 +158,7 @@
     completePasswordReset: completePasswordReset,
     signOut: signOut,
     getMyAccountAccess: getMyAccountAccess,
+    invokeFunction: invokeFunction,
     requireDailyViewAccess: requireDailyViewAccess,
     getSafeNextPath: getSafeNextPath,
     exchangeCodeFromUrl: exchangeCodeFromUrl,

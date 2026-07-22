@@ -10,6 +10,8 @@
 
   var currentAccount = null;
   var currentLookups = null;
+  var pollTimer = null;
+  var POLL_INTERVAL_MS = 60 * 1000;
 
   // ---- small helpers ----
 
@@ -271,6 +273,14 @@
     var contentEl = document.getElementById('dashboard-content');
     var bodyEl = contentEl.querySelector('.today-body');
     var statusEl = contentEl.querySelector('.today-status');
+    if (!bodyEl || !statusEl) {
+      // Today tab is no longer on screen (user navigated away) — the
+      // interval has no DOM left to update, so stop it rather than tick
+      // forever in the background.
+      if (pollTimer) { window.clearInterval(pollTimer); pollTimer = null; }
+      return;
+    }
+
     statusEl.textContent = 'Updating…';
     statusEl.removeAttribute('data-tone');
     loadAndRenderBody(bodyEl, statusEl, currentAccount, accountLocalIsoDate(currentAccount.timezone));
@@ -278,6 +288,7 @@
 
   function render(contentEl, account) {
     currentAccount = account;
+    if (pollTimer) { window.clearInterval(pollTimer); pollTimer = null; }
 
     contentEl.textContent = '';
     contentEl.appendChild(buildHeader());
@@ -292,6 +303,11 @@
     contentEl.appendChild(bodyEl);
 
     loadAndRenderBody(bodyEl, statusEl, account, accountLocalIsoDate(account.timezone));
+    // Device status (Online/Recently seen/Offline) is derived from
+    // last_seen_at against the current time, so this also catches a device
+    // quietly aging past a threshold with no new heartbeat, not just fresh
+    // schedule/message data.
+    pollTimer = window.setInterval(refresh, POLL_INTERVAL_MS);
   }
 
   window.dvToday = { render: render };

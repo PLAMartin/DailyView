@@ -12,6 +12,8 @@
 
   var currentAccount = null;
   var currentLookups = null;
+  var pollTimer = null;
+  var POLL_INTERVAL_MS = 60 * 1000;
 
   function el(tag, className, text) {
     var e = document.createElement(tag);
@@ -374,7 +376,13 @@
     var contentEl = document.getElementById('dashboard-content');
     var bodyEl = contentEl.querySelector('.devices-body');
     var statusEl = contentEl.querySelector('.devices-status');
-    if (!bodyEl || !statusEl) return;
+    if (!bodyEl || !statusEl) {
+      // Devices tab is no longer on screen (user navigated away) — the
+      // interval has no DOM left to update, so stop it rather than tick
+      // forever in the background.
+      if (pollTimer) { window.clearInterval(pollTimer); pollTimer = null; }
+      return;
+    }
 
     statusEl.textContent = 'Loading…';
     statusEl.removeAttribute('data-tone');
@@ -394,6 +402,7 @@
 
   function render(contentEl, account) {
     currentAccount = account;
+    if (pollTimer) { window.clearInterval(pollTimer); pollTimer = null; }
 
     contentEl.textContent = '';
     contentEl.appendChild(el('h2', null, 'Devices'));
@@ -408,6 +417,10 @@
     contentEl.appendChild(bodyEl);
 
     refresh();
+    // Online/Recently seen/Offline is derived from last_seen_at against the
+    // current time, so this also catches a device quietly aging past a
+    // threshold with no new heartbeat, not just fresh data.
+    pollTimer = window.setInterval(refresh, POLL_INTERVAL_MS);
   }
 
   window.dvDevices = { render: render };

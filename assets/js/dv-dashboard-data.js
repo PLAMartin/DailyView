@@ -269,10 +269,16 @@
 
   // Member rows have a composite (account_id, user_id) key — no surrogate id
   // column exists on dv_account_user.
+  //
+  // dv_account_user has four FKs into dv_user (user_id, created_by_user_id,
+  // updated_by_user_id, deleted_by_user_id), so an unqualified `dv_user(...)`
+  // embed is ambiguous to PostgREST (PGRST201) and the request fails outright
+  // — confirmed live via a direct REST call. The `!fkey_name` hint pins it to
+  // the membership's own user.
   var MEMBER_SELECT =
     'account_id, user_id, role_id, permission_id, relationship_to_viewer, is_primary_contact, ' +
     'can_manage_events, can_manage_users, can_manage_devices, can_send_prompts, created_at, ' +
-    'dv_user(full_name, preferred_name, email), ' +
+    'dv_user!dv_account_user_user_id_fkey(full_name, preferred_name, email), ' +
     'dv_account_user_role(role), ' +
     'dv_account_user_permission(permission)';
 

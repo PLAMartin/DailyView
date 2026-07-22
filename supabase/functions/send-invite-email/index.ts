@@ -67,12 +67,15 @@ serve(async (req) => {
       }),
     });
 
+    const resendBody = await res.json().catch(() => null);
     if (!res.ok) {
-      const err = await res.text();
-      return jsonResponse({ error: err }, 500);
+      return jsonResponse({ error: resendBody || 'send failed' }, 500);
     }
 
-    return jsonResponse({ ok: true });
+    // resendBody.id is Resend's own message id — harmless to return, and the
+    // only way to trace a specific send in Resend's dashboard/logs without
+    // separate log access.
+    return jsonResponse({ ok: true, resendId: resendBody?.id || null });
   } catch (err) {
     return jsonResponse({ error: String(err) }, 500);
   }

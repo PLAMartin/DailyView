@@ -78,7 +78,9 @@
     document.getElementById('event-cancel-btn').addEventListener('click', closeEventDialog);
     eventForm.addEventListener('submit', handleEventSubmit);
 
-    document.getElementById('event-visibility').addEventListener('change', applyVisibilityRule);
+    document.getElementById('event-visibility').addEventListener('change', function () {
+      applyVisibilityRule(true);
+    });
 
     confirmDialog         = document.getElementById('confirm-dialog');
     confirmTitleEl        = document.getElementById('confirm-dialog-title');
@@ -94,7 +96,13 @@
     confirmBtn.addEventListener('click', handleConfirmClick);
   }
 
-  function applyVisibilityRule() {
+  // isUserChange distinguishes an active dropdown change (fix the "silently
+  // still off after switching back to Display" gotcha by restoring the
+  // checkbox) from the initial sync on dialog-open (must NOT clobber a
+  // loaded event's legitimate display:true + show_on_display:false state —
+  // that combination is valid: eligible for display but intentionally not
+  // shown right now).
+  function applyVisibilityRule(isUserChange) {
     var visSelect = document.getElementById('event-visibility');
     var showCheckbox = document.getElementById('event-show-on-display');
     var selected = visSelect.options[visSelect.selectedIndex];
@@ -105,6 +113,7 @@
       showCheckbox.disabled = true;
     } else {
       showCheckbox.disabled = false;
+      if (isUserChange) showCheckbox.checked = true;
     }
   }
 

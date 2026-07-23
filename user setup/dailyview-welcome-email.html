@@ -1,0 +1,287 @@
+<title>Daily View — Getting Started Email</title>
+<style>
+  :root{
+    --navy:#1a2b6d;
+    --navy-soft:#4a5691;
+    --gold-1:#f5b942;
+    --gold-2:#d9861f;
+    --panel:#eef1fb;
+    --line:#dfe3f2;
+    --paper:#ffffff;
+    --page-bg:#f4f6fb;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#ffffff;
+      --page-bg:#2a2f3d;
+    }
+  }
+  :root[data-theme="dark"]{ --paper:#ffffff; --page-bg:#2a2f3d; }
+  :root[data-theme="light"]{ --paper:#ffffff; --page-bg:#f4f6fb; }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    padding:32px 16px;
+    background:var(--page-bg);
+    font-family:'Source Sans Pro', Arial, sans-serif;
+    color:var(--navy);
+  }
+  .email-note{
+    max-width:600px;
+    margin:0 auto 18px;
+    font-family:Arial, sans-serif;
+    font-size:13px;
+    color:#6b7280;
+    background:#fffbe8;
+    border:1px solid #f0dfa0;
+    border-radius:8px;
+    padding:10px 14px;
+  }
+  .email-note strong{ color:#4a4020; }
+
+  .wrap{
+    max-width:600px;
+    margin:0 auto;
+    background:var(--paper);
+    border-radius:16px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .header{
+    padding:24px 32px 20px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  .header img{ height:44px; display:block; margin:0 auto 8px; }
+  .header .wordmark{
+    font-size:17px;
+    font-weight:700;
+    color:var(--navy);
+    letter-spacing:0.2px;
+  }
+
+  .hero{
+    padding:8px 32px 4px;
+    text-align:center;
+  }
+  .hero h1{
+    font-size:24px;
+    line-height:1.3;
+    margin:0 0 10px;
+    color:var(--navy);
+  }
+  .hero p{
+    font-size:15px;
+    line-height:1.6;
+    color:var(--navy-soft);
+    margin:0 auto;
+    max-width:440px;
+  }
+
+  .steps{ padding:28px 32px 8px; }
+  .step{
+    display:table;
+    width:100%;
+    margin-bottom:22px;
+    border-collapse:separate;
+  }
+  .step-badge{
+    display:table-cell;
+    width:36px;
+    vertical-align:top;
+  }
+  .step-badge span{
+    display:inline-block;
+    width:28px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--gold-1), var(--gold-2));
+    color:#ffffff;
+    font-weight:700;
+    font-size:14px;
+  }
+  .step-body{
+    display:table-cell;
+    vertical-align:top;
+    padding-left:14px;
+  }
+  .step-body h2{
+    font-size:16px;
+    margin:2px 0 6px;
+    color:var(--navy);
+  }
+  .step-body p{
+    font-size:14px;
+    line-height:1.6;
+    margin:0 0 8px;
+    color:#3c4570;
+  }
+  .step-body ol, .step-body ul{
+    margin:0 0 8px;
+    padding-left:18px;
+    font-size:14px;
+    line-height:1.7;
+    color:#3c4570;
+  }
+  .btn{
+    display:inline-block;
+    background:var(--navy);
+    color:#ffffff !important;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:8px;
+    margin-top:2px;
+  }
+  .link-plain{ color:var(--navy); font-weight:600; }
+  code.pill{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:2px 7px;
+    font-family:'SFMono-Regular', Menlo, monospace;
+    font-size:13px;
+    color:var(--navy);
+  }
+
+  .panel{
+    margin:8px 32px 28px;
+    background:var(--panel);
+    border-radius:12px;
+    padding:20px 22px;
+  }
+  .panel h2{
+    font-size:16px;
+    margin:0 0 10px;
+    color:var(--navy);
+  }
+  .panel table{ width:100%; border-collapse:collapse; }
+  .panel td{
+    font-size:14px;
+    line-height:1.6;
+    color:#3c4570;
+    padding:5px 0;
+    vertical-align:top;
+  }
+  .panel td.label{
+    width:110px;
+    font-weight:700;
+    color:var(--navy);
+    white-space:nowrap;
+  }
+
+  .reassure{
+    margin:0 32px 28px;
+    padding:14px 16px;
+    border-left:3px solid var(--gold-2);
+    background:#fff9ef;
+    border-radius:0 8px 8px 0;
+    font-size:13.5px;
+    line-height:1.6;
+    color:#5a4a25;
+  }
+
+  .signoff{
+    padding:0 32px 28px;
+    font-size:14px;
+    line-height:1.7;
+    color:#3c4570;
+  }
+
+  .footer{
+    background:var(--panel);
+    padding:20px 32px;
+    text-align:center;
+    font-size:12px;
+    color:#5a6390;
+  }
+  .footer a{ color:var(--navy); }
+</style>
+
+<div class="email-note">
+  <strong>How to use this draft:</strong> select everything inside the card below (click once inside it, then Ctrl/Cmd+A won't work across the whole page — instead click‑drag from the logo to the footer) and copy it into a new email in Gmail/Outlook — formatting and images will carry over. Swap in the recipient's name and your own sign-off before sending.
+</div>
+
+<div class="wrap">
+
+  <div class="header">
+    <img src="https://www.dailyview.org/assets/favicons/icon-512.png" alt="Daily View">
+    <div class="wordmark">Daily View</div>
+  </div>
+
+  <div class="hero">
+    <h1>Let's get your screen set up</h1>
+    <p>Two short steps and Mum will have today's plan up on the wall — no technical experience needed, and everything is managed from your phone or computer.</p>
+  </div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-badge"><span>1</span></div>
+      <div class="step-body">
+        <h2>Set up the viewer screen</h2>
+        <p>On the tablet or display itself:</p>
+        <ol>
+          <li>Plug it in and connect it to your home Wi‑Fi, as you would with any tablet.</li>
+          <li>Open a web browser and go to <code class="pill">dailyview.org/display</code></li>
+          <li>Add it to the home screen (share/menu button → <em>Add to Home Screen</em>), so it reopens automatically if the screen restarts.</li>
+        </ol>
+        <a class="btn" href="https://www.dailyview.org/display">Open the viewer setup page →</a>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-badge"><span>2</span></div>
+      <div class="step-body">
+        <h2>Sign in to your dashboard</h2>
+        <p>On your own phone or computer, not the screen:</p>
+        <a class="btn" href="https://www.dailyview.org/login/">Sign in to your dashboard →</a>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-badge"><span>3</span></div>
+      <div class="step-body">
+        <h2>Pair the two together</h2>
+        <ol>
+          <li>In your dashboard, go to <strong>Devices → Add device</strong> and give it a name (e.g. "Mum's kitchen screen").</li>
+          <li>You'll see a short code and a QR code — it's valid for 15 minutes.</li>
+          <li>Back on the screen, type the code into the box shown there and select <strong>Connect</strong>.</li>
+        </ol>
+        <p>That's it — the screen now shows today's plan and keeps itself up to date automatically. Find it a stable, plugged-in spot where it's easy to glance at.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel">
+    <h2>Getting started with your dashboard</h2>
+    <table>
+      <tr><td class="label">Today</td><td>See exactly what the screen is showing right now.</td></tr>
+      <tr><td class="label">Calendar</td><td>Add, edit, or remove events for any day.</td></tr>
+      <tr><td class="label">People</td><td>Invite other family members or carers to help manage the plan.</td></tr>
+      <tr><td class="label">Devices</td><td>Pair new screens or check that an existing one is online.</td></tr>
+      <tr><td class="label">Messages</td><td>Send a short note that appears on the screen.</td></tr>
+      <tr><td class="label">Settings</td><td>Adjust reminders and other preferences.</td></tr>
+    </table>
+  </div>
+
+  <div class="reassure">
+    Once it's paired, the person using the screen never needs to touch a setting or log in — everything after this is managed from your dashboard.
+  </div>
+
+  <div class="signoff">
+    <p>Any trouble along the way, just reply to this email and we'll help you sort it out.</p>
+    <p>— The Daily View team</p>
+  </div>
+
+  <div class="footer">
+    Daily View · <a href="https://www.dailyview.org">dailyview.org</a><br>
+    <a href="https://www.dailyview.org/legal/privacy-policy.html">Privacy Policy</a> · <a href="https://www.dailyview.org/legal/terms-of-use.html">Terms of Use</a>
+  </div>
+
+</div>

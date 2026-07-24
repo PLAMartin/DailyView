@@ -1,54 +1,56 @@
-Subject: Let's get your Daily View screen set up
+Subject: Setting up your Daily View screen 
 
 Hi [Name],
 
-Two short steps and Mum will have today's plan up on the wall — no
+There are three steps to get your parent setup and Mum will have today's plan up on the wall — no
 technical experience needed, and everything is managed from your phone
 or computer.
 
+View this guide as a webpage: https://www.dailyview.org/screen-setup
+
 1) SET UP THE VIEWER SCREEN
-On the tablet or display itself:
-  - Plug it in and connect it to your home Wi-Fi, as you would with
+On the tablet (or other display) itself:
+  - Plug it in and connect it to your home Wi-Fi as you would with
     any tablet.
   - Open a web browser and go to: https://www.dailyview.org/display
   - Add it to the home screen (share/menu button -> "Add to Home
-    Screen"), so it reopens automatically if the screen restarts.
+    Screen") so it reopens automatically if the screen restarts.
 
 2) SIGN IN TO YOUR DASHBOARD
-On your own phone or computer, not the screen:
+On your own phone or computer (not the viewer screen):
   - Sign in here: https://www.dailyview.org/login/
 
 3) PAIR THE TWO TOGETHER
   - In your dashboard, go to Devices -> Add device and give it a name
     (e.g. "Mum's kitchen screen").
-  - You'll see a short code and a QR code — it's valid for 15 minutes.
-  - Back on the screen, type the code into the box shown there and
+  - You'll see a short code and a QR code which is valid for 15 minutes.
+  - Back on the viewer screen, type the code into the box shown there and
     select Connect.
 
-That's it — the screen now shows today's plan and keeps itself up to
+The viewer screen now shows today's plan and keeps itself up to
 date automatically. Find it a stable, plugged-in spot where it's easy
 to glance at.
 
 GETTING STARTED WITH YOUR DASHBOARD
-  Today     - See exactly what the screen is showing right now.
-  Calendar  - Add, edit, or remove events for any day.
+  Today     - See what the viewer screen is showing (max 60 secs delay).
+  Calendar  - Add, edit or remove events for any day.
   People    - Invite other family members or carers to help manage
               the plan.
-  Devices   - Pair new screens or check that an existing one is
+  Devices   - Pair new viewer screens or check that an existing one is
               online.
   Messages  - Send a short note that appears on the screen.
   Settings  - Adjust reminders and other preferences.
 
-Once it's paired, the person using the screen never needs to touch a
-setting or log in — everything after this is managed from your
+Once it's paired, the person using the viewer screen never needs to touch a
+setting or log in; everything after this is managed from your
 dashboard.
 
-Any trouble along the way, just reply to this email and we'll help
+Any trouble along the way, please reply to this email and I'll help
 you sort it out.
 
-— The Daily View team
+Phil... (Daily View creator)
 
---
+
 Daily View · https://www.dailyview.org
 Privacy Policy: https://www.dailyview.org/legal/privacy-policy.html
 Terms of Use: https://www.dailyview.org/legal/terms-of-use.html

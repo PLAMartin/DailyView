@@ -167,9 +167,71 @@
     section.appendChild(p);
 
     section.appendChild(renderScreenSetupGuide());
+    section.appendChild(renderInviteGuide());
     section.appendChild(renderTroubleshootingGuide());
 
     contentEl.appendChild(section);
+  }
+
+  // Mirrors the actual invite flow in people.js: an email is sent
+  // automatically, with a copy-link fallback shown right away in case it
+  // bounces or the sender wants to share it another way (e.g. text).
+  function renderInviteGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'Inviting a family member or carer'));
+    guide.appendChild(el(
+      'p',
+      'help-guide-intro',
+      'Anyone helping to manage the plan — checking it, updating it, or just keeping an eye on things — can have their own sign-in.'
+    ));
+
+    var list = el('ol', 'help-guide-steps');
+
+    var step1 = el('li', 'help-guide-step');
+    step1.appendChild(el('span', 'help-guide-badge', '1'));
+    var step1Body = el('div', 'help-guide-step-body');
+    step1Body.appendChild(el('h4', null, 'Send the invite'));
+    var step1List = el('ol', 'help-guide-substeps');
+    var peopleItem = el('li');
+    peopleItem.appendChild(document.createTextNode('Go to '));
+    var peopleLink = el('a', null, 'People → Invite person');
+    peopleLink.href = '#people';
+    peopleItem.appendChild(peopleLink);
+    peopleItem.appendChild(document.createTextNode(' and enter their email address.'));
+    step1List.appendChild(peopleItem);
+    step1List.appendChild(el(
+      'li',
+      null,
+      'Choose a role — each one shows a short summary of what that person will be able to see and change.'
+    ));
+    step1List.appendChild(el('li', null, 'Select Send invite.'));
+    step1Body.appendChild(step1List);
+    step1.appendChild(step1Body);
+    list.appendChild(step1);
+
+    var step2 = el('li', 'help-guide-step');
+    step2.appendChild(el('span', 'help-guide-badge', '2'));
+    var step2Body = el('div', 'help-guide-step-body');
+    step2Body.appendChild(el('h4', null, 'They accept it'));
+    var step2List = el('ol', 'help-guide-substeps');
+    step2List.appendChild(el(
+      'li',
+      null,
+      'An invite email goes out straight away with a link to accept. The invite dialog also shows a Copy link button — use it if the email does not arrive, or to share the invite another way.'
+    ));
+    step2List.appendChild(el('li', null, 'The link is valid for 7 days. You can see who has and hasn’t accepted yet in People.'));
+    step2Body.appendChild(step2List);
+    step2.appendChild(step2Body);
+    list.appendChild(step2);
+
+    guide.appendChild(list);
+    guide.appendChild(el(
+      'p',
+      'help-guide-outro',
+      'You can change someone’s role, resend, or revoke an invite at any time from People.'
+    ));
+
+    return guide;
   }
 
   // Mirrors the steps in the welcome email and the Devices "Pair this

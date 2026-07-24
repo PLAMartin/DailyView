@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setting up your Daily View screen — Daily View</title>
+<meta name="description" content="Step-by-step instructions for setting up and pairing a Daily View screen — no technical experience needed.">
+
+<!-- Favicons -->
+<link rel="icon" href="../assets/favicons/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="manifest" href="../assets/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a2b6d">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --dv-navy:       #1a2b6d;
+  --dv-navy-dark:  #14226b;
+  --dv-text-muted: #6878a8;
+  --dv-text-mid:   #3d4e87;
+  --dv-bg-soft:    #f8f9ff;
+  --dv-bg-cta:     #eef2ff;
+  --dv-border-card:#d4dcf0;
+  --dv-divider:    #e8ecf4;
+  --dv-footer-rule:#e0e7f2;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  color: var(--dv-navy);
+  background: #fff;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 36px;
+}
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: #fff;
+  border-bottom: 1px solid var(--dv-divider);
+  padding: 14px 0;
+}
+.site-header .container {
+  max-width: 1160px;
+  display: flex;
+  align-items: center;
+}
+.site-logo img { height: 38px; width: auto; display: block; }
+
+/* Guide content */
+.guide-content { padding: 56px 0 72px; }
+.guide-content h1 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--dv-navy);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.guide-intro {
+  font-size: 1.1rem;
+  color: var(--dv-text-mid);
+  max-width: 52ch;
+  margin-bottom: 40px;
+}
+
+.setup-steps { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+.setup-step {
+  display: flex;
+  gap: 18px;
+  border: 1px solid var(--dv-border-card);
+  border-radius: 14px;
+  padding: 22px 24px;
+  background: var(--dv-bg-soft);
+}
+.setup-step-badge {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--dv-navy);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+.setup-step-body h2 { font-size: 1.15rem; margin-bottom: 4px; }
+.setup-step-note { font-size: 0.92rem; color: var(--dv-text-muted); margin-bottom: 10px; }
+.setup-step-body ol {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.98rem;
+  color: var(--dv-navy);
+}
+.setup-step-body code {
+  background: var(--dv-bg-cta);
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-family: 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.92em;
+}
+
+.guide-outro {
+  margin-top: 28px;
+  color: var(--dv-text-mid);
+  max-width: 52ch;
+}
+
+.guide-cta {
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-block;
+  background: var(--dv-navy);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.98rem;
+  padding: 12px 22px;
+  border-radius: 10px;
+}
+.btn:hover, .btn:focus-visible { background: var(--dv-navy-dark); outline: none; }
+.guide-cta-note { font-size: 0.9rem; color: var(--dv-text-muted); }
+
+.guide-support {
+  margin-top: 44px;
+  padding-top: 24px;
+  border-top: 1px solid var(--dv-divider);
+  font-size: 0.95rem;
+  color: var(--dv-text-mid);
+}
+.guide-support a { color: var(--dv-navy); }
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid var(--dv-footer-rule);
+  padding: 28px 0;
+}
+.site-footer .container {
+  max-width: 1160px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+}
+.footer-links a {
+  font-size: 0.875rem;
+  color: var(--dv-text-muted);
+  text-decoration: none;
+}
+.footer-links a:hover,
+.footer-links a:focus-visible { text-decoration: underline; color: var(--dv-navy); }
+
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .guide-content { padding: 40px 0 56px; }
+  .setup-step { flex-direction: column; gap: 10px; padding: 18px; }
+  .footer-row { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="site-logo" aria-label="Daily View home">
+      <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="38">
+    </a>
+  </div>
+</header>
+
+<main class="guide-content">
+  <div class="container">
+
+    <h1>Setting up your Daily View screen</h1>
+    <p class="guide-intro">Two short steps and today&rsquo;s plan will be up on the wall &mdash; no technical experience needed.</p>
+
+    <ol class="setup-steps">
+      <li class="setup-step">
+        <span class="setup-step-badge" aria-hidden="true">1</span>
+        <div class="setup-step-body">
+          <h2>Set up the viewer screen</h2>
+          <p class="setup-step-note">On the tablet or display itself:</p>
+          <ol>
+            <li>Plug it in and connect it to your home Wi&#8209;Fi, as you would with any tablet.</li>
+            <li>Open a web browser and go to <code>dailyview.org/display</code></li>
+            <li>Add it to the home screen (share/menu button &rarr; <em>Add to Home Screen</em>), so it reopens automatically if the screen restarts.</li>
+          </ol>
+        </div>
+      </li>
+
+      <li class="setup-step">
+        <span class="setup-step-badge" aria-hidden="true">2</span>
+        <div class="setup-step-body">
+          <h2>Pair the two together</h2>
+          <p class="setup-step-note">Back on your own phone or computer:</p>
+          <ol>
+            <li>Sign in to your Daily View dashboard, then go to <strong>Devices &rarr; Add device</strong> and give it a name (e.g. &ldquo;Mum&rsquo;s kitchen screen&rdquo;).</li>
+            <li>You&rsquo;ll see a short code and a QR code &mdash; it&rsquo;s valid for 15 minutes.</li>
+            <li>Back on the screen, type the code into the box shown there and select <strong>Connect</strong>.</li>
+          </ol>
+        </div>
+      </li>
+    </ol>
+
+    <p class="guide-outro">That&rsquo;s it &mdash; the screen updates itself automatically from here. Find it a stable, plugged-in spot where it&rsquo;s easy to glance at. The person using it never needs to touch a setting or log in.</p>
+
+    <div class="guide-cta">
+      <a class="btn" href="../login/">Sign in to your dashboard &rarr;</a>
+      <span class="guide-cta-note">Already have an account? Sign in to get your pairing code.</span>
+    </div>
+
+    <p class="guide-support">Still stuck? Email <a href="mailto:support@dailyview.org">support@dailyview.org</a> and we&rsquo;ll help you sort it out.</p>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-row">
+      <p class="footer-copy">© <span id="copyright-year"></span> Daily View</p>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="../about/">About</a>
+        <a href="../legal/terms-of-use.html">Terms of Use</a>
+        <a href="../legal/privacy-policy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('copyright-year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

@@ -168,6 +168,9 @@
 
     section.appendChild(renderScreenSetupGuide());
     section.appendChild(renderInviteGuide());
+    section.appendChild(renderEventsGuide());
+    section.appendChild(renderMessagesGuide());
+    section.appendChild(renderDisplaySettingsGuide());
     section.appendChild(renderTroubleshootingGuide());
 
     contentEl.appendChild(section);
@@ -295,6 +298,151 @@
       'help-guide-outro',
       'That’s it — the screen updates itself automatically from here. The person using it never needs to touch a setting or log in.'
     ));
+
+    return guide;
+  }
+
+  // Mirrors event-dialog.js: title (max 100 chars), a specific date and
+  // optional times, and a visibility choice — 'display' is the only one
+  // that ever reaches the screen (see HIDDEN_VISIBILITY_VALUES there).
+  function renderEventsGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'Adding and updating events'));
+    guide.appendChild(el(
+      'p',
+      'help-guide-intro',
+      'Events are what actually show up on the screen, so this is the part you’ll use most day to day.'
+    ));
+
+    var list = el('ol', 'help-guide-steps');
+
+    var step1 = el('li', 'help-guide-step');
+    step1.appendChild(el('span', 'help-guide-badge', '1'));
+    var step1Body = el('div', 'help-guide-step-body');
+    step1Body.appendChild(el('h4', null, 'Add an event'));
+    var step1List = el('ol', 'help-guide-substeps');
+    var addItem = el('li');
+    addItem.appendChild(document.createTextNode('From '));
+    var calendarLink = el('a', null, 'Today or Calendar');
+    calendarLink.href = '#calendar';
+    addItem.appendChild(calendarLink);
+    addItem.appendChild(document.createTextNode(', select Add event and give it a title, a date, and a time.'));
+    step1List.appendChild(addItem);
+    step1List.appendChild(el(
+      'li',
+      null,
+      'Set its visibility to Display so it appears on the screen — the other options keep it private to the dashboard only.'
+    ));
+    step1Body.appendChild(step1List);
+    step1.appendChild(step1Body);
+    list.appendChild(step1);
+
+    var step2 = el('li', 'help-guide-step');
+    step2.appendChild(el('span', 'help-guide-badge', '2'));
+    var step2Body = el('div', 'help-guide-step-body');
+    step2Body.appendChild(el('h4', null, 'Change or remove one'));
+    var step2List = el('ol', 'help-guide-substeps');
+    step2List.appendChild(el('li', null, 'Open the event and edit any detail, then save.'));
+    step2List.appendChild(el(
+      'li',
+      null,
+      'Use Cancel for a one-off change (it stops showing on the screen but stays in your records) — use Delete to remove it for good.'
+    ));
+    step2Body.appendChild(step2List);
+    step2.appendChild(step2Body);
+    list.appendChild(step2);
+
+    guide.appendChild(list);
+    return guide;
+  }
+
+  // Mirrors the "Add message" dialog (220-char limit) and the Pause/Resume
+  // toggle in messages.js — messages show as a banner on the display.
+  function renderMessagesGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'Sending a message to the screen'));
+    guide.appendChild(el(
+      'p',
+      'help-guide-intro',
+      'A message is a short note that appears on the display alongside the schedule — handy for a one-off reminder that isn’t really an event.'
+    ));
+
+    var list = el('ol', 'help-guide-steps');
+
+    var step1 = el('li', 'help-guide-step');
+    step1.appendChild(el('span', 'help-guide-badge', '1'));
+    var step1Body = el('div', 'help-guide-step-body');
+    step1Body.appendChild(el('h4', null, 'Write and send it'));
+    var step1List = el('ol', 'help-guide-substeps');
+    var msgItem = el('li');
+    msgItem.appendChild(document.createTextNode('Go to '));
+    var messagesLink = el('a', null, 'Messages → Add message');
+    messagesLink.href = '#messages';
+    msgItem.appendChild(messagesLink);
+    msgItem.appendChild(document.createTextNode(' and type your note (up to 220 characters).'));
+    step1List.appendChild(msgItem);
+    step1Body.appendChild(step1List);
+    step1.appendChild(step1Body);
+    list.appendChild(step1);
+
+    var step2 = el('li', 'help-guide-step');
+    step2.appendChild(el('span', 'help-guide-badge', '2'));
+    var step2Body = el('div', 'help-guide-step-body');
+    step2Body.appendChild(el('h4', null, 'Pause, resume, or remove it'));
+    var step2List = el('ol', 'help-guide-substeps');
+    step2List.appendChild(el(
+      'li',
+      null,
+      'Use Pause to take it off the screen temporarily without deleting it, or Resume to bring it back.'
+    ));
+    step2Body.appendChild(step2List);
+    step2.appendChild(step2Body);
+    list.appendChild(step2);
+
+    guide.appendChild(list);
+    return guide;
+  }
+
+  // Explains the two settings groups in settings.js: Account settings
+  // (owner only) and Display settings (owner or device manager) — kept as
+  // an FAQ rather than steps since these are independent toggles, not a
+  // sequence.
+  function renderDisplaySettingsGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'Customising the display'));
+    guide.appendChild(el(
+      'p',
+      'help-guide-intro',
+      'A few settings control how the screen looks and behaves — all in Settings.'
+    ));
+
+    var items = [
+      {
+        label: 'The time-of-day icon or greeting',
+        detail: 'Set under Account settings (owner only): the Morning/Afternoon/Evening/Night start times control when the icon changes, and "Show time-of-day icon" turns it off entirely.'
+      },
+      {
+        label: 'How many events show at once',
+        detail: '"Events shown on display" in Account settings limits the list to a set number of upcoming items — a lower number keeps the screen simpler.'
+      },
+      {
+        label: 'Text size, contrast, and layout',
+        detail: 'Set under Display settings (owner or device manager): Font size, Contrast, and Layout control how easy the screen is to read, and Time format switches between 12‑hour and 24‑hour clocks.'
+      },
+      {
+        label: 'Events that have already happened',
+        detail: '"Show past events" and "Grey out past events" in Display settings decide whether finished items stay visible (dimmed) or disappear once done.'
+      }
+    ];
+
+    var list = el('dl', 'help-guide-faq');
+    items.forEach(function (item) {
+      var entry = el('div', 'help-guide-faq-item');
+      entry.appendChild(el('dt', null, item.label));
+      entry.appendChild(el('dd', null, item.detail));
+      list.appendChild(entry);
+    });
+    guide.appendChild(list);
 
     return guide;
   }

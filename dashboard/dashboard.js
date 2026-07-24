@@ -166,7 +166,74 @@
     p.appendChild(document.createTextNode(' and we will get back to you.'));
     section.appendChild(p);
 
+    section.appendChild(renderScreenSetupGuide());
+
     contentEl.appendChild(section);
+  }
+
+  // Mirrors the steps in the welcome email and the Devices "Pair this
+  // device" dialog copy, so the guide stays consistent wherever a carer
+  // encounters it.
+  function renderScreenSetupGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'Setting up your Daily View screen'));
+    guide.appendChild(el(
+      'p',
+      'help-guide-intro',
+      'Two short steps and your family member will have today’s plan up on the wall — no technical experience needed.'
+    ));
+
+    var list = el('ol', 'help-guide-steps');
+
+    // Step 1
+    var step1 = el('li', 'help-guide-step');
+    step1.appendChild(el('span', 'help-guide-badge', '1'));
+    var step1Body = el('div', 'help-guide-step-body');
+    step1Body.appendChild(el('h4', null, 'Set up the viewer screen'));
+    step1Body.appendChild(el('p', 'help-guide-step-note', 'On the tablet or display itself:'));
+    var step1List = el('ol', 'help-guide-substeps');
+    step1List.appendChild(el('li', null, 'Plug it in and connect it to your home Wi‑Fi, as you would with any tablet.'));
+    var urlItem = el('li');
+    urlItem.appendChild(document.createTextNode('Open a web browser and go to '));
+    urlItem.appendChild(el('code', null, 'dailyview.org/display'));
+    step1List.appendChild(urlItem);
+    step1List.appendChild(el(
+      'li',
+      null,
+      'Add it to the home screen (share/menu button → Add to Home Screen), so it reopens automatically if the screen restarts.'
+    ));
+    step1Body.appendChild(step1List);
+    step1.appendChild(step1Body);
+    list.appendChild(step1);
+
+    // Step 2
+    var step2 = el('li', 'help-guide-step');
+    step2.appendChild(el('span', 'help-guide-badge', '2'));
+    var step2Body = el('div', 'help-guide-step-body');
+    step2Body.appendChild(el('h4', null, 'Pair the two together'));
+    step2Body.appendChild(el('p', 'help-guide-step-note', 'Back on your own phone or computer:'));
+    var step2List = el('ol', 'help-guide-substeps');
+    var addDeviceItem = el('li');
+    addDeviceItem.appendChild(document.createTextNode('Go to '));
+    var devicesLink = el('a', null, 'Devices → Add device');
+    devicesLink.href = '#devices';
+    addDeviceItem.appendChild(devicesLink);
+    addDeviceItem.appendChild(document.createTextNode(' and give it a name (e.g. "Mum’s kitchen screen").'));
+    step2List.appendChild(addDeviceItem);
+    step2List.appendChild(el('li', null, 'You’ll see a short code and a QR code — it’s valid for 15 minutes.'));
+    step2List.appendChild(el('li', null, 'On the screen, type the code into the box shown there and select Connect.'));
+    step2Body.appendChild(step2List);
+    step2.appendChild(step2Body);
+    list.appendChild(step2);
+
+    guide.appendChild(list);
+    guide.appendChild(el(
+      'p',
+      'help-guide-outro',
+      'That’s it — the screen updates itself automatically from here. The person using it never needs to touch a setting or log in.'
+    ));
+
+    return guide;
   }
 
   function renderSection() {

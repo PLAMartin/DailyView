@@ -167,6 +167,7 @@
     section.appendChild(p);
 
     section.appendChild(renderScreenSetupGuide());
+    section.appendChild(renderTroubleshootingGuide());
 
     contentEl.appendChild(section);
   }
@@ -231,6 +232,51 @@
       'p',
       'help-guide-outro',
       'That’s it — the screen updates itself automatically from here. The person using it never needs to touch a setting or log in.'
+    ));
+
+    return guide;
+  }
+
+  // Reflects the actual states shown in Devices (devices.js) and on the
+  // screen itself (display.js: offline pill after 5 minutes of failed
+  // fetches, "no longer connected" message on auth errors) so the advice
+  // matches what carers will really see.
+  function renderTroubleshootingGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'If the screen isn’t working'));
+
+    var items = [
+      {
+        symptom: 'The screen shows a small “offline” notice',
+        fix: 'This clears itself once the screen reconnects to Wi‑Fi. Today’s plan stays on screen from its last successful update while it reconnects, so nothing is lost in the meantime.'
+      },
+      {
+        symptom: 'The screen asks for a new code (“This screen is no longer connected…”)',
+        fix: 'This means the screen was disconnected from your account — usually after being removed or deactivated in Devices. Go to Devices, reactivate it if needed, generate a new pairing code, and enter it on the screen.'
+      },
+      {
+        symptom: 'A device shows as “Waiting to connect” in Devices',
+        fix: 'The pairing code was created but never entered on the screen. Check the screen is powered on and connected to Wi‑Fi, then enter the code — or generate a new one if it has expired.'
+      },
+      {
+        symptom: 'A device shows as “Offline” in Devices',
+        fix: 'It hasn’t checked in for over a day. Check it’s still plugged in, powered on, and connected to Wi‑Fi.'
+      }
+    ];
+
+    var list = el('dl', 'help-guide-faq');
+    items.forEach(function (item) {
+      var entry = el('div', 'help-guide-faq-item');
+      entry.appendChild(el('dt', null, item.symptom));
+      entry.appendChild(el('dd', null, item.fix));
+      list.appendChild(entry);
+    });
+    guide.appendChild(list);
+
+    guide.appendChild(el(
+      'p',
+      'help-guide-outro',
+      'Still stuck? Email support@dailyview.org and we’ll help you sort it out.'
     ));
 
     return guide;

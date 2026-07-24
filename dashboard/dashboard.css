@@ -252,6 +252,11 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .help-guide-substeps code { background: var(--dv-bg-cta); padding: 1px 6px; border-radius: 4px; font-size: 0.88em; }
 .help-guide-outro { margin-top: 14px; }
 
+.help-guide-faq { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.help-guide-faq-item { border: 1px solid var(--dv-border-card); border-radius: 10px; padding: 12px 16px; }
+.help-guide-faq-item dt { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.help-guide-faq-item dd { color: var(--dv-text-mid); font-size: 0.92rem; margin: 0; }
+
 .dash-bottom-nav { display: none; }
 
 @media (max-width: 860px) {

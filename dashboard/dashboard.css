@@ -374,6 +374,7 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dvm-next-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em; color: var(--dv-accent); margin-bottom: 3px; }
 .dvm-next-item { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
 .dvm-next-time { font-size: 0.75rem; font-weight: 600; color: var(--dv-accent); }
+.dvm-next-countdown { font-size: 0.72rem; font-weight: 400; color: var(--dv-subtle); margin-top: 2px; }
 .dvm-message-banner {
   background: #fff8e6;
   color: #8a6100;
@@ -413,6 +414,7 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dv-mockup--landscape .dvm-next-label { font-size: 0.75rem; }
 .dv-mockup--landscape .dvm-next-item { font-size: 1.15rem; }
 .dv-mockup--landscape .dvm-next-time { font-size: 0.92rem; }
+.dv-mockup--landscape .dvm-next-countdown { font-size: 0.85rem; }
 .dv-mockup--landscape .dvm-message-label { font-size: 0.75rem; }
 .dv-mockup--landscape .dvm-message-text { font-size: 0.88rem; }
 

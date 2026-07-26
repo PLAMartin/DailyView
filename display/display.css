@@ -252,6 +252,7 @@ button, input { font-family: inherit; }
   -webkit-box-orient: vertical;
 }
 .dvm-next-time { font-size: 1.5rem; font-weight: 600; color: var(--dv-accent); margin: 0; }
+.dvm-next-countdown { font-size: 1.2rem; font-weight: 500; color: var(--dv-subtle); margin: 6px 0 0; }
 
 .viewer-offline-pill {
   position: absolute;
@@ -274,6 +275,7 @@ button, input { font-family: inherit; }
   .dvm-tod-icon img { height: 64px; }
   .dv-mockup--landscape .dvm-event-name,
   .dvm-next-item { font-size: 1.3rem; }
+  .dvm-next-countdown { font-size: 1rem; }
 }
 
 /* Spec §6.2: optimised for landscape, but usable in portrait too. */

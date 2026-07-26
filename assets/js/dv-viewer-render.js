@@ -76,6 +76,18 @@
     return null;
   }
 
+  // Rounds minutesUntil into calm, low-anxiety wording rather than
+  // exact-to-the-minute precision — mirrors the marketing site's
+  // formatCountdown (index.html / try-demo.js), kept as a separate copy
+  // here since this module has no shared-code path with those static pages.
+  function formatCountdown(minutesUntil) {
+    if (typeof minutesUntil !== 'number' || minutesUntil <= 0) return '';
+    if (minutesUntil < 10) return 'in ' + minutesUntil + ' minutes';
+    if (minutesUntil <= 90) return 'in about ' + (Math.round(minutesUntil / 5) * 5) + ' minutes';
+    var hours = Math.round(minutesUntil / 30) * 30 / 60;
+    return 'in about ' + hours + (hours === 1 ? ' hour' : ' hours');
+  }
+
   function el(tag, className, text) {
     var e = document.createElement(tag);
     if (className) e.className = className;
@@ -171,6 +183,8 @@
       if (viewModel.nextEvent) {
         next.appendChild(el('div', 'dvm-next-item', viewModel.nextEvent.title));
         next.appendChild(el('div', 'dvm-next-time', 'at ' + viewModel.nextEvent.timeLabel));
+        var countdown = formatCountdown(viewModel.nextEvent.minutesUntil);
+        if (countdown) next.appendChild(el('div', 'dvm-next-countdown', countdown));
       } else {
         next.appendChild(el('div', 'dvm-next-item', 'Nothing else planned today.'));
       }

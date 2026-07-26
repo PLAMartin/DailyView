@@ -144,6 +144,15 @@
     return null;
   }
 
+  function formatCountdown(currentTime, eventTime) {
+    var diff = timeToMinutes(eventTime) - timeToMinutes(currentTime);
+    if (diff <= 0) return '';
+    if (diff < 10) return 'in ' + diff + ' minutes';
+    if (diff <= 90) return 'in about ' + (Math.round(diff / 5) * 5) + ' minutes';
+    var hours = Math.round(diff / 30) * 30 / 60;
+    return 'in about ' + hours + (hours === 1 ? ' hour' : ' hours');
+  }
+
   function cloneScenario(key) {
     var seed = DEMO_SCENARIOS[key];
     return typeof structuredClone === 'function'
@@ -225,13 +234,16 @@
     var next = computeNext(scenario.events, state.currentTime);
     var nextItemEl = mockup.querySelector('.dvm-next-item');
     var nextTimeEl = mockup.querySelector('.dvm-next-time');
+    var nextCountdownEl = mockup.querySelector('.dvm-next-countdown');
     var nextCard = mockup.querySelector('.dvm-next-card');
     if (next) {
       nextItemEl.textContent = next.title;
       nextTimeEl.textContent = 'at ' + next.time;
+      nextCountdownEl.textContent = formatCountdown(state.currentTime, next.time);
     } else {
       nextItemEl.textContent = 'Nothing else planned today';
       nextTimeEl.textContent = '';
+      nextCountdownEl.textContent = '';
     }
 
     if (options.highlightEventId) {

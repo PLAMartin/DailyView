@@ -409,6 +409,7 @@ section { padding: 56px 0; }
 .dvm-next-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; color: var(--dv-accent); margin-bottom: 3px; }
 .dvm-next-item { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
 .dvm-next-time { font-size: 0.75rem; font-weight: 600; color: var(--dv-accent); }
+.dvm-next-countdown { font-size: 0.72rem; font-weight: 400; color: var(--dv-subtle); margin-top: 2px; }
 
 /* ── Landscape mockup variant ── */
 .dv-mockup--landscape {
@@ -446,10 +447,11 @@ section { padding: 56px 0; }
 .dv-mockup--landscape .dvm-event-icon { width: 34px; height: 34px; }
 .dv-mockup--landscape .dvm-event-name { font-size: 0.95rem; }
 .dv-mockup--landscape .dvm-event-time { font-size: 0.88rem; }
-.dv-mockup--landscape .dvm-next-card  { grid-area: next; margin-top: 0; padding: 14px 18px; }
-.dv-mockup--landscape .dvm-next-label { font-size: 0.7rem; }
-.dv-mockup--landscape .dvm-next-item  { font-size: 1.15rem; }
-.dv-mockup--landscape .dvm-next-time  { font-size: 0.92rem; }
+.dv-mockup--landscape .dvm-next-card      { grid-area: next; margin-top: 0; padding: 14px 18px; }
+.dv-mockup--landscape .dvm-next-label     { font-size: 0.7rem; }
+.dv-mockup--landscape .dvm-next-item      { font-size: 1.15rem; }
+.dv-mockup--landscape .dvm-next-time      { font-size: 0.92rem; }
+.dv-mockup--landscape .dvm-next-countdown { font-size: 0.85rem; }
 
 /* ── Transient "just updated" highlight (spec §9.3.5 / §15) ── */
 @media (prefers-reduced-motion: no-preference) {
@@ -620,8 +622,9 @@ section { padding: 56px 0; }
   .dv-mockup--landscape .dvm-event-icon { width: 24px; height: 24px; }
   .dv-mockup--landscape .dvm-event-name { font-size: 0.68rem; }
   .dv-mockup--landscape .dvm-event-time { font-size: 0.62rem; }
-  .dv-mockup--landscape .dvm-next-card  { padding: 8px 10px; }
-  .dv-mockup--landscape .dvm-next-label { font-size: 0.58rem; }
-  .dv-mockup--landscape .dvm-next-item  { font-size: 0.75rem; }
-  .dv-mockup--landscape .dvm-next-time  { font-size: 0.65rem; }
+  .dv-mockup--landscape .dvm-next-card      { padding: 8px 10px; }
+  .dv-mockup--landscape .dvm-next-label     { font-size: 0.58rem; }
+  .dv-mockup--landscape .dvm-next-item      { font-size: 0.75rem; }
+  .dv-mockup--landscape .dvm-next-time      { font-size: 0.65rem; }
+  .dv-mockup--landscape .dvm-next-countdown { font-size: 0.6rem; }
 }

@@ -476,6 +476,12 @@ dialog#video-dialog video {
   font-weight: 600;
   color: var(--dv-accent);
 }
+.dvm-next-countdown {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--dv-subtle);
+  margin-top: 2px;
+}
 
 /* ── Landscape mockup variant (secondary section) ── */
 .dv-mockup--landscape {
@@ -520,9 +526,10 @@ dialog#video-dialog video {
 .dv-mockup--landscape .dvm-event-name { font-size: 0.95rem; }
 .dv-mockup--landscape .dvm-event-time { font-size: 0.88rem; }
 .dv-mockup--landscape .dvm-next-card  { grid-area: next; margin-top: 0; padding: 14px 18px; }
-.dv-mockup--landscape .dvm-next-label { font-size: 0.7rem; }
-.dv-mockup--landscape .dvm-next-item  { font-size: 1.15rem; }
-.dv-mockup--landscape .dvm-next-time  { font-size: 0.92rem; }
+.dv-mockup--landscape .dvm-next-label     { font-size: 0.7rem; }
+.dv-mockup--landscape .dvm-next-item      { font-size: 1.15rem; }
+.dv-mockup--landscape .dvm-next-time      { font-size: 0.92rem; }
+.dv-mockup--landscape .dvm-next-countdown { font-size: 0.85rem; }
 
 /* ── Hero mockup: percentage columns to fit its smaller canvas ── */
 #dv-mockup-hero.dv-mockup--landscape {
@@ -1067,10 +1074,11 @@ dialog#video-dialog video {
   .dv-mockup--landscape .dvm-event-icon { width: 24px; height: 24px; }
   .dv-mockup--landscape .dvm-event-name { font-size: 0.68rem; }
   .dv-mockup--landscape .dvm-event-time { font-size: 0.62rem; }
-  .dv-mockup--landscape .dvm-next-card  { padding: 8px 10px; }
-  .dv-mockup--landscape .dvm-next-label { font-size: 0.58rem; }
-  .dv-mockup--landscape .dvm-next-item  { font-size: 0.75rem; }
-  .dv-mockup--landscape .dvm-next-time  { font-size: 0.65rem; }
+  .dv-mockup--landscape .dvm-next-card      { padding: 8px 10px; }
+  .dv-mockup--landscape .dvm-next-label     { font-size: 0.58rem; }
+  .dv-mockup--landscape .dvm-next-item      { font-size: 0.75rem; }
+  .dv-mockup--landscape .dvm-next-time      { font-size: 0.65rem; }
+  .dv-mockup--landscape .dvm-next-countdown { font-size: 0.6rem; }
 }
 </style>
 
@@ -1264,6 +1272,7 @@ dialog#video-dialog video {
             <div class="dvm-next-label">NEXT</div>
             <div class="dvm-next-item"></div>
             <div class="dvm-next-time"></div>
+            <div class="dvm-next-countdown"></div>
           </aside>
         </article>
         </div>
@@ -1558,6 +1567,21 @@ const mockupDataSecondary = {
   next: { label: 'Clare visiting', time: '17:00' }
 };
 
+// Countdown to the NEXT event, worded and rounded for calm, low-anxiety
+// reading rather than exact-to-the-minute precision (see CLAUDE.md tone).
+function formatCountdown(nowStr, eventStr) {
+  function toMinutes(t) {
+    var parts = t.split(':');
+    return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+  }
+  var diff = toMinutes(eventStr) - toMinutes(nowStr);
+  if (diff <= 0) return '';
+  if (diff < 10) return 'in ' + diff + ' minutes';
+  if (diff <= 90) return 'in about ' + (Math.round(diff / 5) * 5) + ' minutes';
+  var hours = Math.round(diff / 30) * 30 / 60;
+  return 'in about ' + hours + (hours === 1 ? ' hour' : ' hours');
+}
+
 function renderMockup(id, data) {
   var el = document.getElementById(id);
   if (!el) return;
@@ -1587,6 +1611,7 @@ function renderMockup(id, data) {
 
   el.querySelector('.dvm-next-item').textContent = d.next.label;
   el.querySelector('.dvm-next-time').textContent = 'at ' + d.next.time;
+  el.querySelector('.dvm-next-countdown').textContent = formatCountdown(d.time, d.next.time);
 }
 
 try { renderMockup('dv-mockup-hero'); } catch(e) {}

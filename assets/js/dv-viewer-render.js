@@ -82,9 +82,14 @@
   // here since this module has no shared-code path with those static pages.
   function formatCountdown(minutesUntil) {
     if (typeof minutesUntil !== 'number' || minutesUntil <= 0) return '';
-    if (minutesUntil < 10) return 'in ' + minutesUntil + ' minutes';
-    if (minutesUntil <= 90) return 'in about ' + (Math.round(minutesUntil / 5) * 5) + ' minutes';
-    var hours = Math.round(minutesUntil / 30) * 30 / 60;
+    // Rounded here (rather than assumed pre-rounded) because display.js
+    // decays this value locally between polls (minutesUntil - elapsed
+    // minutes since the snapshot was fetched), so it arrives fractional.
+    var mins = Math.round(minutesUntil);
+    if (mins <= 0) return '';
+    if (mins < 10) return 'in ' + mins + ' minutes';
+    if (mins <= 90) return 'in about ' + (Math.round(mins / 5) * 5) + ' minutes';
+    var hours = Math.round(mins / 30) * 30 / 60;
     return 'in about ' + hours + (hours === 1 ? ' hour' : ' hours');
   }
 
@@ -211,6 +216,7 @@
     buildMockup: buildMockup,
     dayDateLabels: dayDateLabels,
     currentTimeLabel: currentTimeLabel,
+    formatCountdown: formatCountdown,
     PERIOD_ICONS: PERIOD_ICONS
   };
 })();

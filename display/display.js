@@ -23,6 +23,7 @@
   var state = {
     deviceId: null,
     snapshot: null,
+    snapshotFetchedAt: null,
     clockTimer: null,
     pollTimer: null,
     firstFailureAt: null
@@ -88,9 +89,13 @@
   }
 
   // ---- clock ----
-  // Only the visible time ticks locally every second; dateLabel/dayPeriod/
-  // events/next/message stay exactly as last fetched until the next poll —
-  // see the plan's accepted trade-off on per-minute "current" event state.
+  // The visible time ticks locally every second; dateLabel/dayPeriod/events/
+  // message stay exactly as last fetched until the next poll — see the
+  // plan's accepted trade-off on per-minute "current" event state. The NEXT
+  // countdown is the one exception: it decays locally in step with the
+  // clock (nextEvent.minutesUntil minus minutes elapsed since this snapshot
+  // was fetched/cached) so it never visibly lags behind the live clock for
+  // the up-to-a-minute gap between polls.
 
   function stopClock() {
     if (state.clockTimer) {
@@ -108,6 +113,12 @@
         state.snapshot.preferences && state.snapshot.preferences.timeFormat
       );
     }
+
+    var countdownEl = viewerMount.querySelector('.dvm-next-countdown');
+    if (countdownEl && state.snapshot.nextEvent && typeof state.snapshot.nextEvent.minutesUntil === 'number') {
+      var elapsedMinutes = (Date.now() - state.snapshotFetchedAt) / 60000;
+      countdownEl.textContent = dvViewerRender.formatCountdown(state.snapshot.nextEvent.minutesUntil - elapsedMinutes);
+    }
   }
 
   function startClock() {
@@ -118,8 +129,9 @@
 
   // ---- rendering ----
 
-  function renderViewer(snapshot) {
+  function renderViewer(snapshot, fetchedAt) {
     state.snapshot = snapshot;
+    state.snapshotFetchedAt = fetchedAt || Date.now();
     viewerMount.textContent = '';
     viewerMount.appendChild(dvViewerRender.buildMockup(snapshot, snapshot.timezone, { ariaLabel: 'Daily View' }));
     showOnly('viewer');
@@ -157,7 +169,7 @@
 
     var cache = readCache();
     if (cache && cache.data) {
-      if (!state.snapshot) renderViewer(cache.data);
+      if (!state.snapshot) renderViewer(cache.data, new Date(cache.cachedAt).getTime());
       setOfflinePillVisible((Date.now() - state.firstFailureAt) > OFFLINE_INDICATOR_DELAY_MS);
     } else {
       stopClock();
@@ -262,7 +274,7 @@
     // then reconciles once the live fetch below returns.
     if (storedId && cache && cache.data) {
       state.deviceId = storedId;
-      renderViewer(cache.data);
+      renderViewer(cache.data, new Date(cache.cachedAt).getTime());
     }
 
     pairingForm.addEventListener('submit', handlePairingSubmit);

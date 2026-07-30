@@ -68,10 +68,30 @@
     });
   }
 
+  // Fire-and-forget diagnostics for the failure states in display.js that
+  // read as "something's wrong" rather than a transient/expected retry.
+  // Callable by role anon too: the exact case this exists to catch
+  // (ensureDeviceSession failing) means there's no session yet, so the
+  // client hasn't reached role authenticated when this fires.
+  function logClientError(context, error, deviceId, referenceCode) {
+    return sb.rpc('dv_log_client_error', {
+      p_context: context,
+      p_error_code: (error && (error.code || error.status)) ? String(error.code || error.status) : null,
+      p_error_message: (error && error.message) ? String(error.message) : null,
+      p_device_id: deviceId || null,
+      p_reference_code: referenceCode || null,
+      p_user_agent: (typeof navigator !== 'undefined' && navigator.userAgent) || null
+    }).then(function (result) {
+      if (result.error) throw result.error;
+      return result.data;
+    });
+  }
+
   window.dvViewerData = {
     ensureDeviceSession: ensureDeviceSession,
     getViewerSnapshot: getViewerSnapshot,
     redeemPairingCode: redeemPairingCode,
-    touchHeartbeat: touchHeartbeat
+    touchHeartbeat: touchHeartbeat,
+    logClientError: logClientError
   };
 })();

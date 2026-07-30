@@ -74,6 +74,27 @@
     state.snapshot = null;
   }
 
+  // ---- error logging ----
+  // Short codes only (no 0/O/1/I) so a code read aloud over the phone by a
+  // carer isn't ambiguous. Generated client-side so it can be shown on
+  // screen immediately, then sent along with the log row so the two match up.
+  var REFERENCE_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+  function generateReferenceCode() {
+    var out = '';
+    for (var i = 0; i < 5; i++) {
+      out += REFERENCE_CODE_ALPHABET.charAt(Math.floor(Math.random() * REFERENCE_CODE_ALPHABET.length));
+    }
+    return out;
+  }
+
+  // Fire-and-forget: a failed log call should never affect what's on screen.
+  function logClientError(context, error, deviceId) {
+    var referenceCode = generateReferenceCode();
+    dvViewerData.logClientError(context, error, deviceId, referenceCode).catch(function () {});
+    return referenceCode;
+  }
+
   // ---- view switching ----
 
   function showOnly(view) {
@@ -155,8 +176,10 @@
 
   function handleFetchFailure(error) {
     if (error && error.code === '42501') {
+      var revokedDeviceId = state.deviceId;
       stopClock();
       clearDeviceState();
+      logClientError('fetch_snapshot_revoked', error, revokedDeviceId);
       showOnly('pairing');
       setPairingMessage(
         'This screen is no longer connected to a Daily View account. Enter a new code to reconnect.',
@@ -165,13 +188,16 @@
       return;
     }
 
-    if (!state.firstFailureAt) state.firstFailureAt = Date.now();
+    var isNewFailure = !state.firstFailureAt;
+    if (isNewFailure) state.firstFailureAt = Date.now();
 
     var cache = readCache();
     if (cache && cache.data) {
       if (!state.snapshot) renderViewer(cache.data, new Date(cache.cachedAt).getTime());
       setOfflinePillVisible((Date.now() - state.firstFailureAt) > OFFLINE_INDICATOR_DELAY_MS);
     } else {
+      // Only log the first failure of a run, not every 60s poll retry.
+      if (isNewFailure) logClientError('fetch_snapshot_no_cache', error, state.deviceId);
       stopClock();
       loadingMessageEl.textContent = 'Daily View is reconnecting. Your information will appear here shortly.';
       showOnly('loading');
@@ -294,7 +320,8 @@
       // non-connectivity failure — retrying won't help, so it gets its own
       // calm message rather than the generic reconnecting state.
       console.error('Daily View: could not start a device session', error);
-      loadingMessageEl.textContent = 'Daily View could not start. Please contact support.';
+      var referenceCode = logClientError('ensure_device_session', error, storedId);
+      loadingMessageEl.textContent = 'Daily View could not start. Please contact support and mention code ' + referenceCode + '.';
       showOnly('loading');
     });
   }

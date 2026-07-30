@@ -345,7 +345,7 @@
   // encounters it.
   function renderScreenSetupGuide() {
     var guide = el('div', 'help-guide');
-    guide.appendChild(el('h3', null, 'Setting up your Daily View viewer'));
+    guide.appendChild(el('h3', null, 'Setting up your Daily View viewer device'));
     guide.appendChild(el(
       'p',
       'help-guide-intro',

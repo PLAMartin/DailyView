@@ -166,6 +166,7 @@
     p.appendChild(document.createTextNode(' and we will get back to you.'));
     section.appendChild(p);
 
+    section.appendChild(renderDeviceGuide());
     section.appendChild(renderScreenSetupGuide());
     section.appendChild(renderInviteGuide());
     section.appendChild(renderRolesGuide());
@@ -234,6 +235,107 @@
       'help-guide-outro',
       'You can change someone’s role, resend, or revoke an invite at any time from People.'
     ));
+
+    return guide;
+  }
+
+  // Comes before the screen-setup guide since choosing a device is the step
+  // before pairing one. Reusing an existing device is the recommended path
+  // (Daily View is just a web page — no app install, no special hardware),
+  // so that's presented first; buying new is the fallback with a short,
+  // deliberately small list of specific models rather than an exhaustive
+  // comparison, matching the "fewer, clearer choices" design principle.
+  function renderDeviceGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'Choosing a device for the screen'));
+    guide.appendChild(el(
+      'p',
+      'help-guide-intro',
+      'Daily View runs in an ordinary web browser, so in most cases you won’t need to buy anything new.'
+    ));
+
+    var list = el('ol', 'help-guide-steps');
+
+    var step1 = el('li', 'help-guide-step');
+    step1.appendChild(el('span', 'help-guide-badge', '1'));
+    var step1Body = el('div', 'help-guide-step-body');
+    step1Body.appendChild(el('h4', null, 'Recommended: use a device you already have'));
+    step1Body.appendChild(el(
+      'p',
+      'help-guide-step-note',
+      'An old tablet or phone that’s no longer anyone’s daily device is often ideal — it keeps costs down and puts something already in a drawer back to use. Look for:'
+    ));
+    var step1List = el('ul', 'help-guide-substeps');
+    [
+      'A screen of at least 8–10 inches, so today’s plan is easy to read from across the room.',
+      'A web browser that’s still receiving updates — recent versions of Safari or Chrome both work well.',
+      'Wi‑Fi, and a spot within range of it near where the screen will sit.',
+      'Somewhere it can stay plugged in permanently — battery life and battery health don’t matter once it’s always on charge.',
+      'A way to prop it up — a stand, dock, case with a built-in kickstand, or wall mount.',
+      'The ability to turn off its auto-lock/screen timeout and notification pop-ups in Settings, so the plan stays visible and undisturbed.'
+    ].forEach(function (text) {
+      step1List.appendChild(el('li', null, text));
+    });
+    step1Body.appendChild(step1List);
+    step1.appendChild(step1Body);
+    list.appendChild(step1);
+
+    var step2 = el('li', 'help-guide-step');
+    step2.appendChild(el('span', 'help-guide-badge', '2'));
+    var step2Body = el('div', 'help-guide-step-body');
+    step2Body.appendChild(el('h4', null, 'If you do need to buy one'));
+    step2Body.appendChild(el(
+      'p',
+      'help-guide-step-note',
+      'The same characteristics above still apply. A plain, everyday tablet is all that’s needed — there’s no reason to pay for a high-end model. A few reliable, affordable options:'
+    ));
+
+    var models = [
+      {
+        name: 'Amazon Fire HD 10',
+        detail: 'The most budget-friendly option. 10.1" screen, plenty large enough, and inexpensive enough that it’s an easy first purchase.',
+        href: 'https://www.amazon.com/Amazon-relaxation-vibrant-octa-core-processor/dp/B0GVTPKJVT'
+      },
+      {
+        name: 'Samsung Galaxy Tab A11+',
+        detail: 'An 11" Android tablet a step up from the Fire tablet — a smoother browser and more storage, still at a modest price.',
+        href: 'https://www.samsung.com/us/tablets/galaxy-tab-a11-plus/'
+      },
+      {
+        name: 'Apple iPad (11-inch)',
+        detail: 'Costs more, but Guided Access (Settings → Accessibility) locks the screen into Daily View so nothing else can be opened by mistake — worth it if that reassurance matters to your family.',
+        href: 'https://www.apple.com/ipad-11/'
+      }
+    ].map(function (model) {
+      var entry = el('div', 'help-guide-faq-item');
+      entry.appendChild(el('dt', null, model.name));
+      var dd = el('dd');
+      dd.appendChild(document.createTextNode(model.detail + ' '));
+      var link = el('a', null, 'See current price');
+      link.href = model.href;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      dd.appendChild(link);
+      entry.appendChild(dd);
+      return entry;
+    });
+    var modelList = el('dl', 'help-guide-faq');
+    models.forEach(function (entry) { modelList.appendChild(entry); });
+    step2Body.appendChild(modelList);
+    step2.appendChild(step2Body);
+    list.appendChild(step2);
+
+    guide.appendChild(list);
+
+    var outro = el('p', 'help-guide-outro');
+    outro.appendChild(document.createTextNode('Whichever device you use, a simple '));
+    var standLink = el('a', null, 'stand or case with a kickstand');
+    standLink.href = 'https://www.amazon.com/Tablet-Stands/b?ie=UTF8&node=3015412011';
+    standLink.target = '_blank';
+    standLink.rel = 'noopener';
+    outro.appendChild(standLink);
+    outro.appendChild(document.createTextNode(' makes it easy to prop up wherever it will live.'));
+    guide.appendChild(outro);
 
     return guide;
   }

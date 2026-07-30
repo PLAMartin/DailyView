@@ -247,7 +247,7 @@
   // comparison, matching the "fewer, clearer choices" design principle.
   function renderDeviceGuide() {
     var guide = el('div', 'help-guide');
-    guide.appendChild(el('h3', null, 'Choosing a device for the viewer'));
+    guide.appendChild(el('h3', null, 'Choosing a viewer screen'));
     guide.appendChild(el(
       'p',
       'help-guide-intro',
@@ -345,7 +345,7 @@
   // encounters it.
   function renderScreenSetupGuide() {
     var guide = el('div', 'help-guide');
-    guide.appendChild(el('h3', null, 'Setting up your Daily View viewer device'));
+    guide.appendChild(el('h3', null, 'Setting up your viewer screen'));
     guide.appendChild(el(
       'p',
       'help-guide-intro',

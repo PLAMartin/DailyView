@@ -6,8 +6,6 @@
   var NETWORK_FAILURE =
     'We could not reach Daily View just now. Please check your connection and try again.';
 
-  var FONT_SIZES = ['standard', 'large', 'extra_large'];
-  var CONTRASTS = ['standard', 'high'];
   var LAYOUTS = ['standard', 'simplified'];
   var TIME_FORMATS = ['12_hour', '24_hour'];
 
@@ -205,14 +203,6 @@
     form.setAttribute('novalidate', '');
 
     var row = el('div', 'field-row');
-    var fontSizeField = selectField('Font size', FONT_SIZES, pref.font_size || 'standard');
-    fontSizeField._select.disabled = !canEditDisplay;
-    row.appendChild(fontSizeField);
-
-    var contrastField = selectField('Contrast', CONTRASTS, pref.contrast || 'standard');
-    contrastField._select.disabled = !canEditDisplay;
-    row.appendChild(contrastField);
-
     var layoutField = selectField('Layout', LAYOUTS, pref.layout || 'standard');
     layoutField._select.disabled = !canEditDisplay;
     row.appendChild(layoutField);
@@ -247,8 +237,6 @@
         submitBtn.textContent = 'Saving…';
 
         var patch = {
-          font_size: fontSizeField._select.value,
-          contrast: contrastField._select.value,
           layout: layoutField._select.value,
           time_format: timeFormatField._select.value,
           show_past_events: showPast._input.checked,

@@ -426,8 +426,8 @@
         detail: '"Events shown on display" in Account settings limits the list to a set number of upcoming items — a lower number keeps the screen simpler.'
       },
       {
-        label: 'Text size, contrast, and layout',
-        detail: 'Set under Display settings (owner or device manager): Font size, Contrast, and Layout control how easy the screen is to read, and Time format switches between 12‑hour and 24‑hour clocks.'
+        label: 'Layout and time format',
+        detail: 'Set under Display settings (owner or device manager): Layout controls how easy the screen is to read, and Time format switches between 12‑hour and 24‑hour clocks.'
       },
       {
         label: 'Events that have already happened',

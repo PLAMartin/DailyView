@@ -294,17 +294,17 @@
       {
         name: 'Amazon Fire HD 10',
         detail: 'The most budget-friendly option. 10.1" screen, plenty large enough, and inexpensive enough that it’s an easy first purchase.',
-        href: 'https://www.amazon.com/Amazon-relaxation-vibrant-octa-core-processor/dp/B0GVTPKJVT'
+        href: 'https://www.amazon.co.uk/fire-hd-10-tablet/dp/B0CXL5RV2F'
       },
       {
         name: 'Samsung Galaxy Tab A11+',
         detail: 'An 11" Android tablet a step up from the Fire tablet — a smoother browser and more storage, still at a modest price.',
-        href: 'https://www.samsung.com/us/tablets/galaxy-tab-a11-plus/'
+        href: 'https://www.samsung.com/uk/tablets/galaxy-tab-a/galaxy-tab-a11-plus-grey-128gb-wi-fi-sm-x230nzareub/'
       },
       {
         name: 'Apple iPad (11-inch)',
         detail: 'Costs more, but Guided Access (Settings → Accessibility) locks the screen into Daily View so nothing else can be opened by mistake — worth it if that reassurance matters to your family.',
-        href: 'https://www.apple.com/ipad-11/'
+        href: 'https://www.apple.com/uk/ipad-11/'
       }
     ].map(function (model) {
       var entry = el('div', 'help-guide-faq-item');
@@ -330,7 +330,7 @@
     var outro = el('p', 'help-guide-outro');
     outro.appendChild(document.createTextNode('Whichever device you use, a simple '));
     var standLink = el('a', null, 'stand or case with a kickstand');
-    standLink.href = 'https://www.amazon.com/Tablet-Stands/b?ie=UTF8&node=3015412011';
+    standLink.href = 'https://www.amazon.co.uk/Tablet-Stands/b?node=1499988031';
     standLink.target = '_blank';
     standLink.rel = 'noopener';
     outro.appendChild(standLink);

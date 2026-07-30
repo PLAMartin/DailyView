@@ -168,6 +168,7 @@
 
     section.appendChild(renderScreenSetupGuide());
     section.appendChild(renderInviteGuide());
+    section.appendChild(renderRolesGuide());
     section.appendChild(renderEventsGuide());
     section.appendChild(renderMessagesGuide());
     section.appendChild(renderDisplaySettingsGuide());
@@ -400,6 +401,61 @@
     list.appendChild(step2);
 
     guide.appendChild(list);
+    return guide;
+  }
+
+  // Explains the owner / role / primary contact model backing people.js and
+  // dv_account_user, in plain language — kept as an FAQ like the settings
+  // guide below, since these are independent facts rather than a sequence.
+  function renderRolesGuide() {
+    var guide = el('div', 'help-guide');
+    guide.appendChild(el('h3', null, 'Owner, roles, and primary contact'));
+    guide.appendChild(el(
+      'p',
+      'help-guide-intro',
+      'Everyone on an account is either the owner or has a role that decides what they can see and change.'
+    ));
+
+    var items = [
+      {
+        label: 'The owner',
+        detail: 'Whoever set up the account. The owner has full control — events, messages, devices, settings, and everyone else on the account. Every account always has exactly one owner.'
+      },
+      {
+        label: 'Carer / Family member',
+        detail: 'Can add and update events, messages, and prompts. Cannot change devices, people, or account settings.'
+      },
+      {
+        label: 'Viewer',
+        detail: 'Can see the schedule but cannot make changes.'
+      },
+      {
+        label: 'Device manager',
+        detail: 'Can pair and manage screens/devices, but not events or people.'
+      },
+      {
+        label: 'Primary contact',
+        detail: 'One person marked as the main point of contact for the account — separate from being the owner, so a carer can be the primary contact even if someone else owns the account.'
+      }
+    ];
+
+    var list = el('dl', 'help-guide-faq');
+    items.forEach(function (item) {
+      var entry = el('div', 'help-guide-faq-item');
+      entry.appendChild(el('dt', null, item.label));
+      entry.appendChild(el('dd', null, item.detail));
+      list.appendChild(entry);
+    });
+    guide.appendChild(list);
+
+    var outro = el('p', 'help-guide-outro');
+    outro.appendChild(document.createTextNode('Change someone’s role, or set who the primary contact is, from '));
+    var peopleLink = el('a', null, 'People');
+    peopleLink.href = '#people';
+    outro.appendChild(peopleLink);
+    outro.appendChild(document.createTextNode('.'));
+    guide.appendChild(outro);
+
     return guide;
   }
 

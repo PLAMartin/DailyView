@@ -6,7 +6,6 @@
   var NETWORK_FAILURE =
     'We could not reach Daily View just now. Please check your connection and try again.';
 
-  var LAYOUTS = ['standard', 'simplified'];
   var TIME_FORMATS = ['12_hour', '24_hour'];
 
   var currentAccount = null;
@@ -203,10 +202,6 @@
     form.setAttribute('novalidate', '');
 
     var row = el('div', 'field-row');
-    var layoutField = selectField('Layout', LAYOUTS, pref.layout || 'standard');
-    layoutField._select.disabled = !canEditDisplay;
-    row.appendChild(layoutField);
-
     var timeFormatField = selectField('Time format', TIME_FORMATS, pref.time_format || '12_hour');
     timeFormatField._select.disabled = !canEditDisplay;
     row.appendChild(timeFormatField);
@@ -237,7 +232,6 @@
         submitBtn.textContent = 'Saving…';
 
         var patch = {
-          layout: layoutField._select.value,
           time_format: timeFormatField._select.value,
           show_past_events: showPast._input.checked,
           grey_out_past_events: greyOut._input.checked

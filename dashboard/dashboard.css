@@ -13,6 +13,8 @@
   --dv-subtle:      #8896c4;
   --dv-footer-rule: #e0e7f2;
   --dv-error:       #c0392b;
+  --dv-bg-upcoming: #eaf6ee;
+  --dv-text-upcoming: #2f6b46;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -382,6 +384,10 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
   border-radius: 8px;
   margin-bottom: 12px;
 }
+.dvm-upcoming-card { margin-top: 12px; background: var(--dv-bg-upcoming); border-radius: 12px; padding: 10px 14px; }
+.dvm-upcoming-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em; color: var(--dv-text-upcoming); margin-bottom: 3px; }
+.dvm-upcoming-item { font-size: 0.85rem; font-weight: 700; color: var(--dv-text-upcoming); margin-bottom: 2px; }
+.dvm-upcoming-when { font-size: 0.72rem; font-weight: 500; color: var(--dv-text-upcoming); opacity: 0.85; }
 
 .dv-mockup--landscape {
   display: grid;
@@ -415,6 +421,10 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .dv-mockup--landscape .dvm-next-item { font-size: 1.15rem; }
 .dv-mockup--landscape .dvm-next-time { font-size: 0.92rem; }
 .dv-mockup--landscape .dvm-next-countdown { font-size: 0.85rem; }
+.dv-mockup--landscape .dvm-upcoming-card { grid-area: next; margin-top: 0; padding: 14px 18px; }
+.dv-mockup--landscape .dvm-upcoming-label { font-size: 0.75rem; }
+.dv-mockup--landscape .dvm-upcoming-item { font-size: 0.95rem; }
+.dv-mockup--landscape .dvm-upcoming-when { font-size: 0.8rem; }
 .dv-mockup--landscape .dvm-message-label { font-size: 0.75rem; }
 .dv-mockup--landscape .dvm-message-text { font-size: 0.88rem; }
 
@@ -430,6 +440,13 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 }
 .dv-mockup--landscape .dvm-side-col .dvm-next-card {
   flex: 3 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.dv-mockup--landscape .dvm-side-col .dvm-upcoming-card {
+  flex: 1 1 auto;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -678,6 +695,10 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .field-checkbox label input { width: auto; margin-top: 3px; }
 .field-row { display: flex; gap: 14px; flex-wrap: wrap; }
 .field-row .field { flex: 1 1 140px; max-width: 240px; }
+.field-radio-group { border: none; padding: 0; margin: 0 0 16px; gap: 8px; }
+.field-radio-group legend { font-weight: 700; font-size: 0.9rem; color: var(--dv-navy); padding: 0; margin-bottom: 2px; }
+.field-radio-group label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.field-radio-group label input { width: auto; }
 
 /* ── Event / confirm / more / message / device dialogs (chrome mirrors index.html's #name-dialog) ── */
 dialog#event-dialog, dialog#confirm-dialog, dialog#more-sheet, dialog#message-dialog,

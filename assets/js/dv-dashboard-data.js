@@ -17,13 +17,18 @@
 
   var EVENT_SELECT =
     'event_id, account_id, title, description, event_date, start_time, end_time, ' +
-    'display_priority, show_on_display, created_at, updated_at, ' +
+    'display_priority, show_on_display, created_at, updated_at, series_id, ' +
     'event_type_id, event_status_id, event_visibility_id, event_accuracy_id, event_source_id, ' +
     'dv_event_type(event_type), ' +
     'dv_event_status(event_status), ' +
     'dv_event_visibility(event_visibility), ' +
     'dv_event_accuracy(event_accuracy), ' +
     'dv_event_source(event_source)';
+
+  var EVENT_SERIES_SELECT =
+    'series_id, account_id, title, description, start_date, end_date, start_time, end_time, ' +
+    'rrule, display_priority, show_on_display, is_active, created_at, updated_at, ' +
+    'event_type_id, event_visibility_id, event_accuracy_id, event_source_id';
 
   var eventLookupsCache = null;
 
@@ -111,6 +116,34 @@
       .then(function (result) {
         if (result.error) throw result.error;
         return true;
+      });
+  }
+
+  // Series rows drive the trigger in 20260817220000_dv_event_series.sql, which materializes
+  // dv_event occurrence rows server-side -- callers should refetch events (e.g. re-run
+  // listEventsInRange/listTodayEvents) after these resolve to see the generated rows.
+  function createEventSeries(payload) {
+    return sb
+      .from('dv_event_series')
+      .insert(payload)
+      .select(EVENT_SERIES_SELECT)
+      .single()
+      .then(function (result) {
+        if (result.error) throw result.error;
+        return result.data;
+      });
+  }
+
+  function updateEventSeries(seriesId, patch) {
+    return sb
+      .from('dv_event_series')
+      .update(patch)
+      .eq('series_id', seriesId)
+      .select(EVENT_SERIES_SELECT)
+      .single()
+      .then(function (result) {
+        if (result.error) throw result.error;
+        return result.data;
       });
   }
 
@@ -456,6 +489,8 @@
     updateEvent: updateEvent,
     cancelEvent: cancelEvent,
     deleteEvent: deleteEvent,
+    createEventSeries: createEventSeries,
+    updateEventSeries: updateEventSeries,
     listEventLookups: listEventLookups,
     listDevices: listDevices,
     createDevice: createDevice,

@@ -93,6 +93,14 @@
     return 'in about ' + hours + (hours === 1 ? ' hour' : ' hours');
   }
 
+  // Day-granularity companion to formatCountdown() above — for the "coming up" advance
+  // reminder (upcomingReminder.daysUntil), not the minute-precision NEXT countdown.
+  function formatDaysUntil(daysUntil) {
+    if (typeof daysUntil !== 'number' || daysUntil <= 0) return '';
+    if (daysUntil === 1) return 'tomorrow';
+    return 'in ' + daysUntil + ' days';
+  }
+
   function el(tag, className, text) {
     var e = document.createElement(tag);
     if (className) e.className = className;
@@ -195,18 +203,30 @@
       }
     }
 
-    // When a message is present, NEXT and the message pane share the same
-    // grid slot via a flex column so the message pane's height is set in
-    // proportion to the NEXT card's rather than sizing to its own text
-    // alone. Without a message, NEXT is placed directly so its established
-    // top-aligned, content-sized behaviour is unchanged.
-    if (messageBanner) {
+    var upcoming = null;
+    if (viewModel.upcomingReminder) {
+      upcoming = el('aside', 'dvm-upcoming-card');
+      upcoming.appendChild(el('div', 'dvm-upcoming-label', 'COMING UP'));
+      upcoming.appendChild(el('div', 'dvm-upcoming-item', viewModel.upcomingReminder.title));
+      var when = formatDaysUntil(viewModel.upcomingReminder.daysUntil);
+      if (when) upcoming.appendChild(el('div', 'dvm-upcoming-when', when));
+    }
+
+    // Whenever more than one of NEXT / COMING UP / MESSAGE is present, they share the same grid
+    // slot via a flex column (.dvm-side-col) so each pane's height is set in proportion to the
+    // others' rather than sizing to its own text alone. With only one present, it's placed
+    // directly so its established top-aligned, content-sized behaviour is unchanged.
+    var sideItems = [];
+    if (next) sideItems.push(next);
+    if (upcoming) sideItems.push(upcoming);
+    if (messageBanner) sideItems.push(messageBanner);
+
+    if (sideItems.length > 1) {
       var sideCol = el('div', 'dvm-side-col');
-      if (next) sideCol.appendChild(next);
-      sideCol.appendChild(messageBanner);
+      sideItems.forEach(function (item) { sideCol.appendChild(item); });
       article.appendChild(sideCol);
-    } else if (next) {
-      article.appendChild(next);
+    } else if (sideItems.length === 1) {
+      article.appendChild(sideItems[0]);
     }
 
     return article;

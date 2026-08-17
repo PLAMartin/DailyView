@@ -18,6 +18,7 @@
   var currentContext = null;
   var currentLookups = null;
   var editingEventId = null;
+  var editingSeriesId = null;
   var pendingConfirmAction = null;
   var onChangeCallback = null;
 
@@ -153,6 +154,10 @@
     document.getElementById('event-priority').value = '5';
     document.getElementById('event-show-on-display').checked = true;
     document.getElementById('event-show-on-display').disabled = false;
+    document.getElementById('event-repeats-annually').checked = false;
+    document.getElementById('event-series-scope-occurrence').checked = true;
+    document.getElementById('event-series-scope-field').hidden = true;
+    editingSeriesId = null;
 
     populateSelect(document.getElementById('event-type'), currentLookups.eventTypes, 'event_type_id', 'event_type',
       firstIdWhere(currentLookups.eventTypes, 'event_type_id', 'event_type', 'other'));
@@ -171,6 +176,7 @@
     eventTitleEl.textContent = 'Add event';
     eventSubmitBtn.textContent = 'Save event';
     resetEventForm(defaultDate);
+    document.getElementById('event-repeats-field').hidden = false;
     eventDialog.showModal();
   }
 
@@ -195,6 +201,12 @@
     document.getElementById('event-visibility').value = String(ev.event_visibility_id);
     document.getElementById('event-accuracy').value = String(ev.event_accuracy_id);
     applyVisibilityRule();
+
+    // Recurrence can only be switched on when an event is first created, not retrofitted onto
+    // an existing one-off event — the repeats checkbox is create-only.
+    document.getElementById('event-repeats-field').hidden = true;
+    editingSeriesId = ev.series_id || null;
+    document.getElementById('event-series-scope-field').hidden = !editingSeriesId;
 
     eventDialog.showModal();
   }
@@ -286,12 +298,38 @@
     eventSubmitBtn.disabled = true;
     eventSubmitBtn.textContent = 'Saving…';
 
-    var request = editingEventId
-      ? dvData.updateEvent(editingEventId, payload)
-      : dvData.createEvent(Object.assign({
-          event_source_id: 3, // web_dashboard — confirmed seed value, see migration
-          created_by_user_id: currentContext.userId
-        }, payload));
+    var repeatsAnnually = !editingEventId && document.getElementById('event-repeats-annually').checked;
+    var seriesScope = editingSeriesId
+      ? (document.getElementById('event-series-scope-series').checked ? 'series' : 'occurrence')
+      : null;
+
+    var request;
+    if (repeatsAnnually) {
+      // dv_event_series' AFTER INSERT trigger (see supabase/migrations/20260817220000_dv_event_series.sql)
+      // materializes the actual dv_event occurrence rows synchronously, in the same transaction
+      // — by the time this insert resolves, they already exist for the caller's refresh to pick up.
+      var seriesPayload = Object.assign({
+        event_source_id: 3, // web_dashboard — confirmed seed value, see migration
+        created_by_user_id: currentContext.userId,
+        rrule: 'FREQ=YEARLY',
+        start_date: payload.event_date
+      }, payload);
+      delete seriesPayload.event_date;
+      request = dvData.createEventSeries(seriesPayload);
+    } else if (seriesScope === 'series') {
+      var seriesEditPayload = Object.assign({}, payload);
+      delete seriesEditPayload.event_date; // the series has no single date of its own
+      request = dvData.updateEventSeries(editingSeriesId, seriesEditPayload);
+    } else if (editingEventId) {
+      request = dvData.updateEvent(editingEventId, seriesScope === 'occurrence'
+        ? Object.assign({ series_overridden: true }, payload)
+        : payload);
+    } else {
+      request = dvData.createEvent(Object.assign({
+        event_source_id: 3, // web_dashboard — confirmed seed value, see migration
+        created_by_user_id: currentContext.userId
+      }, payload));
+    }
 
     request.then(function () {
       eventSubmitBtn.disabled = false;

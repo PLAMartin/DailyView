@@ -140,6 +140,14 @@
     showNextReminder._input.disabled = !canEditAccount;
     form.appendChild(showNextReminder);
 
+    var reminderLeadDaysInput = document.createElement('input');
+    reminderLeadDaysInput.type = 'number';
+    reminderLeadDaysInput.min = '0';
+    reminderLeadDaysInput.max = '14';
+    reminderLeadDaysInput.value = String(account.upcoming_reminder_lead_days || 3);
+    reminderLeadDaysInput.disabled = !canEditAccount;
+    form.appendChild(field('Days of advance notice for birthdays and anniversaries', reminderLeadDaysInput));
+
     var autoReset = checkboxField('Automatically reset to today each morning', account.auto_reset_to_today !== false);
     autoReset._input.disabled = !canEditAccount;
     form.appendChild(autoReset);
@@ -169,6 +177,7 @@
           night_start_time: nightInput.value || null,
           show_day_period: showDayPeriod._input.checked,
           show_next_reminder: showNextReminder._input.checked,
+          upcoming_reminder_lead_days: Number(reminderLeadDaysInput.value) || 0,
           auto_reset_to_today: autoReset._input.checked
         };
 

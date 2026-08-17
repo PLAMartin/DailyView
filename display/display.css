@@ -6,6 +6,8 @@
   --dv-text-muted:  #6878a8;
   --dv-divider:     #e8ecf4;
   --dv-subtle:      #8896c4;
+  --dv-bg-upcoming: #eaf6ee;
+  --dv-text-upcoming: #2f6b46;
 }
 
 * { box-sizing: border-box; }
@@ -254,6 +256,29 @@ button, input { font-family: inherit; }
 .dvm-next-time { font-size: 1.5rem; font-weight: 600; color: var(--dv-accent); margin: 0; }
 .dvm-next-countdown { font-size: 1.2rem; font-weight: 500; color: var(--dv-subtle); margin: 6px 0 0; }
 
+/* Advance reminder for a recurring event (birthday/anniversary) a few days out — a distinct
+   soft colour from both NEXT (light blue) and MESSAGE (amber) so "coming up in a few days" is
+   never mistaken for "happening today." Present only when dv_get_today_view_model() returns an
+   upcomingReminder (see dv-viewer-render.js). Standalone rule (no message/next present) reuses
+   the same "next" grid area as .dvm-next-card/.dvm-side-col above; when stacked with either of
+   those it instead sizes inside .dvm-side-col like .dvm-message-banner does. */
+.dv-mockup--landscape .dvm-upcoming-card {
+  grid-area: next;
+  background: var(--dv-bg-upcoming);
+  border-radius: 24px;
+  padding: 24px 32px;
+  align-self: start;
+}
+.dv-mockup--landscape .dvm-side-col .dvm-upcoming-card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.dvm-upcoming-label { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--dv-text-upcoming); margin: 0 0 8px; }
+.dvm-upcoming-item { font-size: 1.5rem; font-weight: 700; color: var(--dv-text-upcoming); margin: 0 0 4px; }
+.dvm-upcoming-when { font-size: 1.1rem; font-weight: 500; color: var(--dv-text-upcoming); opacity: 0.85; margin: 0; }
+
 .viewer-offline-pill {
   position: absolute;
   bottom: 24px;
@@ -276,19 +301,21 @@ button, input { font-family: inherit; }
   .dv-mockup--landscape .dvm-event-name,
   .dvm-next-item { font-size: 1.3rem; }
   .dvm-next-countdown { font-size: 1rem; }
+  .dvm-upcoming-item { font-size: 1.2rem; }
 }
 
 /* Spec §6.2: optimised for landscape, but usable in portrait too. */
 @media (orientation: portrait) {
   .dv-mockup--landscape {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto auto;
     grid-template-areas:
       "title"
       "top"
       "todaylabel"
       "events"
       "next"
+      "upcoming"
       "message";
     /* Grid's default align-content:normal resolves to stretch, which
        distributes any leftover vertical space across every auto row
@@ -317,5 +344,6 @@ button, input { font-family: inherit; }
      grid, positioned via the areas above (.dvm-next-card already carries
      grid-area: next from the base landscape rule above). */
   .dv-mockup--landscape .dvm-side-col { display: contents; }
+  .dv-mockup--landscape .dvm-upcoming-card { grid-area: upcoming; }
   .dv-mockup--landscape .dvm-message-banner { grid-area: message; }
 }

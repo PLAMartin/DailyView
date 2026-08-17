@@ -157,6 +157,16 @@
         </div>
       </div>
 
+      <div class="field field-checkbox" id="event-repeats-field">
+        <label><input type="checkbox" id="event-repeats-annually" name="repeats_annually"> Repeats every year (e.g. a birthday or anniversary)</label>
+      </div>
+
+      <fieldset class="field field-radio-group" id="event-series-scope-field" hidden>
+        <legend>Apply changes to</legend>
+        <label><input type="radio" name="series_scope" id="event-series-scope-occurrence" value="occurrence" checked> This occurrence only</label>
+        <label><input type="radio" name="series_scope" id="event-series-scope-series" value="series"> Entire series</label>
+      </fieldset>
+
       <div class="event-dialog-actions">
         <button type="button" class="btn-outline" id="event-cancel-btn">Cancel</button>
         <button type="submit" class="btn" id="event-submit-btn">Save event</button>

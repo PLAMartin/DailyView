@@ -300,12 +300,10 @@
     if (canManage) {
       var actions = el('div', 'device-card-actions');
 
-      if (!device.paired_at) {
-        var pairBtn = el('button', 'btn-outline', 'Pair device');
-        pairBtn.type = 'button';
-        pairBtn.addEventListener('click', function () { openPairDialog(device, onChanged); });
-        actions.appendChild(pairBtn);
-      }
+      var pairBtn = el('button', 'btn-outline', device.paired_at ? 'Generate new code' : 'Pair device');
+      pairBtn.type = 'button';
+      pairBtn.addEventListener('click', function () { openPairDialog(device, onChanged); });
+      actions.appendChild(pairBtn);
 
       var editBtn = el('button', 'btn-outline', 'Edit');
       editBtn.type = 'button';

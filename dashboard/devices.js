@@ -138,6 +138,12 @@
     container.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2 });
   }
 
+  // Scanning the code should connect the device, not just show the text —
+  // /display/ reads this `code` param and redeems it automatically.
+  function pairingUrlFor(pairingCode) {
+    return window.location.origin + '/display/?code=' + encodeURIComponent(pairingCode);
+  }
+
   var onDeviceChanged = null;
 
   function openAddDialog(onChanged) {
@@ -237,7 +243,7 @@
       : 'Expires ' + PAIRING_CODE_MINUTES + ' minutes after it was created. Enter it on the Daily View screen to connect.';
     pairExpiryEl.setAttribute('data-tone', expired ? 'error' : 'info');
     if (device.pairing_code && !expired) {
-      renderQr(pairQrEl, device.pairing_code);
+      renderQr(pairQrEl, pairingUrlFor(device.pairing_code));
       pairQrEl.hidden = false;
     } else {
       pairQrEl.textContent = '';

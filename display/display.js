@@ -288,6 +288,20 @@
 
   // ---- init ----
 
+  // Populated by the pairing QR code (dashboard/devices.js links here as
+  // /display/?code=XXX-XXX) so scanning connects the device instead of
+  // just displaying the code for someone to type in by hand.
+  function getCodeFromUrl() {
+    var raw = new URLSearchParams(window.location.search).get('code');
+    return raw ? normalizeCode(raw) : null;
+  }
+
+  function stripCodeFromUrl() {
+    var url = new URL(window.location.href);
+    url.searchParams.delete('code');
+    window.history.replaceState({}, document.title, url.pathname + url.search + url.hash);
+  }
+
   function init() {
     showOnly('loading');
     loadingMessageEl.textContent = 'Daily View is getting ready…';
@@ -313,6 +327,12 @@
         fetchSnapshot();
       } else {
         showOnly('pairing');
+        var urlCode = getCodeFromUrl();
+        if (urlCode) {
+          stripCodeFromUrl();
+          pairingCodeInput.value = urlCode;
+          handlePairingSubmit({ preventDefault: function () {} });
+        }
       }
     }, function (error) {
       // Anonymous sign-in itself failing (most likely: "Allow anonymous

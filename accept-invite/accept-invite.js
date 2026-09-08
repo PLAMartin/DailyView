@@ -182,8 +182,8 @@
       valid = false;
       firstInvalid = firstInvalid || newName;
     }
-    if (newPassword.value.length < 12) {
-      showFieldError(newPassword, newPwError, newPwField, 'Use at least 12 characters.');
+    if (newPassword.value.length < 7) {
+      showFieldError(newPassword, newPwError, newPwField, 'Use at least 7 characters.');
       valid = false;
       firstInvalid = firstInvalid || newPassword;
     }

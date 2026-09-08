@@ -128,7 +128,7 @@ async function handleAcceptExistingUser(invite: InviteRow, authHeader: string | 
 async function handleAcceptNewUser(invite: InviteRow, fullName: string | undefined, password: string | undefined) {
   const trimmedName = (fullName || '').trim();
   if (!trimmedName) return jsonResponse({ error: 'full-name-required' }, 400);
-  if (!password || password.length < 12) return jsonResponse({ error: 'weak-password' }, 400);
+  if (!password || password.length < 7) return jsonResponse({ error: 'weak-password' }, 400);
 
   // Re-check right before creating the auth identity — closes the race where
   // two invite links for the same email are redeemed at once.

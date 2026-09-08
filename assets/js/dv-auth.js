@@ -71,8 +71,35 @@
     });
   }
 
-  function completePasswordReset(newPassword) {
+  function updatePassword(newPassword) {
     return sb.auth.updateUser({ password: newPassword });
+  }
+
+  function completePasswordReset(newPassword) {
+    return updatePassword(newPassword);
+  }
+
+  // How the current session was established, read from the access token's `amr`
+  // claim (e.g. ['password'], ['otp'], ['magiclink']). Used to offer someone who
+  // signed in via an email link the chance to set a password, since Supabase
+  // exposes no "does this account have a password?" flag. Never used for access
+  // control — this reads the token without verifying it.
+  function getSignInMethods() {
+    return getSession().then(function (session) {
+      if (!session || !session.access_token) return [];
+      try {
+        var payload = session.access_token.split('.')[1];
+        var json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+        var amr = JSON.parse(json).amr || [];
+        return amr.map(function (entry) {
+          return typeof entry === 'string' ? entry : entry.method;
+        }).filter(Boolean);
+      } catch (err) {
+        return [];
+      }
+    }, function () {
+      return [];
+    });
   }
 
   function signOut() {
@@ -156,6 +183,8 @@
     sendMagicLink: sendMagicLink,
     sendPasswordReset: sendPasswordReset,
     completePasswordReset: completePasswordReset,
+    updatePassword: updatePassword,
+    getSignInMethods: getSignInMethods,
     signOut: signOut,
     getMyAccountAccess: getMyAccountAccess,
     invokeFunction: invokeFunction,

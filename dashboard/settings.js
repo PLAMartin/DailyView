@@ -2,6 +2,7 @@
   'use strict';
 
   var dvData = window.dvDashboardData;
+  var dvAuth = window.dvAuth;
 
   var NETWORK_FAILURE =
     'We could not reach Daily View just now. Please check your connection and try again.';
@@ -263,6 +264,149 @@
     return section;
   }
 
+  // ---- Your sign-in section ----
+
+  // Until this existed there was no way to set or change a password anywhere in
+  // the app. Anyone whose account was created outside the invite flow — or who
+  // only ever signed in with an email link — had no route to a password at all,
+  // and had to request a reset link every single time they wanted to get in.
+
+  var MIN_PASSWORD_LENGTH = 12;
+
+  function passwordField(labelText, inputId, withToggle) {
+    var wrap = el('div', 'field' + (withToggle ? ' field-with-toggle' : ''));
+    var label = el('label', null, labelText);
+    label.setAttribute('for', inputId);
+    wrap.appendChild(label);
+
+    var row = el('div', 'field-input-row');
+    var input = document.createElement('input');
+    input.type = 'password';
+    input.id = inputId;
+    input.autocomplete = 'new-password';
+    row.appendChild(input);
+
+    if (withToggle) {
+      var toggle = el('button', 'field-toggle-btn', 'Show');
+      toggle.type = 'button';
+      toggle.setAttribute('aria-pressed', 'false');
+      row.appendChild(toggle);
+      wrap._toggle = toggle;
+    }
+    wrap.appendChild(row);
+
+    var error = el('p', 'field-error');
+    error.id = inputId + '-error';
+    error.hidden = true;
+    wrap.appendChild(error);
+
+    wrap._input = input;
+    wrap._error = error;
+    return wrap;
+  }
+
+  function showFieldError(fieldWrap, text) {
+    fieldWrap.setAttribute('data-invalid', 'true');
+    fieldWrap._input.setAttribute('aria-invalid', 'true');
+    fieldWrap._input.setAttribute('aria-describedby', fieldWrap._error.id);
+    fieldWrap._error.textContent = text;
+    fieldWrap._error.hidden = false;
+  }
+
+  function clearFieldError(fieldWrap) {
+    fieldWrap.removeAttribute('data-invalid');
+    fieldWrap._input.removeAttribute('aria-invalid');
+    fieldWrap._input.removeAttribute('aria-describedby');
+    fieldWrap._error.textContent = '';
+    fieldWrap._error.hidden = true;
+  }
+
+  function buildSignInSection(signedInWithLink) {
+    var section = el('section', 'settings-section');
+    section.appendChild(el('h3', null, 'Your sign-in'));
+
+    section.appendChild(el(
+      'p',
+      'schedule-readonly-note',
+      signedInWithLink
+        ? 'You signed in using an email link. Set a password here and you can sign in straight away next time, without waiting for an email.'
+        : 'Change the password you use to sign in to Daily View.'
+    ));
+
+    var form = el('form', 'settings-form');
+    form.setAttribute('novalidate', '');
+
+    var passwordWrap = passwordField('New password', 'settings-new-password', true);
+    form.appendChild(passwordWrap);
+    form.appendChild(el('p', 'settings-static-value', 'Use at least ' + MIN_PASSWORD_LENGTH + ' characters.'));
+
+    var confirmWrap = passwordField('Confirm password', 'settings-confirm-password', false);
+    form.appendChild(confirmWrap);
+
+    passwordWrap._toggle.addEventListener('click', function () {
+      var isHidden = passwordWrap._input.type === 'password';
+      var nextType = isHidden ? 'text' : 'password';
+      passwordWrap._input.type = nextType;
+      confirmWrap._input.type = nextType;
+      passwordWrap._toggle.textContent = isHidden ? 'Hide' : 'Show';
+      passwordWrap._toggle.setAttribute('aria-pressed', String(isHidden));
+    });
+
+    var messageEl = el('p', 'auth-message');
+    messageEl.setAttribute('role', 'status');
+    messageEl.setAttribute('aria-live', 'polite');
+    form.appendChild(messageEl);
+
+    var submitBtn = el('button', 'btn', 'Save password');
+    submitBtn.type = 'submit';
+    form.appendChild(submitBtn);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      setMessage(messageEl, '', null);
+      clearFieldError(passwordWrap);
+      clearFieldError(confirmWrap);
+
+      var value = passwordWrap._input.value;
+      var firstInvalid = null;
+
+      if (value.length < MIN_PASSWORD_LENGTH) {
+        showFieldError(passwordWrap, 'Use at least ' + MIN_PASSWORD_LENGTH + ' characters.');
+        firstInvalid = passwordWrap._input;
+      }
+      if (!confirmWrap._input.value || confirmWrap._input.value !== value) {
+        showFieldError(confirmWrap, 'Passwords do not match.');
+        firstInvalid = firstInvalid || confirmWrap._input;
+      }
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving…';
+
+      dvAuth.updatePassword(value).then(function (result) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Save password';
+        if (result.error) {
+          setMessage(messageEl, NETWORK_FAILURE, 'error');
+          return;
+        }
+        passwordWrap._input.value = '';
+        confirmWrap._input.value = '';
+        setMessage(messageEl, 'Password saved. Use it next time you sign in.', 'info');
+      }, function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Save password';
+        setMessage(messageEl, NETWORK_FAILURE, 'error');
+      });
+    });
+
+    section.appendChild(form);
+    return section;
+  }
+
   // ---- Subscription section (placeholder — no payment handling, spec 17.5) ----
 
   function buildSubscriptionSection(account) {
@@ -275,10 +419,11 @@
     return section;
   }
 
-  function renderBody(bodyEl, account, pref, role, canManageDevices) {
+  function renderBody(bodyEl, account, pref, role, canManageDevices, signedInWithLink) {
     bodyEl.textContent = '';
     bodyEl.appendChild(buildAccountSection(account, role === 'owner'));
     bodyEl.appendChild(buildDisplaySection(pref, !!canManageDevices));
+    bodyEl.appendChild(buildSignInSection(signedInWithLink));
     bodyEl.appendChild(buildSubscriptionSection(account));
   }
 
@@ -293,11 +438,14 @@
 
     Promise.all([
       dvData.getAccountSettings(currentAccount.account_id),
-      dvData.getOrCreateDisplayPreference(currentAccount.account_id)
+      dvData.getOrCreateDisplayPreference(currentAccount.account_id),
+      dvAuth.getSignInMethods()
     ]).then(function (results) {
       statusEl.textContent = '';
       currentPref = results[1];
-      renderBody(bodyEl, results[0], results[1], currentAccount.role, currentAccount.can_manage_devices);
+      var methods = results[2] || [];
+      var signedInWithLink = methods.length > 0 && methods.indexOf('password') === -1;
+      renderBody(bodyEl, results[0], results[1], currentAccount.role, currentAccount.can_manage_devices, signedInWithLink);
     }, function () {
       statusEl.textContent = NETWORK_FAILURE;
       statusEl.setAttribute('data-tone', 'error');

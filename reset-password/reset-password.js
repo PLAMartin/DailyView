@@ -65,8 +65,8 @@
     clearFieldError(passwordInput, passwordError, passwordField);
     clearFieldError(confirmInput, confirmError, confirmField);
 
-    if (passwordInput.value.length < 7) {
-      showFieldError(passwordInput, passwordError, passwordField, 'Use at least 7 characters.');
+    if (passwordInput.value.length < 12) {
+      showFieldError(passwordInput, passwordError, passwordField, 'Use at least 12 characters.');
       valid = false;
       firstInvalid = firstInvalid || passwordInput;
     }

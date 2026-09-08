@@ -271,7 +271,7 @@
   // only ever signed in with an email link — had no route to a password at all,
   // and had to request a reset link every single time they wanted to get in.
 
-  var MIN_PASSWORD_LENGTH = 7;
+  var MIN_PASSWORD_LENGTH = 12;
 
   function passwordField(labelText, inputId, withToggle) {
     var wrap = el('div', 'field' + (withToggle ? ' field-with-toggle' : ''));

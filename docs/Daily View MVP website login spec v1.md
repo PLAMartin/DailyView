@@ -657,7 +657,7 @@ Required copy:
 ```text
 Choose a new password
 
-Use at least 7 characters. A longer passphrase is easier to remember and more secure.
+Use at least 12 characters. A longer passphrase is easier to remember and more secure.
 ```
 
 Controls:
@@ -671,7 +671,7 @@ Controls:
 
 Validation:
 
-- Minimum 7 characters.
+- Minimum 12 characters.
 - New password and confirmation must match.
 - Show text-based inline validation.
 - Keep focus in the first field with an error.

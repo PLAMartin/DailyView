@@ -146,7 +146,9 @@
     reminderLeadDaysInput.max = '14';
     reminderLeadDaysInput.value = String(account.upcoming_reminder_lead_days || 3);
     reminderLeadDaysInput.disabled = !canEditAccount;
-    form.appendChild(field('Days of advance notice for birthdays and anniversaries', reminderLeadDaysInput));
+    // Now seeds only the *yearly* default. Notice for every other frequency comes from
+    // dv_default_notice_days(), or from a per-event override set in the event dialog.
+    form.appendChild(field('Days of advance notice for yearly events (birthdays and anniversaries)', reminderLeadDaysInput));
 
     var autoReset = checkboxField('Automatically reset to today each morning', account.auto_reset_to_today !== false);
     autoReset._input.disabled = !canEditAccount;

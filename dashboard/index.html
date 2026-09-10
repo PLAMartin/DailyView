@@ -157,8 +157,40 @@
         </div>
       </div>
 
-      <div class="field field-checkbox" id="event-repeats-field">
-        <label><input type="checkbox" id="event-repeats-annually" name="repeats_annually"> Repeats every year (e.g. a birthday or anniversary)</label>
+      <div class="field-row" id="event-repeats-field">
+        <div class="field" id="event-repeats-select-field">
+          <label for="event-repeats">Repeats</label>
+          <select id="event-repeats" name="repeats">
+            <option value="" selected>Does not repeat</option>
+            <option value="weekly">Every week</option>
+            <option value="fortnightly">Every 2 weeks</option>
+            <option value="four_weekly">Every 4 weeks</option>
+            <option value="monthly">Every month</option>
+            <option value="yearly">Every year (e.g. a birthday)</option>
+          </select>
+        </div>
+        <p class="field-static" id="event-repeats-static" hidden></p>
+        <div class="field" id="event-repeat-until-field" hidden>
+          <label for="event-repeat-until">Repeat until (optional)</label>
+          <input type="date" id="event-repeat-until" name="repeat_until">
+          <p class="field-error" id="event-repeat-until-error" hidden></p>
+        </div>
+      </div>
+
+      <!-- Shown for one-off events too, not just repeating ones: an important one-off, such
+           as a hospital appointment, is often the thing most worth flagging in advance. -->
+      <div class="field" id="event-advance-notice-field">
+        <label for="event-advance-notice">Show a reminder on the screen beforehand</label>
+        <select id="event-advance-notice" name="advance_notice_days" aria-describedby="event-advance-notice-hint">
+          <option value="" selected>Use the usual notice for this kind of event</option>
+          <option value="0">No advance notice</option>
+          <option value="1">The day before</option>
+          <option value="2">2 days before</option>
+          <option value="3">3 days before</option>
+          <option value="5">5 days before</option>
+          <option value="7">A week before</option>
+        </select>
+        <p class="field-hint" id="event-advance-notice-hint"></p>
       </div>
 
       <fieldset class="field field-radio-group" id="event-series-scope-field" hidden>
@@ -168,6 +200,7 @@
       </fieldset>
 
       <div class="event-dialog-actions">
+        <button type="button" class="btn-outline schedule-delete-btn event-delete-btn" id="event-delete-btn" hidden>Delete</button>
         <button type="button" class="btn-outline" id="event-cancel-btn">Cancel</button>
         <button type="submit" class="btn" id="event-submit-btn">Save event</button>
       </div>
@@ -395,6 +428,16 @@
   <div class="confirm-dialog-inner">
     <h2 id="confirm-dialog-title">Are you sure?</h2>
     <p id="confirm-dialog-message-text"></p>
+
+    <!-- Only shown when the event being removed belongs to a repeating series. Without this a
+         weekly series could never be stopped: deleting one occurrence leaves the series active
+         and the top-up job simply regenerates it. -->
+    <fieldset class="field field-radio-group" id="confirm-dialog-scope-field" hidden>
+      <legend id="confirm-dialog-scope-legend">This event repeats</legend>
+      <label><input type="radio" name="confirm_scope" id="confirm-dialog-scope-one" value="one" checked> Just this one</label>
+      <label><input type="radio" name="confirm_scope" id="confirm-dialog-scope-future" value="future"> This one and all future ones</label>
+    </fieldset>
+
     <div class="auth-message" id="confirm-dialog-message" role="status" aria-live="polite"></div>
     <div class="confirm-dialog-actions">
       <button type="button" class="btn-outline" id="confirm-dialog-cancel">Cancel</button>

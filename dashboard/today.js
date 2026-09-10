@@ -89,6 +89,9 @@
   function eventBadges(ev) {
     var badges = el('div', 'schedule-event-badges');
     badges.appendChild(el('span', 'badge', humanize(ev.dv_event_status.event_status)));
+    if (ev.series_id) {
+      badges.appendChild(el('span', 'badge badge-repeats', 'Repeats'));
+    }
     if (ev.dv_event_visibility.event_visibility !== 'display') {
       badges.appendChild(el('span', 'badge', humanize(ev.dv_event_visibility.event_visibility)));
     } else if (!ev.show_on_display) {

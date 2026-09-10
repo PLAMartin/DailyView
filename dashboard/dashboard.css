@@ -482,6 +482,7 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .device-status-recently-seen { background: var(--dv-bg-cta); color: var(--dv-navy); }
 .device-status-offline, .device-status-inactive { background: #fdf1ef; color: var(--dv-error); }
 .device-status-waiting-to-connect { background: #fff8e6; color: #8a6100; }
+.badge-repeats { background: var(--dv-bg-upcoming); color: var(--dv-text-upcoming); }
 
 /* ── Schedule list ── */
 .schedule-section-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
@@ -509,6 +510,7 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 .schedule-row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .schedule-delete-btn { color: var(--dv-error); border-color: var(--dv-error); }
 .schedule-delete-btn:hover, .schedule-delete-btn:focus-visible { background: #fdf1ef; }
+.event-delete-btn { margin-right: auto; }
 
 /* ══════════════════════════════════════════ */
 /* CALENDAR PAGE                               */
@@ -690,6 +692,13 @@ h1, h2 { font-weight: 700; line-height: 1.2; color: var(--dv-navy); }
 }
 .field[data-invalid="true"] input { border-color: var(--dv-error); }
 .field-error { color: var(--dv-error); font-size: 0.82rem; }
+/* Plain-language explanation under a control (e.g. what "the usual notice" resolves to for
+   the frequency currently chosen). Uses --dv-text-mid rather than --dv-text-muted: this is
+   explanatory copy the carer is meant to read, so it needs full body-text contrast. */
+.field-hint { color: var(--dv-text-mid); font-size: 0.82rem; margin-top: 4px; }
+/* Read-only stand-in for the frequency select when editing an existing series -- recurrence
+   is deliberately create-only (see event-dialog.js). */
+.field-static { font-weight: 600; color: var(--dv-navy); padding: 8px 0; }
 .field-checkbox { flex-direction: row; align-items: center; }
 .field-checkbox label { display: flex; align-items: flex-start; gap: 8px; font-weight: 600; }
 .field-checkbox label input { width: auto; margin-top: 3px; }

@@ -17,7 +17,7 @@
 
   var EVENT_SELECT =
     'event_id, account_id, title, description, event_date, start_time, end_time, ' +
-    'display_priority, show_on_display, created_at, updated_at, series_id, ' +
+    'display_priority, show_on_display, advance_notice_days, created_at, updated_at, series_id, ' +
     'event_type_id, event_status_id, event_visibility_id, event_accuracy_id, event_source_id, ' +
     'dv_event_type(event_type), ' +
     'dv_event_status(event_status), ' +
@@ -27,7 +27,7 @@
 
   var EVENT_SERIES_SELECT =
     'series_id, account_id, title, description, start_date, end_date, start_time, end_time, ' +
-    'rrule, display_priority, show_on_display, is_active, created_at, updated_at, ' +
+    'rrule, display_priority, show_on_display, advance_notice_days, is_active, created_at, updated_at, ' +
     'event_type_id, event_visibility_id, event_accuracy_id, event_source_id';
 
   var eventLookupsCache = null;
@@ -134,6 +134,18 @@
       });
   }
 
+  function getEventSeries(seriesId) {
+    return sb
+      .from('dv_event_series')
+      .select(EVENT_SERIES_SELECT)
+      .eq('series_id', seriesId)
+      .single()
+      .then(function (result) {
+        if (result.error) throw result.error;
+        return result.data;
+      });
+  }
+
   function updateEventSeries(seriesId, patch) {
     return sb
       .from('dv_event_series')
@@ -141,6 +153,25 @@
       .eq('series_id', seriesId)
       .select(EVENT_SERIES_SELECT)
       .single()
+      .then(function (result) {
+        if (result.error) throw result.error;
+        return result.data;
+      });
+  }
+
+  // Ends a series: deactivates it and clears its future, non-overridden occurrences in one
+  // transaction. Without this a series can be created but never stopped -- deleting a single
+  // occurrence leaves is_active = true and the weekly top-up job simply regenerates it. See
+  // dv_stop_event_series() in supabase/migrations/20260910120100_dv_advance_notice_rules.sql.
+  // fromIsoDate is the occurrence the carer was looking at, so "this one and all future ones"
+  // cuts from there rather than always from today.
+  function stopEventSeries(seriesId, byUserId, fromIsoDate) {
+    return sb
+      .rpc('dv_stop_event_series', {
+        p_series_id: seriesId,
+        p_user_id: byUserId,
+        p_from_date: fromIsoDate || null
+      })
       .then(function (result) {
         if (result.error) throw result.error;
         return result.data;
@@ -490,7 +521,9 @@
     cancelEvent: cancelEvent,
     deleteEvent: deleteEvent,
     createEventSeries: createEventSeries,
+    getEventSeries: getEventSeries,
     updateEventSeries: updateEventSeries,
+    stopEventSeries: stopEventSeries,
     listEventLookups: listEventLookups,
     listDevices: listDevices,
     createDevice: createDevice,

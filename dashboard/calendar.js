@@ -104,6 +104,9 @@
     if (ev.dv_event_status.event_status !== 'scheduled') {
       badges.appendChild(el('span', 'badge', humanize(ev.dv_event_status.event_status)));
     }
+    if (ev.series_id) {
+      badges.appendChild(el('span', 'badge badge-repeats', 'Repeats'));
+    }
     if (ev.dv_event_visibility.event_visibility !== 'display') {
       badges.appendChild(el('span', 'badge', humanize(ev.dv_event_visibility.event_visibility)));
     } else if (!ev.show_on_display) {
@@ -112,7 +115,9 @@
     if (ev.dv_event_accuracy.event_accuracy !== 'confirmed') {
       badges.appendChild(el('span', 'badge', humanize(ev.dv_event_accuracy.event_accuracy)));
     }
-    if (ev.dv_event_source && ev.dv_event_source.event_source !== 'web_dashboard') {
+    if (ev.dv_event_source
+        && ev.dv_event_source.event_source !== 'web_dashboard'
+        && ev.dv_event_source.event_source !== 'recurring_series') {
       badges.appendChild(el('span', 'badge', humanize(ev.dv_event_source.event_source)));
     }
     return badges;

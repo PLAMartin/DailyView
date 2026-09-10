@@ -94,11 +94,16 @@
   }
 
   // Day-granularity companion to formatCountdown() above — for the "coming up" advance
-  // reminder (upcomingReminder.daysUntil), not the minute-precision NEXT countdown.
-  function formatDaysUntil(daysUntil) {
+  // reminder, not the minute-precision NEXT countdown. Past three days, counting forward
+  // ("in 6 days") is real arithmetic for the person reading the screen, so the named day from
+  // upcomingReminder.dateLabel ("Friday, 19 September") is shown instead.
+  function formatUpcomingWhen(upcoming) {
+    if (!upcoming) return '';
+    var daysUntil = upcoming.daysUntil;
     if (typeof daysUntil !== 'number' || daysUntil <= 0) return '';
     if (daysUntil === 1) return 'tomorrow';
-    return 'in ' + daysUntil + ' days';
+    if (daysUntil <= 3) return 'in ' + daysUntil + ' days';
+    return upcoming.dateLabel ? 'on ' + upcoming.dateLabel : 'in ' + daysUntil + ' days';
   }
 
   function el(tag, className, text) {
@@ -208,7 +213,7 @@
       upcoming = el('aside', 'dvm-upcoming-card');
       upcoming.appendChild(el('div', 'dvm-upcoming-label', 'COMING UP'));
       upcoming.appendChild(el('div', 'dvm-upcoming-item', viewModel.upcomingReminder.title));
-      var when = formatDaysUntil(viewModel.upcomingReminder.daysUntil);
+      var when = formatUpcomingWhen(viewModel.upcomingReminder);
       if (when) upcoming.appendChild(el('div', 'dvm-upcoming-when', when));
     }
 

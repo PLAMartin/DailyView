@@ -12,6 +12,33 @@
   // the live seed data (dv_event_visibility), not the spec doc's naming.
   var HIDDEN_VISIBILITY_VALUES = ['private', 'supporters_only'];
 
+  // Repeat frequency -> the rrule string stored on dv_event_series.rrule, and the plain-language
+  // label used when an existing series is shown read-only. These are the only rrules
+  // dv_generate_series_occurrences() understands (see
+  // supabase/migrations/20260910120000_dv_event_series_frequencies.sql) — the weekday of a
+  // weekly series and the day-of-month of a monthly one both come from start_date, so there is
+  // no BYDAY/BYMONTHDAY to build here.
+  var REPEAT_OPTIONS = {
+    weekly:       { rrule: 'FREQ=WEEKLY',            label: 'Repeats every week' },
+    fortnightly:  { rrule: 'FREQ=WEEKLY;INTERVAL=2', label: 'Repeats every 2 weeks' },
+    four_weekly:  { rrule: 'FREQ=WEEKLY;INTERVAL=4', label: 'Repeats every 4 weeks' },
+    monthly:      { rrule: 'FREQ=MONTHLY',           label: 'Repeats every month' },
+    yearly:       { rrule: 'FREQ=YEARLY',            label: 'Repeats every year' }
+  };
+
+  // What "Use the usual notice for this kind of event" resolves to, mirroring
+  // dv_default_notice_days() in that same migration. Kept here only to explain the default to
+  // the carer in plain language — the server is the authority, and the yearly case defers to
+  // the account's own setting, which this dialog does not load.
+  var DEFAULT_NOTICE_HINTS = {
+    '':           'One-off events are not announced in advance unless you choose a reminder here.',
+    weekly:       'Weekly events are not announced in advance — they would be on the screen almost every day. Choose a reminder above if you want one.',
+    fortnightly:  'Events every 2 weeks are not announced in advance. Choose a reminder above if you want one.',
+    four_weekly:  'Events every 4 weeks are not announced in advance. Choose a reminder above if you want one.',
+    monthly:      'Monthly events are announced the day before.',
+    yearly:       'Yearly events use the notice set on the Settings page (3 days to start with).'
+  };
+
   // Shared by every page that opens these dialogs (Today, Calendar, ...).
   // context = { accountId, timezone, userId }; onChanged is called after a
   // successful save/cancel/delete so the caller can refresh its own view.
@@ -19,6 +46,8 @@
   var currentLookups = null;
   var editingEventId = null;
   var editingSeriesId = null;
+  var currentEditingEvent = null;
+  var editingSeries = null;
   var pendingConfirmAction = null;
   var onChangeCallback = null;
 
@@ -79,9 +108,20 @@
     document.getElementById('event-cancel-btn').addEventListener('click', closeEventDialog);
     eventForm.addEventListener('submit', handleEventSubmit);
 
+    document.getElementById('event-delete-btn').addEventListener('click', function () {
+      if (!currentEditingEvent) return;
+      var outerOnChanged = onChangeCallback;
+      openDeleteConfirm(currentEditingEvent, currentContext, function () {
+        closeEventDialog();
+        if (outerOnChanged) outerOnChanged();
+      });
+    });
+
     document.getElementById('event-visibility').addEventListener('change', function () {
       applyVisibilityRule(true);
     });
+
+    document.getElementById('event-repeats').addEventListener('change', applyRepeatRule);
 
     confirmDialog         = document.getElementById('confirm-dialog');
     confirmTitleEl        = document.getElementById('confirm-dialog-title');
@@ -116,6 +156,26 @@
       showCheckbox.disabled = false;
       if (isUserChange) showCheckbox.checked = true;
     }
+  }
+
+  // Reveals "Repeat until" only once a frequency is chosen, and keeps the advance-notice hint
+  // describing whichever frequency is currently selected.
+  function applyRepeatRule() {
+    var repeatsEl = document.getElementById('event-repeats');
+    var freq = editingSeries ? seriesFreqKey(editingSeries.rrule) : repeatsEl.value;
+    document.getElementById('event-repeat-until-field').hidden = !freq;
+    document.getElementById('event-advance-notice-hint').textContent =
+      DEFAULT_NOTICE_HINTS[freq] || DEFAULT_NOTICE_HINTS[''];
+  }
+
+  // rrule string -> the REPEAT_OPTIONS key that produced it, so an existing series can be
+  // described back to the carer.
+  function seriesFreqKey(rrule) {
+    var match = '';
+    Object.keys(REPEAT_OPTIONS).forEach(function (key) {
+      if (REPEAT_OPTIONS[key].rrule === rrule) match = key;
+    });
+    return match;
   }
 
   function populateSelect(selectEl, items, idKey, labelKey, defaultId) {
@@ -154,10 +214,15 @@
     document.getElementById('event-priority').value = '5';
     document.getElementById('event-show-on-display').checked = true;
     document.getElementById('event-show-on-display').disabled = false;
-    document.getElementById('event-repeats-annually').checked = false;
+    document.getElementById('event-repeats').value = '';
+    document.getElementById('event-repeats').disabled = false;
+    document.getElementById('event-repeat-until').value = '';
+    document.getElementById('event-advance-notice').value = '';
     document.getElementById('event-series-scope-occurrence').checked = true;
     document.getElementById('event-series-scope-field').hidden = true;
     editingSeriesId = null;
+    editingSeries = null;
+    applyRepeatRule();
 
     populateSelect(document.getElementById('event-type'), currentLookups.eventTypes, 'event_type_id', 'event_type',
       firstIdWhere(currentLookups.eventTypes, 'event_type_id', 'event_type', 'other'));
@@ -173,10 +238,14 @@
     currentLookups = lookups;
     onChangeCallback = onChanged;
     editingEventId = null;
+    currentEditingEvent = null;
     eventTitleEl.textContent = 'Add event';
     eventSubmitBtn.textContent = 'Save event';
     resetEventForm(defaultDate);
     document.getElementById('event-repeats-field').hidden = false;
+    document.getElementById('event-repeats-select-field').hidden = false;
+    document.getElementById('event-repeats-static').hidden = true;
+    document.getElementById('event-delete-btn').hidden = true;
     eventDialog.showModal();
   }
 
@@ -186,9 +255,11 @@
     currentLookups = lookups;
     onChangeCallback = onChanged;
     editingEventId = ev.event_id;
+    currentEditingEvent = ev;
     eventTitleEl.textContent = 'Edit event';
     eventSubmitBtn.textContent = 'Save event';
     resetEventForm(ev.event_date);
+    document.getElementById('event-delete-btn').hidden = false;
 
     document.getElementById('event-title').value = ev.title || '';
     document.getElementById('event-date').value = ev.event_date;
@@ -202,13 +273,49 @@
     document.getElementById('event-accuracy').value = String(ev.event_accuracy_id);
     applyVisibilityRule();
 
-    // Recurrence can only be switched on when an event is first created, not retrofitted onto
-    // an existing one-off event — the repeats checkbox is create-only.
+    document.getElementById('event-advance-notice').value =
+      ev.advance_notice_days === null || ev.advance_notice_days === undefined
+        ? '' : String(ev.advance_notice_days);
+
+    // How often an event repeats can only be chosen when it is first created, not retrofitted
+    // onto an existing one-off event — the frequency control stays create-only. What a carer
+    // does revisit is when the series ends and how much notice it gets, so those two stay
+    // editable via the "Entire series" scope below.
     document.getElementById('event-repeats-field').hidden = true;
     editingSeriesId = ev.series_id || null;
+    editingSeries = null;
     document.getElementById('event-series-scope-field').hidden = !editingSeriesId;
+    document.getElementById('event-repeat-until-field').hidden = true;
+    applyRepeatRule();
 
     eventDialog.showModal();
+
+    if (editingSeriesId) loadSeriesIntoDialog(editingSeriesId);
+  }
+
+  // The event row carries only series_id, so the series' own end date and rrule are fetched
+  // after the dialog is already open. Guarded on editingSeriesId because the carer may have
+  // closed or reopened the dialog before this resolves.
+  function loadSeriesIntoDialog(seriesId) {
+    var repeatsField = document.getElementById('event-repeats-field');
+    dvData.getEventSeries(seriesId).then(function (series) {
+      if (editingSeriesId !== seriesId) return;
+      editingSeries = series;
+
+      var freq = seriesFreqKey(series.rrule);
+      var label = freq ? REPEAT_OPTIONS[freq].label : 'Repeats';
+      var staticEl = document.getElementById('event-repeats-static');
+      staticEl.textContent = label;
+      repeatsField.hidden = false;
+      document.getElementById('event-repeats-select-field').hidden = true;
+      staticEl.hidden = false;
+
+      document.getElementById('event-repeat-until').value = series.end_date || '';
+      applyRepeatRule();
+    }, function () {
+      // A failed lookup only costs the carer the end-date field; the rest of the dialog is
+      // already usable, so this stays silent rather than throwing an alarming error at them.
+    });
   }
 
   function closeEventDialog() {
@@ -271,8 +378,25 @@
       firstInvalid = firstInvalid || priorityInput;
     }
 
+    var untilInput = document.getElementById('event-repeat-until');
+    var untilError = document.getElementById('event-repeat-until-error');
+    var untilField = document.getElementById('event-repeat-until-field');
+    clearFieldError(untilInput, untilError, untilField);
+    if (!untilField.hidden && untilInput.value && dateInput.value && untilInput.value < dateInput.value) {
+      showFieldError(untilInput, untilError, untilField, 'The repeat end date must be on or after the event date.');
+      valid = false;
+      firstInvalid = firstInvalid || untilInput;
+    }
+
     if (firstInvalid) firstInvalid.focus();
     return valid;
+  }
+
+  // '' (the "use the usual notice" option) means null — resolve from the frequency
+  // server-side — which is distinct from 0, "never announce this in advance".
+  function selectedNoticeDays() {
+    var raw = document.getElementById('event-advance-notice').value;
+    return raw === '' ? null : Number(raw);
   }
 
   function handleEventSubmit(e) {
@@ -292,32 +416,37 @@
       event_accuracy_id: Number(document.getElementById('event-accuracy').value),
       display_priority: Number(document.getElementById('event-priority').value),
       show_on_display: document.getElementById('event-show-on-display').checked,
+      advance_notice_days: selectedNoticeDays(),
       updated_by_user_id: currentContext.userId
     };
 
     eventSubmitBtn.disabled = true;
     eventSubmitBtn.textContent = 'Saving…';
 
-    var repeatsAnnually = !editingEventId && document.getElementById('event-repeats-annually').checked;
+    var repeatKey = !editingEventId ? document.getElementById('event-repeats').value : '';
+    var repeatOption = REPEAT_OPTIONS[repeatKey] || null;
     var seriesScope = editingSeriesId
       ? (document.getElementById('event-series-scope-series').checked ? 'series' : 'occurrence')
       : null;
 
     var request;
-    if (repeatsAnnually) {
+    if (repeatOption) {
       // dv_event_series' AFTER INSERT trigger (see supabase/migrations/20260817220000_dv_event_series.sql)
       // materializes the actual dv_event occurrence rows synchronously, in the same transaction
       // — by the time this insert resolves, they already exist for the caller's refresh to pick up.
       var seriesPayload = Object.assign({
         event_source_id: 3, // web_dashboard — confirmed seed value, see migration
         created_by_user_id: currentContext.userId,
-        rrule: 'FREQ=YEARLY',
-        start_date: payload.event_date
+        rrule: repeatOption.rrule,
+        start_date: payload.event_date,
+        end_date: document.getElementById('event-repeat-until').value || null
       }, payload);
       delete seriesPayload.event_date;
       request = dvData.createEventSeries(seriesPayload);
     } else if (seriesScope === 'series') {
-      var seriesEditPayload = Object.assign({}, payload);
+      var seriesEditPayload = Object.assign({
+        end_date: document.getElementById('event-repeat-until').value || null
+      }, payload);
       delete seriesEditPayload.event_date; // the series has no single date of its own
       request = dvData.updateEventSeries(editingSeriesId, seriesEditPayload);
     } else if (editingEventId) {
@@ -352,16 +481,32 @@
     confirmMessageTextEl.textContent = opts.message;
     confirmBtn.textContent = opts.confirmLabel || 'Confirm';
     setMessage(confirmMessageEl, '', null);
+
+    // opts.scopeLegend opts this dialog into the "just this one / and all future ones" choice;
+    // every other caller (Messages, people, ...) gets the plain two-button dialog unchanged.
+    var scopeField = document.getElementById('confirm-dialog-scope-field');
+    scopeField.hidden = !opts.scopeLegend;
+    document.getElementById('confirm-dialog-scope-one').checked = true;
+    if (opts.scopeLegend) {
+      document.getElementById('confirm-dialog-scope-legend').textContent = opts.scopeLegend;
+    }
+
     pendingConfirmAction = opts.onConfirm;
     confirmDialog.showModal();
+  }
+
+  function selectedConfirmScope() {
+    if (document.getElementById('confirm-dialog-scope-field').hidden) return null;
+    return document.getElementById('confirm-dialog-scope-future').checked ? 'future' : 'one';
   }
 
   function handleConfirmClick() {
     if (!pendingConfirmAction) return;
     var action = pendingConfirmAction;
+    var scope = selectedConfirmScope();
     confirmBtn.disabled = true;
     confirmCancelBtn.disabled = true;
-    action().then(function () {
+    action(scope).then(function () {
       confirmBtn.disabled = false;
       confirmCancelBtn.disabled = false;
       pendingConfirmAction = null;
@@ -390,11 +535,20 @@
   }
 
   function openDeleteConfirm(ev, context, onChanged) {
+    var repeats = !!ev.series_id;
     openConfirmDialog({
       title: 'Delete this event?',
-      message: '"' + ev.title + '" will be permanently removed. This cannot be undone.',
+      message: repeats
+        ? '"' + ev.title + '" repeats. Choose how much of it to remove. This cannot be undone.'
+        : '"' + ev.title + '" will be permanently removed. This cannot be undone.',
       confirmLabel: 'Delete event',
-      onConfirm: function () {
+      scopeLegend: repeats ? 'This event repeats' : null,
+      onConfirm: function (scope) {
+        // "This one and all future ones" also ends the series itself — otherwise is_active
+        // stays true and the weekly top-up job regenerates everything just deleted.
+        if (repeats && scope === 'future') {
+          return dvData.stopEventSeries(ev.series_id, context.userId, ev.event_date);
+        }
         return dvData.deleteEvent(ev.event_id, context.userId);
       }
     }, onChanged);

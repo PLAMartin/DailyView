@@ -2,7 +2,7 @@ Subject: Setting up your Daily View screen
 
 Hi [Name],
 
-There are three steps to get your parent setup and Mum will have today's plan up on the wall — no
+Two short steps and Mum will have today's plan up on the wall — no
 technical experience needed, and everything is managed from your phone
 or computer.
 
@@ -16,16 +16,14 @@ On the tablet (or other display) itself:
   - Add it to the home screen (share/menu button -> "Add to Home
     Screen") so it reopens automatically if the screen restarts.
 
-2) SIGN IN TO YOUR DASHBOARD
-On your own phone or computer (not the viewer screen):
-  - Sign in here: https://www.dailyview.org/login/
-
-3) PAIR THE TWO TOGETHER
-  - In your dashboard, go to Devices -> Add device and give it a name
+2) PAIR THE TWO TOGETHER
+Back on your own phone or computer (not the viewer screen):
+  - Sign in to your dashboard: https://www.dailyview.org/login/
+  - Go to Devices -> Add device and give it a name
     (e.g. "Mum's kitchen screen").
   - You'll see a short code and a QR code which is valid for 15 minutes.
   - Back on the viewer screen, type the code into the box shown there and
-    select Connect.
+    select Connect, or scan the QR code with the tablet instead.
 
 The viewer screen now shows today's plan and keeps itself up to
 date automatically. Find it a stable, plugged-in spot where it's easy

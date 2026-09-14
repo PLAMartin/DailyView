@@ -23,8 +23,12 @@ Within this one repo:
   settings for an account. Polls Supabase for real data.
 - **Viewer-facing screens** — `display/` (the real, live wall-mounted
   viewer screen, pairs a device and polls Supabase), `try-demo/`
-  (public unauthenticated preview), `viewer-screen-selection/`,
-  `screen-setup/` (setup guide for the physical device).
+  (public unauthenticated preview).
+- **Guides** — `guides/`: plain-language help articles for families,
+  including `guides/choosing-a-tablet/` and
+  `guides/setting-up-the-screen/` (setup guide for the physical device).
+  The old `/viewer-screen-selection` and `/screen-setup` URLs redirect
+  here via `vercel.json`.
 - **Supabase backend** — `supabase/migrations/` (schema, RLS policies)
   and `supabase/functions/` (edge functions: `send-confirmation`,
   `send-invite-email`, `accept-invite`, `_shared`).
@@ -93,8 +97,10 @@ change applies everywhere.
 /display              Live wall-mounted viewer screen — pairs a device
                       and polls real Supabase data
 /try-demo             Public, unauthenticated viewer preview
-/viewer-screen-selection, /screen-setup
-                      Public pages for choosing/setting up a viewer device
+/guides               Public help articles for families, including
+                      choosing-a-tablet/ and setting-up-the-screen/
+                      (old /viewer-screen-selection and /screen-setup
+                      URLs redirect here via vercel.json)
 /login, /forgot-password, /reset-password, /accept-invite
                       Real Supabase-backed auth flows
 /about, /press        Marketing/company pages

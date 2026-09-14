@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/viewer-screen-selection/:path*", "destination": "/guides/choosing-a-tablet/", "permanent": true },
+    { "source": "/screen-setup/:path*", "destination": "/guides/setting-up-the-screen/", "permanent": true }
+  ]
+}

@@ -6,7 +6,7 @@ There are three steps to get your parent setup and Mum will have today's plan up
 technical experience needed, and everything is managed from your phone
 or computer.
 
-View this guide as a webpage: https://www.dailyview.org/screen-setup
+View this guide as a webpage: https://www.dailyview.org/guides/setting-up-the-screen/
 
 1) SET UP THE VIEWER SCREEN
 On the tablet (or other display) itself:

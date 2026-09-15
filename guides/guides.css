@@ -190,6 +190,30 @@ a:hover { color: var(--dv-navy-dark); }
 }
 .guide .best-for { margin-bottom: 0; }
 
+/* Example day: a short time + title list, echoing the TODAY list on the screen */
+.example-day {
+  list-style: none;
+  background: var(--dv-bg-soft);
+  border: 1px solid var(--dv-border-card);
+  border-radius: 12px;
+  padding: 14px 20px;
+}
+.guide .example-day { margin: 16px 0 20px; }
+.guide .example-day li {
+  margin: 0;
+  padding: 8px 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--dv-divider);
+}
+.guide .example-day li:last-child { border-bottom: none; }
+.example-time {
+  display: inline-block;
+  min-width: 4.2em;
+  font-weight: 400;
+  color: var(--dv-text-mid);
+}
+
 /* Comparison table */
 .compare {
   width: 100%;

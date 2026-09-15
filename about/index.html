@@ -58,6 +58,17 @@ body {
   align-items: center;
 }
 .site-logo img { height: 38px; width: auto; display: block; }
+.site-nav {
+  margin-left: auto;
+}
+.site-nav a {
+  color: var(--dv-navy);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.site-nav a:hover,
+.site-nav a:focus-visible { text-decoration: underline; }
 
 /* Legal-style content (reused for About) */
 .legal-content {
@@ -161,6 +172,9 @@ body {
     <a href="/" class="site-logo" aria-label="Daily View home">
       <img src="../assets/logo/logo_horizontal_v1.svg" alt="Daily View" height="38">
     </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/guides/">Guides</a>
+    </nav>
   </div>
 </header>
 
